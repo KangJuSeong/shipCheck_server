@@ -1,20 +1,18 @@
 from django.contrib import admin
 from .models import Boat, WasteBoat
+from django.utils.html import format_html
 
 
 class BoatAdmin(admin.ModelAdmin):
     list_display = (
-        'title', 'price', 'reserve', 'product_status', 'manufacturer', 'brand',
-        'model_code', 'thumbnail_preview'
+        'id', 'name', 'imo', 'calsign', 'mmsi', 'vessel_type', 'build_year',
+        'current_flag', 'home_port', 'image_tag'
     )
 
-    readonly_fields = ('thumbnail_preview',)
+    def image_tag(self, obj):
+        return format_html('<img src="{}" height="150px;"width="150px;"/>'.format(obj.main_img.url))
+    image_tag.short_description = 'Image'
 
-    def thumbnail_preview(self, obj):
-        return obj.thumbnail_preview
-
-    thumbnail_preview.short_description = 'Thumbnail Preview'
-    thumbnail_preview.allow_tags = True
 
 admin.site.register(Boat, BoatAdmin)
 admin.site.register(WasteBoat)

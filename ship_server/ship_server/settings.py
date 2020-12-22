@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Accounts',
     'rest_framework',
-    'Boats'
+    'Boats',
 ]
 
 MIDDLEWARE = [
@@ -142,5 +142,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'Accounts.Account'
-MEDIA_URL = 'Boats/Boat_img/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Boats/Boat_img/')
+MEDIA_URL = '/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Boats/img')

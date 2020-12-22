@@ -3,29 +3,22 @@ from django.utils.html import mark_safe
 
 
 class Boat(models.Model):
-    STATUS_CHOICE = (
-        ('NEW', '신상품'), ('USED', '중고')
-    )
 
-    title = models.CharField(max_length=100, null=True, blank=True)
-    price = models.CharField(max_length=100, null=True, blank=True)
-    reserve = models.CharField(max_length=100, null=True, blank=True)
-    product_status = models.CharField(max_length=4, choices=STATUS_CHOICE,
-                                      null=True, blank=True)
-    manufacturer = models.CharField(max_length=100, null=True, blank=True)
-    brand = models.CharField(max_length=100, null=True, blank=True)
-    model_code = models.CharField(max_length=100, null=True, blank=True)
-    boat_img = models.ImageField(null=True, blank=True)
-
-    @property
-    def thumbnail_preview(self):
-        if self.boat_img:
-            return mark_safe('<img src="{}" width="300" height="300" />'
-                             .format(self.boat_img.url))
-        return ""
+    name = models.CharField(max_length=255, null=True, blank=True)
+    imo = models.CharField(max_length=255, null=True, blank=True)
+    calsign = models.CharField(max_length=255, null=True, blank=True)
+    mmsi = models.CharField(max_length=255, null=True, blank=True)
+    vessel_type = models.CharField(max_length=255, null=True, blank=True)
+    build_year = models.CharField(max_length=255, null=True, blank=True)
+    current_flag = models.CharField(max_length=255, null=True, blank=True)
+    home_port = models.CharField(max_length=255, null=True, blank=True)
+    main_img = models.ImageField(upload_to='boat_img/', null=True, blank=True)
+    is_learnig = models.BooleanField(default=False)
 
 
 class WasteBoat(models.Model):
-    title = models.CharField(max_length=100, null=True, blank=True)
-    latitude = models.CharField(max_length=100, null=True, blank=True)
-    longitude = models.CharField(max_length=100, null=True, blank=True)
+    title = models.CharField(max_length=255, null=True, blank=True)
+    latitude = models.CharField(max_length=255, null=True, blank=True)
+    longitude = models.CharField(max_length=255, null=True, blank=True)
+    detail = models.CharField(max_length=255, null=True, blank=True)
+    wasted_img = models.ImageField(upload_to='wasted_img/', null=True, blank=True)

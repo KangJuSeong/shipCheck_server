@@ -1,36 +1,41 @@
 from utils.custom_view import APIView
 from Boats.models import Boat, WasteBoat
-from Boats.serializers import BoatSerializer, BoatDetailSerializer, WasteBoatSerializer
-# from utils.test_crawling import parse_data
+from Boats.serializers import BoatSerializer, WasteBoatSerializer
+import base64
+from utils.test_crawling import parse_data
+from django.core.files import File
+from io import BytesIO
+import requests
 
 
-class GetDetailBoatAPI(APIView):
+class DetailBoatAPI(APIView):
     def post(self, request):
-        pk = request.data['id']
-        data = Boat.objects.get(id=pk)
-        serializer = BoatDetailSerializer(data)
+        data = Boat.objects.get(id=request.data['id'])
+        serializer = BoatSerializer(data)
         return self.success(serializer.data, message='success')
 
 
-class GetSearchingBoatAPI(APIView):
+class SearchingBoatAPI(APIView):
     def post(self, request):
         data = Boat.objects.all()
-        for k, v in request.data.items():
-            if v != '':
-                if k == 'title':
-                    data = data.filter(title__contains=v)
-                elif k == 'price':
-                    data = data.filter(price__contains=v)
-                elif k == 'reserve':
-                    data = data.filter(reserve__contains=v)
-                elif k == 'product_status':
-                    data = data.filter(product_status__contains=v)
-                elif k == 'manufacturer':
-                    data = data.filter(manufacturer__contains=v)
-                elif k == 'brand':
-                    data = data.filter(brnad__contains=v)
-                elif k == 'model_code':
-                    data = data.filter(model_code__contains=v)
+        for key, value in request.data.items():
+            if value != '':
+                if key == 'name':
+                    data = data.filter(name__contains=value)
+                elif key == 'imo':
+                    data = data.filter(imo__contains=value)
+                elif key == 'calsign':
+                    data = data.filter(calsign__contains=value)
+                elif key == 'mmsi':
+                    data = data.filter(mmsi__contains=value)
+                elif key == 'vessel_type':
+                    data = data.filter(vessel_type__contains=value)
+                elif key == 'build_year':
+                    data = data.filter(build_year__contains=value)
+                elif key == 'current_flag':
+                    data = data.filter(current_flag__contains=value)
+                elif key == 'home_port':
+                    data = data.filter(home_port__contains=value)
         searching_data = BoatSerializer(data, many=True)
         return self.success(data=searching_data.data, message='success')
 
@@ -48,7 +53,34 @@ class WasteDetailBoatAPI(APIView):
         data = WasteBoat.objects.get(id=pk)
         serializer = WasteBoatSerializer(data)
         return self.success(data=serializer.data, message='success')
-# class test(APIView):
-#     def post(self, request):
-#         parse_data("005930")
-#         return self.success(message='success')
+
+
+class test(APIView):
+    def post(self, request):
+        data_set = []
+        for code in data_set:
+            code = str(code)
+            data = parse_data(code)
+            try:
+                Boat.objects.get(imo=data[1])
+            except Boat.DoesNotExist:
+                response = requests.get(data[8])
+                binary_data = response.content
+                temp_file = BytesIO()
+                temp_file.write(binary_data)
+                boat = Boat.objects.create(name =data[0], imo=data[1], calsign=data[2], mmsi=data[3], vessel_type=data[4], build_year=data[5], current_flag=data[6], home_port=data[7])
+                boat.main_img.save(code+'.jpg', File(temp_file))
+                print(code + '가 등록됐어요')
+            except Boat.MultipleObjectsReturned:
+                print(code + " 가 중복됐어요")
+        return self.success(message='success')
+
+
+
+
+
+
+
+
+
+

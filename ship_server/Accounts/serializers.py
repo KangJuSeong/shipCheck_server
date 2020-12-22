@@ -40,13 +40,8 @@ class LoginSerializer(serializers.Serializer):
                 return {'message': 'Blocked'}
             else:
                 print("Login Success! Hello " + user.name)
-                try:
-                    payload = JWT_PAYLOAD_HANDLER(user)
-                    jwt_token = JWT_ENCODE_HANDLER(payload)
-                except User.DoesNotExist:
-                    raise serializers.ValidationError(
-                        'User with given serviceNum and password does not exists'
-                    )
+                payload = JWT_PAYLOAD_HANDLER(user)
+                jwt_token = JWT_ENCODE_HANDLER(payload)
                 return {
                     'message': 'Success Login',
                     'serviceNum': user.serviceNum,
