@@ -10,6 +10,8 @@ class BoatAdmin(admin.ModelAdmin):
     )
 
     def image_tag(self, obj):
+        if obj.main_img is None:
+            return ""
         return format_html('<img src="{}" height="150px;"width="150px;"/>'.format(obj.main_img.url))
     image_tag.short_description = 'Image'
 
