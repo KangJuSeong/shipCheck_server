@@ -38,16 +38,9 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
-    RANK_CHOICE = (
-        # ("하사","하사"), ("중사","중사"), ("상사","상사"), ("원사","원사"), ("준위","준위"),
-        #("소위","소위"),("중위","중위"), ("대위","대위"), ("소령","소령"), ("중령", "중령"),
-        #("대위","대령")
-    )
-
     serviceNum = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=255, null=True, blank=True)
-    rank = models.CharField(max_length=255, choices=RANK_CHOICE,
-                            null=True, blank=True)
+    rank = models.CharField(max_length=255, null=True, blank=True)
     position = models.CharField(max_length=255, null=True, blank=True)
     belong = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
