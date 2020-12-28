@@ -4,11 +4,11 @@ from Boats.serializers import BoatSerializer, WasteBoatSerializer
 import base64
 from django.core.files.base import ContentFile
 
-from utils.test_crawling import parse_data
-from django.core.files import File
-from io import BytesIO
-import requests
-import random
+# from utils.test_crawling import parse_data
+# from django.core.files import File
+# from io import BytesIO
+# import requests
+# import random
 
 
 class DetailBoatAPI(APIView):
@@ -35,6 +35,10 @@ class RegistBoatAPI(APIView):
             if not serializer.is_valid(raise_exception=True):
                 return self.fail(message="Request Body Error")
             image_data = base64.b64decode(request.data['image_data'])
+            title = serializer.validated_data['title']
+            serializer.validated_data['wasted_img'] = ContentFile(image_data,
+                                                                  title+'.jpg')
+            serializer.save()
             return self.success(message='success')
 
 

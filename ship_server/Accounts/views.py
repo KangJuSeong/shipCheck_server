@@ -16,10 +16,16 @@ class LoginAPI(APIView):
             return self.fail(message="Unauthenticated user")
         if serializer.validated_data['message'] == 'Wating':
             return self.fail(message="Waiting for login approval")
-        if serializer.validated_data['message'] == 'Blocked':
-            return self.fail(message="Blocked user")
+        if serializer.validated_data['message'] == 'Not connected 3months':
+            return self.fail(message="Not connected 3months Blocked user")
+        if serializer.validated_data['message'] == 'Login fail blocked':
+            return self.fail(message='Login fail Blocked user')
         if serializer.validated_data['message'] == "Device mismatch":
             return self.fail(message="Device mismatch")
+        if serializer.validated_data['message'] == "Not connected 3months":
+            return self.fail(message="Not connected 3months")
+        if serializer.validated_data['message'] == 'Incorrect password':
+            return self.fail(message="Incorrect password")
         response = {
             'token': serializer.data['token'],
         }
@@ -53,7 +59,7 @@ class SignUpAPI(APIView):
         return self.success(message='Success Signup')
 
 
-class SearchinPwAPI(APIView):
+class SearchingPwAPI(APIView):
     def post(self, request):
         return self.success()
 

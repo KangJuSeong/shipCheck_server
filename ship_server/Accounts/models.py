@@ -45,11 +45,12 @@ class Account(AbstractBaseUser, PermissionsMixin):
     belong = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
     device_id = models.CharField(max_length=255, null=True, blank=True)
+    attemp = models.IntegerField(default=0)
+    blocked = models.IntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_blocked = models.BooleanField(default=False)
     is_waiting = models.BooleanField(default=True)
 
     objects = AccountManager()
