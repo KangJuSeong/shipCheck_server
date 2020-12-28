@@ -3,6 +3,8 @@ from utils.custom_view import APIView
 from Accounts.models import Account
 from Accounts.serializers import LoginSerializer
 from rest_framework.permissions import AllowAny
+from utils.check_pw import check_pw
+from django.shortcuts import get_object_or_404
 
 
 class LoginAPI(APIView):
@@ -48,15 +50,27 @@ class SignUpAPI(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        Account.objects.create_user(serviceNum=request.data['serviceNum'],
-                                    password=request.data['password'],
-                                    name=request.data['name'],
-                                    rank=request.data['rank'],
-                                    belong=request.data['belong'],
-                                    position=request.data['position'],
-                                    phone=request.data['phone'],
-                                    device_id=request.data['device_id'],)
-        return self.success(message='Success Signup')
+        if Account.objects.filter(serviceNum=request.data['serviceNum']):
+            return self.fail(message="Already exist serviceNum")
+        if Account.objects.filter(device_id=request.data['device_id']):
+            return self.fail(message="Already regist device")
+        value = check_pw(request.data['password'])
+        if value['status'] == '4':
+            # Account.objects.create_user(serviceNum=request.data['serviceNum'],
+            #                             password=request.data['password'],
+            #                             name=request.data['name'],
+            #                             rank=request.data['rank'],
+            #                             belong=request.data['belong'],
+            #                             position=request.data['position'],
+            #                             phone=request.data['phone'],
+            #                             device_id=request.data['device_id'])
+            return self.success(message=value['message'])
+        elif value['status'] == '3':
+            return self.fail(message=value['message'])
+        elif value['status'] == '2':
+            return self.fail(message=value['message'])
+        else:
+            return self.fail(message=value['message'])
 
 
 class SearchingPwAPI(APIView):
