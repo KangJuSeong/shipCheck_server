@@ -4,7 +4,6 @@ from Accounts.models import Account
 from Accounts.serializers import LoginSerializer
 from rest_framework.permissions import AllowAny
 from utils.check_pw import check_pw
-from django.shortcuts import get_object_or_404
 
 
 class LoginAPI(APIView):
@@ -15,18 +14,25 @@ class LoginAPI(APIView):
         if not serializer.is_valid(raise_exception=True):
             return self.fail(message="Request Body Error.")
         if serializer.validated_data['message'] == 'None':
+            print("Unauthenticated user")
             return self.fail(message="Unauthenticated user")
         if serializer.validated_data['message'] == 'Wating':
+            print("Waiting for login approval")
             return self.fail(message="Waiting for login approval")
         if serializer.validated_data['message'] == 'Not connected 3months':
+            print("Not connected 3months Blocked user")
             return self.fail(message="Not connected 3months Blocked user")
         if serializer.validated_data['message'] == 'Login fail blocked':
+            print('Login fail Blocked user')
             return self.fail(message='Login fail Blocked user')
         if serializer.validated_data['message'] == "Device mismatch":
+            print("Device mismatch")
             return self.fail(message="Device mismatch")
         if serializer.validated_data['message'] == "Not connected 3months":
+            print("Not connected 3months")
             return self.fail(message="Not connected 3months")
         if serializer.validated_data['message'] == 'Incorrect password':
+            print("Incorrect password")
             return self.fail(message="Incorrect password")
         response = {
             'token': serializer.data['token'],
@@ -56,14 +62,14 @@ class SignUpAPI(APIView):
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
         if value['status'] == '4':
-            # Account.objects.create_user(serviceNum=request.data['serviceNum'],
-            #                             password=request.data['password'],
-            #                             name=request.data['name'],
-            #                             rank=request.data['rank'],
-            #                             belong=request.data['belong'],
-            #                             position=request.data['position'],
-            #                             phone=request.data['phone'],
-            #                             device_id=request.data['device_id'])
+            Account.objects.create_user(serviceNum=request.data['serviceNum'],
+                                        password=request.data['password'],
+                                        name=request.data['name'],
+                                        rank=request.data['rank'],
+                                        belong=request.data['belong'],
+                                        position=request.data['position'],
+                                        phone=request.data['phone'],
+                                        device_id=request.data['device_id'])
             return self.success(message=value['message'])
         elif value['status'] == '3':
             return self.fail(message=value['message'])

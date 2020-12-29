@@ -1,6 +1,5 @@
 def repeat_search(password):
     repeat = 0
-    print(len(password))
     for i in range(len(password)-1):
         if password[i] == password[i+1]:
             repeat = repeat + 1

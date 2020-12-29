@@ -3,10 +3,11 @@ from Boats.models import Boat, WasteBoat
 from Boats.serializers import BoatSerializer, WasteBoatSerializer
 import base64
 from django.core.files.base import ContentFile
-
+from keras_model import snippets
+from PIL import Image
+import io
 # from utils.test_crawling import parse_data
 # from django.core.files import File
-# from io import BytesIO
 # import requests
 # import random
 
@@ -30,7 +31,7 @@ class RegistBoatAPI(APIView):
                                                                 imo+'.jpg')
             serializer.save()
             return self.success(message='success')
-        else:
+        elif request.data['flag'] == 'Wasted':
             serializer = WasteBoatSerializer(data=request.data)
             if not serializer.is_valid(raise_exception=True):
                 return self.fail(message="Request Body Error")
@@ -86,50 +87,8 @@ class WasteDetailBoatAPI(APIView):
 
 class test(APIView):
     def post(self, request):
-        # data_set = []
-        # for code in data_set:
-        #     code = str(code)
-        #     data = parse_data(code)
-        #     if data[0] == "":
-        #         try:
-        #             WasteBoat.objects.get(title=data[1])
-        #         except WasteBoat.DoesNotExist:
-        #             response = requests.get(data[8])
-        #             binary_data = response.content
-        #             temp_file = BytesIO()
-        #             temp_file.write(binary_data)
-        #             lat = 36 + round(random.random(), 6)
-        #             lon = 127 + round(random.random(), 6)
-        #             boat = WasteBoat.objects.create(latitude=lat,
-        #                                             longitude=lon,
-        #                                             title=data[1])
-        #             boat.wasted_img.save(code+'.jpg', File(temp_file))
-        #             print(code + "가 등록됐어요(Wasted)")
-        #         except Boat.MultipleObjectsReturned:
-        #             print(code + " 가 중복됐어요(Wasted)")
-        #     else:
-        #         try:
-        #             Boat.objects.get(imo=data[1])
-        #         except Boat.DoesNotExist:
-        #             response = requests.get(data[8])
-        #             binary_data = response.content
-        #             temp_file = BytesIO()
-        #             temp_file.write(binary_data)
-        #             boat = Boat.objects.create(name=data[0],
-        #                                        imo=data[1],
-        #                                        calsign=data[2],
-        #                                        mmsi=data[3],
-        #                                        vessel_type=data[4],
-        #                                        build_year=data[5],
-        #                                        current_flag=data[6],
-        #                                        home_port=data[7])
-        #             boat.main_img.save(code+'.jpg', File(temp_file))
-        #             print(code + '가 등록됐어요')
-        #         except Boat.MultipleObjectsReturned:
-        #             print(code + " 가 중복됐어요")
-        # print(WasteBoat.objects.all())
-        # for k in range(21,27):
-        #     i = WasteBoat.objects.get(id=k)
-        #     i.delete()
-        # print(WasteBoat.objects.all())
+        image_data = base64.b64decode(request.data['image_data'])
+        image = Image.open(io.BytesIO(image_data))
+        result = snippets.ai_module(image)
+        print(result)
         return self.success(message='success')
