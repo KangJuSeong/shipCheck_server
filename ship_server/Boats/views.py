@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from keras_model import snippets
 from PIL import Image
 import io
+from random import *
 # from utils.test_crawling import parse_data
 # from django.core.files import File
 # import requests
@@ -87,8 +88,4 @@ class WasteDetailBoatAPI(APIView):
 
 class test(APIView):
     def post(self, request):
-        image_data = base64.b64decode(request.data['image_data'])
-        image = Image.open(io.BytesIO(image_data))
-        result = snippets.ai_module(image)
-        print(result)
         return self.success(message='success')

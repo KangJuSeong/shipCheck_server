@@ -8,7 +8,7 @@ def ai_module(img):
     np.set_printoptions(suppress=True)
 
     # Load the model
-    model = tensorflow.keras.models.load_model('/workspace/ship_server/keras_model/keras_model.h5')
+    model = tensorflow.keras.models.load_model('/workspace/shipCheck_server/ship_server/keras_model/keras_model.h5')
 
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
