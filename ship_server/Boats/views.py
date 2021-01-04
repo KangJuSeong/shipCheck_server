@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from keras_model import snippets
 from PIL import Image
 import io
-from random import *
+from utils.best_three import bestThree
 # from utils.test_crawling import parse_data
 # from django.core.files import File
 # import requests
@@ -91,8 +91,9 @@ class PredictBoat(APIView):
         image_data = base64.b64decode(request.data['image_data'])
         img = Image.open(io.BytesIO(image_data))
         pred = snippets.ai_module(img)
-        print(pred)
-        return self.success(message='success')
+        data = bestThree(pred[0])
+        print(data)
+        return self.success(data={"hello": ['dfs','dfd']}, message='success')
 
 
 class test(APIView):
