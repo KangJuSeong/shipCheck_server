@@ -93,7 +93,7 @@ class PredictBoat(APIView):
         pred = snippets.ai_module(img)
         data = bestThree(pred[0])
         print(data)
-        return self.success(data={"hello": ['dfs','dfd']}, message='success')
+        return self.success(data={"hello": "hello"}, message='success')
 
 
 class test(APIView):
