@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import DetailBoatAPI, SearchingBoatAPI, WasteBoatAPI, WasteDetailBoatAPI, test, RegistBoatAPI
+from .views import DetailBoatAPI, SearchingBoatAPI, WasteBoatAPI, WasteDetailBoatAPI, test, RegistBoatAPI, PredictBoat
 
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^test/', test.as_view()),
     url(r'^boat/wastedboats/', WasteBoatAPI.as_view()),
     url(r'^boat/detailwastedboat/', WasteDetailBoatAPI.as_view()),
+    url(r'^boat/predict/', PredictBoat.as_view())
 ]

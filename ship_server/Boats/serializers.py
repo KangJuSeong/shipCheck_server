@@ -1,7 +1,5 @@
 from rest_framework import serializers
 from Boats.models import Boat, WasteBoat
-import base64
-from django.core.files.base import ContentFile
 
 
 class BoatSearchingSerializer(serializers.HyperlinkedModelSerializer):

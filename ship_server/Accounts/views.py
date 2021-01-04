@@ -1,7 +1,7 @@
 import time
 from utils.custom_view import APIView
 from Accounts.models import Account
-from Accounts.serializers import LoginSerializer
+from Accounts.serializers import LoginSerializer, AccountSerializer
 from rest_framework.permissions import AllowAny
 from utils.check_pw import check_pw
 
@@ -77,6 +77,13 @@ class SignUpAPI(APIView):
             return self.fail(message=value['message'])
         else:
             return self.fail(message=value['message'])
+
+
+class UserInfoAPI(APIView):
+    def post(self, request):
+        user = Account.objects.get(id=self.request.user.id)
+        serializer = AccountSerializer(user)
+        return self.success(serializer.data, message='success')
 
 
 class SearchingPwAPI(APIView):

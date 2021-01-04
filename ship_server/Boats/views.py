@@ -86,6 +86,15 @@ class WasteDetailBoatAPI(APIView):
         return self.success(data=serializer.data, message='success')
 
 
+class PredictBoat(APIView):
+    def post(self, request):
+        image_data = base64.b64decode(request.data['image_data'])
+        img = Image.open(io.BytesIO(image_data))
+        pred = snippets.ai_module(img)
+        print(pred)
+        return self.success(message='success')
+
+
 class test(APIView):
     def post(self, request):
         return self.success(message='success')
