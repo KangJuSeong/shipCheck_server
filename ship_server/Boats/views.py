@@ -78,6 +78,15 @@ class WasteBoatAPI(APIView):
         return self.success(data=serializer.data, message='success')
 
 
+class SearchingWastedAPI(APIView):
+    def post(self, request):
+        data = WasteBoat.objects.all()
+        keyword = request.data['title']
+        data = data.filter(title__contains=keyword)
+        result_data = WasteBoatSerializer(data, many=True)
+        return self.success(data=result_data.data, message='success')
+
+
 class WasteDetailBoatAPI(APIView):
     def post(self, request):
         pk = request.data['id']
