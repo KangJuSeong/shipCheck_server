@@ -36,7 +36,7 @@ class AccountManager(BaseUserManager):
         except Exception as e:
             print(e)
 
-
+# srvno, rank, name, unit(소속부대), position, phone, regit_date(등록일자), last_login, password, approve, is_active, is_superuser, device_id, fail_cnt, block_no
 class Account(AbstractBaseUser, PermissionsMixin):
     serviceNum = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=255, null=True, blank=True)
