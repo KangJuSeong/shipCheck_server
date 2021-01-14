@@ -101,10 +101,11 @@ class PredictBoat(APIView):
         img = Image.open(io.BytesIO(image_data))
         pred = snippets.ai_module(img)
         data = bestThree(pred[0])
-        print(data)
-        return self.success(data={"hello": "hello"}, message='success')
+        return self.success(data=data, message='success')
 
 
 class test(APIView):
     def post(self, request):
         return self.success(message='success')
+
+
