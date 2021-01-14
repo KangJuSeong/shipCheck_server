@@ -32,4 +32,9 @@ def bestThree(arr):
             data['third'].append(str(round(third, 2) * 100) + '%')
             cnt = cnt + 1
     f.close()
-    return data
+    result = []
+    result.append(data['first'])
+    result.append(data['second'])
+    result.append(data['third'])
+    print(result)
+    return result
