@@ -12,5 +12,7 @@ class AccountAdmin(admin.ModelAdmin):
         'phone',
         'device_id'
     )
+    search_fields = ['serviceNum', 'name', 'phone']
+
 
 admin.site.register(Account, AccountAdmin)

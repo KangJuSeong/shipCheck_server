@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [".run.goorm.io"]
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,7 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated', #인증된 유저만
+        'rest_framework.permissions.IsAuthenticated',  # 인증된 유저만
         # 'rest_framework.permissions.IsAdminUser', 관리자 유저만
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -136,6 +137,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+USE_L10N = False
+
+DATE_FORMAT = 'Y-m-d'
+
+DATETIME_FORMAT = 'Y-m-d H:i:s'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

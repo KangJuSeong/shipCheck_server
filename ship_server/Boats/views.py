@@ -1,12 +1,13 @@
 from utils.custom_view import APIView
-from Boats.models import Boat, WasteBoat
-from Boats.serializers import BoatSerializer, WasteBoatSerializer
+from Boats.models import Boat, WasteBoat, BoatImg
+from Boats.serializers import BoatSerializer, WasteBoatSerializer, BoatImageSerializer, ImagesSerializer
 import base64
 from django.core.files.base import ContentFile
 from keras_model import snippets
 from PIL import Image
 import io
 from utils.best_three import bestThree
+from django.db.models import Q
 # from utils.test_crawling import parse_data
 # from django.core.files import File
 # import requests
@@ -100,12 +101,48 @@ class PredictBoat(APIView):
         image_data = base64.b64decode(request.data['image_data'])
         img = Image.open(io.BytesIO(image_data))
         pred = snippets.ai_module(img)
-        data = bestThree(pred[0])
+        result = bestThree(pred[0])
+        _boat1 = Q(name__exact=result[0][0])
+        _boat2 = Q(name__exact=result[1][0])
+        _boat3 = Q(name__exact=result[2][0])
+        data = Boat.objects.filter(_boat1 | _boat2 | _boat3)
+        serializer = BoatSerializer(data, many=True)
+        data = {'result': serializer.data, 'percent': [result[0][1],
+                                                       result[1][1],
+                                                       result[2][1]]}
         return self.success(data=data, message='success')
+
+
+class ImageOfBoat(APIView):
+    def post(self, request):
+        images = BoatImg.objects.filter(s_id=request.data['id'])
+        serializer = BoatImageSerializer(images, many=True)
+        return self.success(data=serializer.data, message="success")
+
+
+class AddImage(APIView):
+    def post(self, request):
+        boat = Boat.objects.get(id=request.data['id'])
+        img = BoatImg.objects.create(s_id=boat.id,
+                                     lat=request.data['lat'],
+                                     lon=request.data['lon'],
+                                     point=request.data['point'])
+        image_data = base64.b64decode(request.data['image_data'])
+        img.img = ContentFile(image_data, img.s_id+'.jpg')
+        img.save()
+        return self.success(message='success')
+
+
+class DetailBoatImage(APIView):
+    def post(self, request):
+        image = BoatImg.objects.get(id=request.data['id'])
+        serializer = BoatImageSerializer(image)
+        return self.success(data=serializer.data, message='success')
 
 
 class test(APIView):
     def post(self, request):
+
         return self.success(message='success')
 
 

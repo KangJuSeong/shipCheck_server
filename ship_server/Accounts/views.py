@@ -28,9 +28,6 @@ class LoginAPI(APIView):
         if serializer.validated_data['message'] == "Device mismatch":
             print("Device mismatch")
             return self.fail(message="Device mismatch")
-        if serializer.validated_data['message'] == "Not connected 3months":
-            print("Not connected 3months")
-            return self.fail(message="Not connected 3months")
         if serializer.validated_data['message'] == 'Incorrect password':
             print("Incorrect password")
             return self.fail(message="Incorrect password")
