@@ -19,7 +19,7 @@ class BoatAdmin(admin.ModelAdmin):
 
 class WastedBoatAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'title', 'image_tag', 'detail', 'latitude', 'longitude', 'is_learning'
+        'id', 'image_tag', 'title', 'detail', 'latitude', 'longitude', 'is_learning'
     )
     search_fields = ['title', 'detail']
 

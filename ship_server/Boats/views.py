@@ -23,6 +23,8 @@ class DetailBoatAPI(APIView):
 
 class RegistBoatAPI(APIView):
     def post(self, request):
+        if request.data['image_data'] == '':
+            return self.fail(message="Non image data")
         if request.data['flag'] == 'Normal':
             serializer = BoatSerializer(data=request.data)
             if not serializer.is_valid(raise_exception=True):
@@ -98,6 +100,8 @@ class WasteDetailBoatAPI(APIView):
 
 class PredictBoat(APIView):
     def post(self, request):
+        if request.data['image_data'] == '':
+            return self.fail(message="Non image data")
         image_data = base64.b64decode(request.data['image_data'])
         img = Image.open(io.BytesIO(image_data))
         pred = snippets.ai_module(img)
@@ -122,13 +126,15 @@ class ImageOfBoat(APIView):
 
 class AddImage(APIView):
     def post(self, request):
+        if request.data['image_data'] == '':
+            return self.fail(message="Non image data")
         boat = Boat.objects.get(id=request.data['id'])
-        img = BoatImg.objects.create(s_id=boat.id,
+        img = BoatImg.objects.create(s_id=boat,
                                      lat=request.data['lat'],
                                      lon=request.data['lon'],
                                      point=request.data['point'])
         image_data = base64.b64decode(request.data['image_data'])
-        img.img = ContentFile(image_data, img.s_id+'.jpg')
+        img.img = ContentFile(image_data, str(img.s_id)+'.jpg')
         img.save()
         return self.success(message='success')
 
@@ -142,7 +148,8 @@ class DetailBoatImage(APIView):
 
 class test(APIView):
     def post(self, request):
-
+        data = BoatImg.objects.get(id=request.data['id'])
+        data.delete()
         return self.success(message='success')
 
 
