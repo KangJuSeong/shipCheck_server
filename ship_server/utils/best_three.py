@@ -4,6 +4,7 @@ def bestThree(arr):
     first = sorted_list[-1]
     second = sorted_list[-2]
     third = sorted_list[-3]
+    print(third)
     first_i = arr.index(first)
     second_i = arr.index(second)
     third_i = arr.index(third)
@@ -21,15 +22,15 @@ def bestThree(arr):
         number = int(line[:index])
         if number == first_i:
             data['first'].append(title.replace('\n', ''))
-            data['first'].append(str(round(first, 2) * 100) + '%')
+            data['first'].append(format(first * 100, '.2f') + '%')
             cnt = cnt + 1
         if number == second_i:
             data['second'].append(title.replace('\n', ''))
-            data['second'].append(str(round(second, 2) * 100) + '%')
+            data['second'].append(format(second * 100, '.2f') + '%')
             cnt = cnt + 1
         if number == third_i:
             data['third'].append(title.replace('\n', ''))
-            data['third'].append(str(round(third, 2) * 100) + '%')
+            data['third'].append(format(third * 100, '.2f') + '%')
             cnt = cnt + 1
     f.close()
     result = []
