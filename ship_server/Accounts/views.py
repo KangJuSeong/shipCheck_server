@@ -54,8 +54,10 @@ class SignUpAPI(APIView):
 
     def post(self, request):
         if Account.objects.filter(serviceNum=request.data['serviceNum']):
+            print('aleady exist serviceNum')
             return self.fail(message="Already exist serviceNum")
         if Account.objects.filter(device_id=request.data['device_id']):
+            print('already regit device')
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
         if value['status'] == '4':
