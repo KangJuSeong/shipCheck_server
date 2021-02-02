@@ -3,6 +3,8 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework_jwt.settings import api_settings
 from datetime import datetime, timezone
+# from django.conf import timezone
+
 
 User = get_user_model()
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
@@ -49,10 +51,11 @@ class LoginSerializer(serializers.Serializer):
                 print("None")
                 return {'message': "None"}
         else:
-            blank_day = (datetime.now(timezone.utc) - user.last_login).days
+            blank_day = (datetime.now() - user.last_login).days
+            # blank_day = (timezone.now() - user.last_login).days
             if blank_day >= 90:
                 user.blocked = 1
-                user.last_login = datetime.now()
+                user.last_login = timezone.now()
                 user.save()
             if not (user.device_id == device_id):
                 return {'message': "Device mismatch"}

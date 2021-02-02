@@ -106,14 +106,22 @@ class PredictBoat(APIView):
         img = Image.open(io.BytesIO(image_data))
         pred = snippets.ai_module(img)
         result = bestThree(pred[0])
+        result_ship = []
         _boat1 = Q(name__exact=result[0][0])
         _boat2 = Q(name__exact=result[1][0])
         _boat3 = Q(name__exact=result[2][0])
-        data = Boat.objects.filter(_boat1 | _boat2 | _boat3)
+        data = Boat.objects.filter(_boat1)
         serializer = BoatSerializer(data, many=True)
-        data = {'result': serializer.data, 'percent': [result[0][1],
-                                                       result[1][1],
-                                                       result[2][1]]}
+        result_ship.append(serializer.data)
+        data = Boat.objects.filter(_boat2)
+        serializer = BoatSerializer(data, many=True)
+        result_ship.append(serializer.data)
+        data = Boat.objects.filter(_boat3)
+        serializer = BoatSerializer(data, many=True)
+        result_ship.append(serializer.data)
+        data = {'result': result_ship, 'percent': [result[0][1],
+                                                   result[1][1],
+                                                   result[2][1]]}
         return self.success(data=data, message='success')
 
 
@@ -148,8 +156,6 @@ class DetailBoatImage(APIView):
 
 class test(APIView):
     def post(self, request):
-        data = BoatImg.objects.get(id=request.data['id'])
-        data.delete()
         return self.success(message='success')
 
 

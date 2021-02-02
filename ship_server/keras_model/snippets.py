@@ -1,15 +1,16 @@
 import tensorflow.keras
 from PIL import Image, ImageOps
 import numpy as np
+import time
 
 
 def ai_module(img):
     # Disable scientific notation for clarity
     np.set_printoptions(suppress=True)
-
+    start_time = time.time()
     # Load the model
-    model = tensorflow.keras.models.load_model('/workspace/shipCheck_server/ship_server/keras_model/keras_model.h5')
-
+    model = tensorflow.keras.models.load_model('/workspace/shipCheck_server/ship_server/keras_model/keras_model.h5', compile=False)
+    print("모델 로딩 시간 : ", time.time() - start_time)
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
     # determined by the first position in the shape tuple, in this case 1.
@@ -34,5 +35,7 @@ def ai_module(img):
     # Load the image into the array
     data[0] = normalized_image_array
     # run the inference
+    start_time = time.time()
     prediction = model.predict(data)
+    print("예측 종료 시간 : ", time.time() - start_time)
     return prediction

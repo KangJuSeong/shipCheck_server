@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+# from django.conf import timezone
+from datetime import datetime
 
 
 class AccountManager(BaseUserManager):
@@ -15,6 +17,7 @@ class AccountManager(BaseUserManager):
                 phone=phone,
                 device_id=device_id
             )
+            user.last_login = datetime.now()
             user.set_password(password)
             user.save()
             return user
@@ -35,6 +38,7 @@ class AccountManager(BaseUserManager):
             return superuser
         except Exception as e:
             print(e)
+
 
 # srvno, rank, name, unit(소속부대), position, phone, regit_date(등록일자), last_login, password, approve, is_active, is_superuser, device_id, fail_cnt, block_no
 class Account(AbstractBaseUser, PermissionsMixin):
