@@ -1,6 +1,6 @@
 from utils.custom_view import APIView
 from Boats.models import Boat, WasteBoat, BoatImg
-from Boats.serializers import BoatSerializer, WasteBoatSerializer, BoatImageSerializer, ImagesSerializer
+from Boats.serializers import BoatSerializer, WasteBoatSerializer, BoatImageSerializer
 import base64
 from django.core.files.base import ContentFile
 from keras_model import snippets
