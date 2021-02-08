@@ -4,7 +4,6 @@ def bestThree(arr):
     first = sorted_list[-1]
     second = sorted_list[-2]
     third = sorted_list[-3]
-    print(third)
     first_i = arr.index(first)
     second_i = arr.index(second)
     third_i = arr.index(third)
