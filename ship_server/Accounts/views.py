@@ -61,11 +61,11 @@ class SignUpAPI(APIView):
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
         if value['status'] == '4':
-            Account.objects.create_user(serviceNum=request.data['serviceNum'],
+            Account.objects.create_user(srvno=request.data['srvno'],
                                         password=request.data['password'],
                                         name=request.data['name'],
                                         rank=request.data['rank'],
-                                        belong=request.data['belong'],
+                                        unit=request.data['unit'],
                                         position=request.data['position'],
                                         phone=request.data['phone'],
                                         device_id=request.data['device_id'])
@@ -80,7 +80,7 @@ class SignUpAPI(APIView):
 
 class UserInfoAPI(APIView):
     def post(self, request):
-        user = Account.objects.get(id=self.request.user.id)
+        user = Account.objects.filter(id=self.request.user.id)
         serializer = AccountSerializer(user)
         return self.success(serializer.data, message='success')
 
