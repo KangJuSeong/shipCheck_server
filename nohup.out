@@ -1,0 +1,238 @@
+Watching for file changes with StatReloader
+2021-02-08 19:15:49.019734: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcudart.so.10.1'; dlerror: libcudart.so.10.1: cannot open shared object file: No such file or directory
+2021-02-08 19:15:49.022001: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+System check identified some issues:
+
+WARNINGS:
+?: (rest_framework.W001) You have specified a default PAGE_SIZE pagination rest_framework setting, without specifying also a DEFAULT_PAGINATION_CLASS.
+	HINT: The default for DEFAULT_PAGINATION_CLASS is None. In previous versions this was PageNumberPagination. If you wish to define PAGE_SIZE globally whilst defining pagination_class on a per-view basis you may silence this check.
+
+System check identified 1 issue (0 silenced).
+Watching for file changes with StatReloader
+2021-02-08 19:17:23.982482: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcudart.so.10.1'; dlerror: libcudart.so.10.1: cannot open shared object file: No such file or directory
+2021-02-08 19:17:23.982548: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+System check identified some issues:
+
+WARNINGS:
+?: (rest_framework.W001) You have specified a default PAGE_SIZE pagination rest_framework setting, without specifying also a DEFAULT_PAGINATION_CLASS.
+	HINT: The default for DEFAULT_PAGINATION_CLASS is None. In previous versions this was PageNumberPagination. If you wish to define PAGE_SIZE globally whilst defining pagination_class on a per-view basis you may silence this check.
+
+System check identified 1 issue (0 silenced).
+Watching for file changes with StatReloader
+2021-02-08 23:07:02.920424: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcudart.so.10.1'; dlerror: libcudart.so.10.1: cannot open shared object file: No such file or directory
+2021-02-08 23:07:02.920469: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+System check identified some issues:
+
+WARNINGS:
+?: (rest_framework.W001) You have specified a default PAGE_SIZE pagination rest_framework setting, without specifying also a DEFAULT_PAGINATION_CLASS.
+	HINT: The default for DEFAULT_PAGINATION_CLASS is None. In previous versions this was PageNumberPagination. If you wish to define PAGE_SIZE globally whilst defining pagination_class on a per-view basis you may silence this check.
+
+System check identified 1 issue (0 silenced).
+[08/Feb/2021 23:07:43] "POST /Accounts/login/ HTTP/1.1" 200 267
+[08/Feb/2021 23:48:43] "POST /Accounts/login/ HTTP/1.1" 200 269
+[08/Feb/2021 23:48:52] "POST /Boats/boat/searchingwasted/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:01:50] "GET /adminBoats/boatimg/ HTTP/1.1" 200 47099
+[09/Feb/2021 00:01:50] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:01:52] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57297
+[09/Feb/2021 00:01:52] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9775828.jpg HTTP/1.1" 200 69296
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9825398.jpg HTTP/1.1" 200 117443
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9780627.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9776418.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9742168.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9793909.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9784336.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9780457.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9848948.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9778399.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9762340.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9813254.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9778818.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9826562.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9812810.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9795658.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9781188.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9745653.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:52] "GET /img/wasted_img/9780653.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9749116.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9783459.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9762326.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9848900.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9839478.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9839454.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9856048.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9801550.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9770763.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9784130.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:53] "GET /img/wasted_img/9780445.jpg HTTP/1.1" 304 0
+[09/Feb/2021 00:01:59] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:02:15] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57297
+[09/Feb/2021 00:02:15] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:02:16] "GET /img/wasted_img/9745653.jpg HTTP/1.1" 200 139563
+[09/Feb/2021 00:02:18] "POST /Boats/boat/detailwastedboat/ HTTP/1.1" 200 190
+[09/Feb/2021 00:02:26] "GET /adminBoats/wasteboat/99/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:02:26] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:02:34] "POST /adminBoats/wasteboat/99/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:02:34] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:02:34] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:02:42] "GET /adminBoats/wasteboat/98/change/ HTTP/1.1" 200 19568
+[09/Feb/2021 00:02:42] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:02:49] "GET /img/wasted_img/9778399.jpg HTTP/1.1" 200 157885
+[09/Feb/2021 00:02:50] "POST /adminBoats/wasteboat/98/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:02:50] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:02:50] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:02:55] "GET /adminBoats/wasteboat/97/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:02:55] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:01] "POST /adminBoats/wasteboat/97/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:03:01] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:03:01] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:11] "GET /adminBoats/wasteboat/96/change/ HTTP/1.1" 200 19568
+[09/Feb/2021 00:03:11] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:16] "POST /adminBoats/wasteboat/96/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:03:17] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:03:17] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:22] "GET /adminBoats/wasteboat/94/change/ HTTP/1.1" 200 19568
+[09/Feb/2021 00:03:22] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:28] "POST /adminBoats/wasteboat/94/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:03:28] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:03:28] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:33] "GET /adminBoats/wasteboat/93/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:03:34] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:39] "POST /adminBoats/wasteboat/93/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:03:39] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:03:39] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:46] "GET /adminBoats/wasteboat/92/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:03:46] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:51] "POST /adminBoats/wasteboat/92/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:03:52] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:03:52] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:03:52] "POST /Boats/boat/detailwastedboat/ HTTP/1.1" 200 190
+[09/Feb/2021 00:03:59] "GET /adminBoats/wasteboat/91/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:03:59] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:02] "GET /img/wasted_img/9784336.jpg HTTP/1.1" 200 128040
+[09/Feb/2021 00:04:04] "POST /adminBoats/wasteboat/91/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:04:04] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:04:04] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:14] "GET /adminBoats/wasteboat/83/change/ HTTP/1.1" 200 19567
+[09/Feb/2021 00:04:14] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:19] "POST /adminBoats/wasteboat/83/change/ HTTP/1.1" 302 0
+[09/Feb/2021 00:04:20] "GET /adminBoats/wasteboat/ HTTP/1.1" 200 57862
+[09/Feb/2021 00:04:20] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:24] "GET /adminBoats/wasteboat/?o=5 HTTP/1.1" 200 59409
+[09/Feb/2021 00:04:24] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:28] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 59470
+[09/Feb/2021 00:04:29] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:31] "GET /adminBoats/wasteboat/90/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19649
+[09/Feb/2021 00:04:31] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:36] "POST /adminBoats/wasteboat/90/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:04:36] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:04:36] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:38] "GET /adminBoats/wasteboat/89/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19649
+[09/Feb/2021 00:04:39] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:44] "POST /adminBoats/wasteboat/89/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:04:44] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:04:44] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:46] "GET /adminBoats/wasteboat/86/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19649
+[09/Feb/2021 00:04:46] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:52] "POST /adminBoats/wasteboat/86/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:04:52] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:04:52] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:04:56] "GET /adminBoats/wasteboat/84/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19649
+[09/Feb/2021 00:04:56] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:01] "POST /adminBoats/wasteboat/84/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:05:01] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:05:01] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:03] "GET /adminBoats/wasteboat/88/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19648
+[09/Feb/2021 00:05:03] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:08] "POST /adminBoats/wasteboat/88/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:05:09] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:05:09] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:12] "GET /adminBoats/wasteboat/85/change/?_changelist_filters=o%3D-5 HTTP/1.1" 200 19649
+[09/Feb/2021 00:05:12] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:17] "POST /adminBoats/wasteboat/85/change/?_changelist_filters=o%3D-5 HTTP/1.1" 302 0
+[09/Feb/2021 00:05:18] "GET /adminBoats/wasteboat/?o=-5 HTTP/1.1" 200 60035
+[09/Feb/2021 00:05:18] "GET /adminjsi18n/ HTTP/1.1" 200 3372
+[09/Feb/2021 00:05:47] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:05:50] "POST /Accounts/login/ HTTP/1.1" 200 274
+[09/Feb/2021 00:05:54] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:05:54] "GET /img/wasted_img/9804801.jpg HTTP/1.1" 200 295658
+[09/Feb/2021 00:05:55] "GET /img/wasted_img/9868338.jpg HTTP/1.1" 200 123026
+[09/Feb/2021 00:05:55] "GET /img/wasted_img/5141146.jpg HTTP/1.1" 200 129393
+[09/Feb/2021 00:05:55] "GET /img/wasted_img/9859117.jpg HTTP/1.1" 200 132003
+[09/Feb/2021 00:05:57] "GET /img/wasted_img/9869332.jpg HTTP/1.1" 200 73812
+[09/Feb/2021 00:05:57] "GET /img/wasted_img/9868326.jpg HTTP/1.1" 200 294607
+[09/Feb/2021 00:05:57] "GET /img/wasted_img/9783071.jpg HTTP/1.1" 200 149997
+[09/Feb/2021 00:05:57] "GET /img/wasted_img/9841598.jpg HTTP/1.1" 200 120344
+[09/Feb/2021 00:05:59] "GET /img/wasted_img/9757187.jpg HTTP/1.1" 200 99459
+[09/Feb/2021 00:06:00] "GET /img/wasted_img/9860245.jpg HTTP/1.1" 200 107072
+[09/Feb/2021 00:06:00] "GET /img/wasted_img/9863584.jpg HTTP/1.1" 200 206038
+[09/Feb/2021 00:06:00] "GET /img/wasted_img/9863314.jpg HTTP/1.1" 200 138754
+[09/Feb/2021 00:06:01] "GET /img/wasted_img/9842188.jpg HTTP/1.1" 200 210578
+[09/Feb/2021 00:06:01] "GET /img/wasted_img/9778818.jpg HTTP/1.1" 200 162355
+[09/Feb/2021 00:06:02] "GET /img/wasted_img/5002522.jpg HTTP/1.1" 200 267045
+[09/Feb/2021 00:06:02] "GET /img/wasted_img/9878826.jpg HTTP/1.1" 200 146785
+[09/Feb/2021 00:06:03] "GET /img/wasted_img/9863326.jpg HTTP/1.1" 200 208688
+[09/Feb/2021 00:06:04] "GET /img/wasted_img/8335449.jpg HTTP/1.1" 200 241038
+[09/Feb/2021 00:06:04] "GET /img/wasted_img/9850537.jpg HTTP/1.1" 200 485623
+[09/Feb/2021 00:06:04] "POST /Boats/boat/detailwastedboat/ HTTP/1.1" 200 189
+[09/Feb/2021 00:06:05] "GET /img/wasted_img/9818797.jpg HTTP/1.1" 200 37888
+[09/Feb/2021 00:06:05] "GET /img/wasted_img/9826548.jpg HTTP/1.1" 200 188163
+[09/Feb/2021 00:06:06] "GET /img/wasted_img/7509598.jpg HTTP/1.1" 200 57877
+[09/Feb/2021 00:06:07] "GET /img/wasted_img/5360912.jpg HTTP/1.1" 200 279066
+[09/Feb/2021 00:06:07] "GET /img/wasted_img/9848223.jpg HTTP/1.1" 200 280342
+[09/Feb/2021 00:06:08] "GET /img/wasted_img/9775828.jpg HTTP/1.1" 200 69296
+[09/Feb/2021 00:06:09] "GET /img/wasted_img/9832119.jpg HTTP/1.1" 200 64939
+[09/Feb/2021 00:06:09] "GET /img/wasted_img/9850575.jpg HTTP/1.1" 200 219362
+[09/Feb/2021 00:06:10] "GET /img/wasted_img/9874911.jpg HTTP/1.1" 200 139905
+[09/Feb/2021 00:06:11] "GET /img/wasted_img/5607742.jpg HTTP/1.1" 200 126752
+[09/Feb/2021 00:06:11] "GET /img/wasted_img/9859129.jpg HTTP/1.1" 200 164888
+[09/Feb/2021 00:06:12] "GET /img/wasted_img/9825453.jpg HTTP/1.1" 200 153316
+[09/Feb/2021 00:06:12] "GET /img/wasted_img/5374391.jpg HTTP/1.1" 200 151486
+[09/Feb/2021 00:06:13] "GET /img/wasted_img/9780445.jpg HTTP/1.1" 200 245822
+[09/Feb/2021 00:06:14] "GET /img/wasted_img/9770763.jpg HTTP/1.1" 200 216722
+[09/Feb/2021 00:06:14] "GET /img/wasted_img/9784130.jpg HTTP/1.1" 200 230793
+[09/Feb/2021 00:06:15] "GET /img/wasted_img/9801550.jpg HTTP/1.1" 200 295016
+[09/Feb/2021 00:06:17] "GET /img/wasted_img/9856048.jpg HTTP/1.1" 200 351335
+[09/Feb/2021 00:06:18] "GET /img/wasted_img/9839454.jpg HTTP/1.1" 200 212739
+[09/Feb/2021 00:06:19] "GET /img/wasted_img/9839478.jpg HTTP/1.1" 200 323334
+[09/Feb/2021 00:06:20] "GET /img/wasted_img/9848900.jpg HTTP/1.1" 200 109901
+[09/Feb/2021 00:06:21] "GET /img/wasted_img/9762326.jpg HTTP/1.1" 200 128145
+[09/Feb/2021 00:06:23] "GET /img/wasted_img/9749116.jpg HTTP/1.1" 200 196414
+[09/Feb/2021 00:06:23] "GET /img/wasted_img/9783459.jpg HTTP/1.1" 200 127818
+[09/Feb/2021 00:06:24] "GET /img/wasted_img/9745653.jpg HTTP/1.1" 200 139563
+[09/Feb/2021 00:06:24] "GET /img/wasted_img/9780653.jpg HTTP/1.1" 200 222350
+[09/Feb/2021 00:06:25] "GET /img/wasted_img/9795658.jpg HTTP/1.1" 200 372872
+[09/Feb/2021 00:06:26] "GET /img/wasted_img/9781188.jpg HTTP/1.1" 200 180217
+[09/Feb/2021 00:06:26] "GET /img/wasted_img/9826562.jpg HTTP/1.1" 200 213341
+[09/Feb/2021 00:06:28] "GET /img/wasted_img/9812810.jpg HTTP/1.1" 200 463976
+[09/Feb/2021 00:06:30] "GET /img/wasted_img/9778818.jpg HTTP/1.1" 200 162355
+[09/Feb/2021 00:06:30] "GET /img/wasted_img/9813254.jpg HTTP/1.1" 200 235990
+[09/Feb/2021 00:06:30] "GET /img/wasted_img/9762340.jpg HTTP/1.1" 200 496349
+[09/Feb/2021 00:06:33] "GET /img/wasted_img/9778399.jpg HTTP/1.1" 200 157885
+[09/Feb/2021 00:06:34] "GET /img/wasted_img/9848948.jpg HTTP/1.1" 200 115618
+[09/Feb/2021 00:06:35] "GET /img/wasted_img/9780457.jpg HTTP/1.1" 200 377985
+[09/Feb/2021 00:06:36] "GET /img/wasted_img/9784336.jpg HTTP/1.1" 200 128040
+[09/Feb/2021 00:06:36] "GET /img/wasted_img/9793909.jpg HTTP/1.1" 200 150793
+[09/Feb/2021 00:06:38] "GET /img/wasted_img/9780627.jpg HTTP/1.1" 200 63707
+[09/Feb/2021 00:06:39] "GET /img/wasted_img/9742168.jpg HTTP/1.1" 200 96379
+[09/Feb/2021 00:06:39] "GET /img/wasted_img/9776418.jpg HTTP/1.1" 200 169847
+[09/Feb/2021 00:06:40] "GET /img/wasted_img/9825398.jpg HTTP/1.1" 200 117443
+[09/Feb/2021 00:06:41] "GET /img/wasted_img/9775828.jpg HTTP/1.1" 200 69296
+[09/Feb/2021 00:06:54] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:06:56] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:06:56] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+[09/Feb/2021 00:07:03] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+Bad Request: /Accounts/login/
+[09/Feb/2021 00:39:02] "POST /Accounts/login/ HTTP/1.1" 400 91
+[09/Feb/2021 00:45:07] "POST /Accounts/login/ HTTP/1.1" 200 269
+[09/Feb/2021 00:45:28] "POST /Boats/boat/wastedboats/ HTTP/1.1" 200 8888
+Watching for file changes with StatReloader
+2021-02-09 09:01:42.526056: W tensorflow/stream_executor/platform/default/dso_loader.cc:59] Could not load dynamic library 'libcudart.so.10.1'; dlerror: libcudart.so.10.1: cannot open shared object file: No such file or directory
+2021-02-09 09:01:42.528472: I tensorflow/stream_executor/cuda/cudart_stub.cc:29] Ignore above cudart dlerror if you do not have a GPU set up on your machine.
+System check identified some issues:
+
+WARNINGS:
+?: (rest_framework.W001) You have specified a default PAGE_SIZE pagination rest_framework setting, without specifying also a DEFAULT_PAGINATION_CLASS.
+	HINT: The default for DEFAULT_PAGINATION_CLASS is None. In previous versions this was PageNumberPagination. If you wish to define PAGE_SIZE globally whilst defining pagination_class on a per-view basis you may silence this check.
+
+System check identified 1 issue (0 silenced).

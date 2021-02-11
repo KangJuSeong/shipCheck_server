@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [".run.goorm.io"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
