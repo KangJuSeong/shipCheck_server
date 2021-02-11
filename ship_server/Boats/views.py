@@ -1,6 +1,6 @@
 from utils.custom_view import APIView
-from Boats.models import Boat, WasteBoat, BoatImg
-from Boats.serializers import BoatSerializer, WasteBoatSerializer, BoatImageSerializer
+from .models import Boat, WasteBoat, BoatImg
+from .serializers import BoatSerializer, WasteBoatSerializer, BoatImageSerializer
 import base64
 from django.core.files.base import ContentFile
 from keras_model import snippets
@@ -9,10 +9,10 @@ import io
 from utils.best_three import bestThree
 from django.db.models import Q
 
-from utils.test_crawling import parse_data
-from django.core.files import File
-import requests
-import random
+# from utils.test_crawling import parse_data
+# from django.core.files import File
+# import requests
+# import random
 
 
 class DetailBoatAPI(APIView):
@@ -164,7 +164,7 @@ class delete(APIView):
 
 class test(APIView):
     def get(self, request):
-        # data_set = [9136967,9236274,9338694,9387437,9332937,9202780,9684689,9235359,9825398,9472141,9289958,9409182,9409338,9343077,9343077,9775828,9196838,9357810,9702132,9705079]
+        # data_set = []
         # for code in data_set:
         #     code = str(code)
         #     data = parse_data(code)
