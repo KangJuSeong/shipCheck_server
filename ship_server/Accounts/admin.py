@@ -10,7 +10,8 @@ class AccountAdmin(admin.ModelAdmin):
         'position',
         'unit',
         'phone',
-        'device_id'
+        'device_id',
+        'regit_date',
     )
     search_fields = ['srvno', 'name', 'phone']
 

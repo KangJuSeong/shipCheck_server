@@ -16,6 +16,7 @@ class AccountManager(BaseUserManager):
                 phone=phone,
                 device_id=device_id
             )
+            user.regit_date = datetime.today()
             user.last_login = datetime.now()
             user.set_password(password)
             user.save()
@@ -23,14 +24,14 @@ class AccountManager(BaseUserManager):
         except Exception as e:
             print(e)
 
-    def create_superuser(self, serviceNum, password):
+    def create_superuser(self, srvno, password):
         try:
             superuser = self.create_user(
-                serviceNum,
+                srvno=srvno,
                 password=password
             )
             superuser.is_active = True
-            superuser.is_waiting = False
+            superuser.approve = True
             superuser.is_staff = True
             superuser.is_superuser = True
             superuser.save()
@@ -56,11 +57,12 @@ UNIT_TYPE = [
 class Account(AbstractBaseUser, PermissionsMixin):
     srvno = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=4, null=True, blank=True)
-    rank = models.CharField(max_length=4, null=True, blank=True)  # 계급 선택
+    rank = models.CharField(max_length=4, null=True, blank=True)
     position = models.CharField(max_length=20, null=True, blank=True)
-    unit = models.CharField(max_length=4, choices=UNIT_TYPE, default='None')  # 소속부대 선택
+    unit = models.CharField(max_length=4, choices=UNIT_TYPE, null=True,
+                            blank=True)
     phone = models.CharField(max_length=11, null=True, blank=True)
-    regit_date = models.DateField(default=datetime.today())
+    regit_date = models.DateField(null=True, blank=True)
     device_id = models.CharField(max_length=255, null=True, blank=True)
     fail_cnt = models.IntegerField(default=0)
     block_no = models.IntegerField(default=0)
