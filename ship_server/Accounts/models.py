@@ -4,15 +4,15 @@ from datetime import datetime
 
 
 class AccountManager(BaseUserManager):
-    def create_user(self, serviceNum, name=None, rank=None, position=None,
-                    belong=None, phone=None, device_id=None, password=None):
+    def create_user(self, srvno, password, name=None, rank=None, position=None,
+                    unit=None, phone=None, device_id=None):
         try:
             user = self.model(
-                serviceNum=serviceNum,
+                srvno=srvno,
                 name=name,
                 rank=rank,
                 position=position,
-                belong=belong,
+                unit=unit,
                 phone=phone,
                 device_id=device_id
             )
@@ -23,7 +23,7 @@ class AccountManager(BaseUserManager):
         except Exception as e:
             print(e)
 
-    def create_superuser(self, serviceNum, password=None):
+    def create_superuser(self, serviceNum, password):
         try:
             superuser = self.create_user(
                 serviceNum,
@@ -39,27 +39,40 @@ class AccountManager(BaseUserManager):
             print(e)
 
 
-# srvno, rank, name, unit(소속부대), position, phone, regit_date(등록일자), last_login, password, approve, is_active, is_superuser, device_id, fail_cnt, block_no
-class Account(AbstractBaseUser, PermissionsMixin):
-    serviceNum = models.CharField(unique=True, max_length=255)
-    name = models.CharField(max_length=255, null=True, blank=True)
-    rank = models.CharField(max_length=255, null=True, blank=True)
-    position = models.CharField(max_length=255, null=True, blank=True)
-    belong = models.CharField(max_length=255, null=True, blank=True)
-    phone = models.CharField(max_length=255, null=True, blank=True)
-    device_id = models.CharField(max_length=255, null=True, blank=True)
-    attemp = models.IntegerField(default=0)
-    blocked = models.IntegerField(default=0)
+UNIT_TYPE = [
+    ('X9-1', 'X9-1대대'),
+    ('X9-2', 'X9-2대대'),
+    ('X9-3', 'X9-3대대'),
+    ('X8-1', 'X8-1대대'),
+    ('X8-2', 'X8-2대대'),
+    ('X8-3', 'X8-3대대'),
+    ('X7-1', 'X7-1대대'),
+    ('X7-2', 'X7-2대대'),
+    ('X7-3', 'X7-3대대'),
+    ('None', 'None')
+]
 
+
+class Account(AbstractBaseUser, PermissionsMixin):
+    srvno = models.CharField(unique=True, max_length=255)
+    name = models.CharField(max_length=4, null=True, blank=True)
+    rank = models.CharField(max_length=4, null=True, blank=True)  # 계급 선택
+    position = models.CharField(max_length=20, null=True, blank=True)
+    unit = models.CharField(max_length=4, choices=UNIT_TYPE, default='None')  # 소속부대 선택
+    phone = models.CharField(max_length=11, null=True, blank=True)
+    regit_date = models.DateField(default=datetime.today())
+    device_id = models.CharField(max_length=255, null=True, blank=True)
+    fail_cnt = models.IntegerField(default=0)
+    block_no = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    is_waiting = models.BooleanField(default=True)
+    approve = models.BooleanField(default=False)
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'serviceNum'
-    REQUIRED_FIELD = ['name', 'rank', 'position', 'belong', 'phone',
+    USERNAME_FIELD = 'srvno'
+    REQUIRED_FIELD = ['name', 'rank', 'position', 'unit', 'phone',
                       'device_id']
 
 
