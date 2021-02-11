@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Accounts',
     'rest_framework',
     'Boats',
+    'Ships',
 ]
 
 MIDDLEWARE = [
@@ -149,4 +150,4 @@ DATETIME_FORMAT = 'Y-m-d H:i:s'
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'Accounts.Account'
 MEDIA_URL = '/img/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Boats/img')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Ships/img')
