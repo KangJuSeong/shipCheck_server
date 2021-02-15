@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from Boats.models import Boat, WasteBoat, BoatImg
+from .models import Boat, WasteBoat, BoatImg
 
 
 class BoatImageSerializer(serializers.HyperlinkedModelSerializer):

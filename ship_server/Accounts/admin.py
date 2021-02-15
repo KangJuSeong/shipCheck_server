@@ -4,15 +4,16 @@ from .models import Account
 
 class AccountAdmin(admin.ModelAdmin):
     list_display = (
-        'serviceNum',
+        'srvno',
         'name',
         'rank',
         'position',
-        'belong',
+        'unit',
         'phone',
-        'device_id'
+        'device_id',
+        'regit_date',
     )
-    search_fields = ['serviceNum', 'name', 'phone']
+    search_fields = ['srvno', 'name', 'phone']
 
 
 admin.site.register(Account, AccountAdmin)
