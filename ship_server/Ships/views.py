@@ -15,9 +15,7 @@ class DetailNoramlShipAPI(APIView):
     def post(self, request):
         try:
             queryset = NormalShip.objects.get(id=request.data['id'])
-            serializer_context = {'request': request}
-            serializer = NormalShipSerializer(queryset,
-                                              context=serializer_context)
+            serializer = NormalShipSerializer(queryset)
             return self.success(data=serializer.data, message='success')
         except ObjectDoesNotExist:
             return self.fail(message='Not Exist')
