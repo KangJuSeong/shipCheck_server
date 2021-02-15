@@ -77,9 +77,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELD = ['name', 'rank', 'position', 'unit', 'phone',
                       'device_id']
 
-
-class Meta:
     def __str__(self):
-        return self.phone
+        return self.srvno
 
     db_table = 'Accounts'

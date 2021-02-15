@@ -77,7 +77,7 @@ class LoginSerializer(serializers.Serializer):
                 jwt_token = JWT_ENCODE_HANDLER(payload)
                 return {
                     'message': 'Success Login',
-                    'serviceNum': user.srvno,
+                    'srvno': user.srvno,
                     'token': jwt_token,
                     'device_id': user.device_id
                 }
