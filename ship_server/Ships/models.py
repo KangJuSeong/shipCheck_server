@@ -7,7 +7,7 @@ class RegitInfo(models.Model):
     register = models.ForeignKey(Account,
                                  on_delete=models.SET_NULL,
                                  null=True,
-                                 blank=True)
+                                 blank=True,)
 
     class Meta:
         abstract = True
