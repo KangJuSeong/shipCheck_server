@@ -32,6 +32,22 @@ class NormalShip(RegitInfo):
 
     def __str__(self):
         return self.name
+    
+    def create_normal_ship(data, user):
+        ship = NormalShip.objects.create(name = data['name'],
+                                         port = data['port'],
+                                         code = data['code'],
+                                         tons = data['tons'],
+                                         types = data['types'],
+                                         is_vpass = data['is_vpass'],
+                                         is_ais = data['is_ais'],
+                                         is_vhf = data['is_vhf'],
+                                         is_ff = data['is_ff'],)
+        ship.register = user
+        # image = base64.b64decode(data['image_data'])
+        # ship.main_img = ContentFile(image_data, str(ship.name)+'.jpg')
+        ship.save()
+        return ship.id
 
 
 class NormalImage(RegitInfo):

@@ -47,7 +47,7 @@ class NormalImgAdmin(admin.ModelAdmin):
 
 class WasteImgAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'image_tag', 'w_id', 'register', 'regit_date', 'lat', 'lon'
+        'id', 'image_tag', 'register', 'regit_date', 'lat', 'lon'
     )
     # search_fields = ['point', 'add_date']
 

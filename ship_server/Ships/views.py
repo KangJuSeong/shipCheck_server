@@ -12,18 +12,31 @@ from django.db.models import Q
 
 
 class DetailNoramlShipAPI(APIView):
-    def post(self, request):
+    def get(self, request, pk=None):
         try:
-            queryset = NormalShip.objects.get(id=request.data['id'])
+            queryset = NormalShip.objects.get(id=pk)
             serializer = NormalShipSerializer(queryset)
             return self.success(data=serializer.data, message='success')
+        except ObjectDoesNotExist:
+            return self.fail(message='Not Exist')
+
+    def delete(self, request, pk=None):
+        try:
+            queryset = NormalShip.objects.get(id=pk)
+            queryset.delete()
+            return self.success(message='success')
         except ObjectDoesNotExist:
             return self.fail(message='Not Exist')
 
 
 class CreateNormalShipAPI(APIView):
     def post(self, request):
-        return self.success(message='success')
+        status = 0
+        status = NormalShip.create_normal_ship(request.data, request.user)
+        if  not status == 0:
+            return self.success(message='success '+str(status))
+        else: return self.fail(message='Fail Create2')
+
 
 
 class ListNormalShipAPI(APIView):
