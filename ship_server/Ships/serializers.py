@@ -3,12 +3,6 @@ from .models import NormalShip, WasteShip, NormalImage, WasteImage
 from Accounts.models import Account
 
 
-class RegisterSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Account
-        fields = ('name')
-
-
 class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
     register = serializers.SlugRelatedField(read_only=True,
                                             many=False,
@@ -18,7 +12,7 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
         model = NormalShip
         fields = ('id', 'main_img', 'name', 'port', 'code', 'tons', 'types',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt',
-                  'is_train', 'regit_date', 'register')
+                  'is_train', 'regit_date')
 
 
 class NormalImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,7 +25,7 @@ class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteShip
         fields = ('id', 'main_img', 'point', 'types', 'lat', 'lon',
-                  'is_train', 'regit_date', 'register')
+                  'is_train', 'regit_date')
 
 
 class WasteImageSerializer(serializers.HyperlinkedModelSerializer):
