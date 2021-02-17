@@ -1,7 +1,7 @@
 import time
 from utils.custom_view import APIView
-from Accounts.models import Account
-from Accounts.serializers import LoginSerializer, AccountSerializer
+from .models import Account
+from .serializers import LoginSerializer, AccountSerializer
 from rest_framework.permissions import AllowAny
 from utils.check_pw import check_pw
 

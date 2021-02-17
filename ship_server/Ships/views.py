@@ -11,7 +11,7 @@ from utils.best_three import bestThree
 from django.db.models import Q
 
 
-class DetailNoramlShipAPI(APIView):
+class DetailNormalShipAPI(APIView):
     def get(self, request, pk=None):
         try:
             queryset = NormalShip.objects.get(id=pk)
@@ -33,10 +33,10 @@ class CreateNormalShipAPI(APIView):
     def post(self, request):
         status = 0
         status = NormalShip.create_normal_ship(request.data, request.user)
-        if  not status == 0:
+        if not status == 0:
             return self.success(message='success '+str(status))
-        else: return self.fail(message='Fail Create2')
-
+        else:
+            return self.fail(message='Fail Create2')
 
 
 class ListNormalShipAPI(APIView):

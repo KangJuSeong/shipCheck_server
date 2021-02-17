@@ -1,4 +1,4 @@
-from Accounts.models import Account
+from .models import Account
 from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework_jwt.settings import api_settings
