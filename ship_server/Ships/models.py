@@ -1,6 +1,5 @@
 from django.db import models
 from Accounts.models import Account
-import datetime
 
 
 class RegitInfo(models.Model):
@@ -33,7 +32,7 @@ class NormalShip(RegitInfo):
                                  blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.id)
     
     def create_normal_ship(data, user):
         ship = NormalShip.objects.create(name=data['name'],
@@ -75,6 +74,9 @@ class WasteShip(RegitInfo):
     main_img = models.ImageField(upload_to='waste/new/%Y/%m/%d',
                                  null=True,
                                  blank=True)
+
+    def __str__(self):
+        return str(self.id)
 
 
 class WasteImage(RegitInfo):
