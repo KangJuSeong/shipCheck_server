@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='BoatImg',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('img', models.ImageField(blank=True, null=True, upload_to='boat_img')),
+                ('media', models.ImageField(blank=True, null=True, upload_to='boat_img')),
                 ('lon', models.FloatField(default=0)),
                 ('lat', models.FloatField(default=0)),
                 ('point', models.TextField()),

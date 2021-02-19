@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='wasteboat',
             name='wasted_img',
-            field=models.ImageField(blank=True, null=True, upload_to='ship_server/Boats/img/wasted_img'),
+            field=models.ImageField(blank=True, null=True, upload_to='ship_server/Boats/media/wasted_img'),
         ),
         migrations.AlterField(
             model_name='boat',
             name='main_img',
-            field=models.ImageField(blank=True, null=True, upload_to='ship_server/Boats/img/boat_img'),
+            field=models.ImageField(blank=True, null=True, upload_to='ship_server/Boats/media/boat_img'),
         ),
     ]

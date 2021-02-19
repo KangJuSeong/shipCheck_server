@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('lat', models.FloatField(default=0)),
                 ('lon', models.FloatField(default=0)),
                 ('regit_date', models.DateTimeField(auto_now_add=True)),
-                ('img', models.ImageField(blank=True, null=True, upload_to='waste_add_img/')),
+                ('media', models.ImageField(blank=True, null=True, upload_to='waste_add_img/')),
                 ('register', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='waste_add_register', to=settings.AUTH_USER_MODEL)),
                 ('w_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='waste_ship', to='Ships.WasteShip')),
             ],
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
             name='NormalImage',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('img', models.ImageField(blank=True, null=True, upload_to='normal_add_img/')),
+                ('media', models.ImageField(blank=True, null=True, upload_to='normal_add_img/')),
                 ('regit_date', models.DateTimeField(auto_now_add=True)),
                 ('n_name', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='normal_ship', to='Ships.NormalShip')),
                 ('register', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='noraml_add_register', to=settings.AUTH_USER_MODEL)),
