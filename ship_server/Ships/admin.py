@@ -5,11 +5,12 @@ from django.utils.html import format_html
 
 class NormalShipAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'image_tag', 'name', 'port', 'code', 'tons', 'types',
+        'id', 'image_tag', 'name',
+        # 'port', 'tons', 'types', 'code',
         # 'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'is_train',
         'img_cnt', 'register', 'regit_date',
     )
-    search_fields = ['name']
+    search_fields = ['id', 'name']
 
     def image_tag(self, obj):
         if obj.main_img == '':
@@ -24,7 +25,7 @@ class WastedShipAdmin(admin.ModelAdmin):
         'id', 'image_tag', 'info', 'types', 'lat', 'lon', 'is_train',
         'regit_date', 'register', 'img_cnt'
     )
-    # search_fields = ['title', 'detail']
+    search_fields = ['info', 'id']
 
     def image_tag(self, obj):
         if obj.main_img == '':
@@ -38,7 +39,7 @@ class NormalImgAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'image_tag', 'n_name', 'register', 'regit_date'
     )
-    # search_fields = ['point', 'add_date']
+    search_fields = ['n_name__id']
 
     def image_tag(self, obj):
         if obj.img is None:
@@ -49,9 +50,9 @@ class NormalImgAdmin(admin.ModelAdmin):
 
 class WasteImgAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'image_tag', 'register', 'regit_date', 'lat', 'lon'
+        'id', 'image_tag', 'w_id', 'register', 'regit_date',
     )
-    # search_fields = ['point', 'add_date']
+    search_fields = ['w_id__id']
 
     def image_tag(self, obj):
         if obj.img is None:
