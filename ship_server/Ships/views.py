@@ -113,8 +113,6 @@ class NormalShipRegister(APIView):
             weight = list(search_row['weight'])[0]
             find_row = img_csv.loc[(img_csv['shipdb_id'] == ship_id)]  # 필터링 된 row를 이용하여 img 주소 찾기
             img_len = len(list(find_row['ship_image']))
-            weight_list = ['톤', 'T', 'ton', 't']
-            size_list = ['길이', ',', '폭', ]
             if name == 'none':
                 name = '정보 없음'
             if code == 'none':
@@ -124,8 +122,8 @@ class NormalShipRegister(APIView):
             if weight == 'none':
                 weight = '정보 없음'
             if not img_len == 0:
-                img_path = list(find_row['ship_image'])[0]
-                img = Image.open('D:/기존 사용 DB/media/' + img_path)
+                img_path = list(find_row['ship_image'])
+                img = Image.open('D:/기존 사용 DB/media/' + img_path[0])
                 img_name = str(uuid.uuid4())
                 buf = BytesIO()
                 img.save(buf, 'jpeg')
@@ -140,6 +138,23 @@ class NormalShipRegister(APIView):
                                                  register=Account.objects.get(srvno='ADMIN'),
                                                  main_img=ContentFile(img_bytes, str(datetime.today())+img_name+'.jpg'))
                 ship.save()
+                if img_len > 1:
+                    for i in range(img_len):
+                        if i == 0:
+                            continue
+                        else:
+                            img = Image.open('D:/기존 사용 DB/media/' + img_path[i])
+                            img_name = str(uuid.uuid4())
+                            buf = BytesIO()
+                            img.save(buf, 'jpeg')
+                            buf.seek(0)
+                            img_bytes = buf.read()
+                            buf.close()
+                            ship_img = NormalImage.objects.create(n_name=NormalShip.objects.get(id=ship.id),
+                                                                  img=ContentFile(img_bytes,
+                                                                                  str(datetime.today())+img_name+'.jpg'))
+                            ship_img.save()
+                            print('{0} / {1}'.format(i, img_len))
                 print('{} 선박 등록 완료'.format(ship_id))
             else:
                 ship = NormalShip.objects.create(name=name,
@@ -149,6 +164,7 @@ class NormalShipRegister(APIView):
                                                  img_cnt=img_len,
                                                  register=Account.objects.get(srvno='ADMIN'))
                 ship.save()
+                print('이미지가 없어요 ㅜㅜ')
                 print('{} 선박 등록 완료'.format(ship_id))
         return self.success(message='success')
 
@@ -172,8 +188,8 @@ class WasteShipReigster(APIView):
             find_row = img_csv.loc[(img_csv['shipdb_id'] == int(ship_id))]  # 필터링 된 row를 이용하여 img 주소 찾기
             img_len = len(list(find_row['ship_image']))
             if not img_len == 0:
-                img_path = list(find_row['ship_image'])[0]
-                img = Image.open('D:/기존 사용 DB/media/' + img_path)
+                img_path = list(find_row['ship_image'])
+                img = Image.open('D:/기존 사용 DB/media/' + img_path[0])
                 img_name = str(uuid.uuid4())
                 buf = BytesIO()
                 img.save(buf, 'jpeg')
@@ -187,7 +203,23 @@ class WasteShipReigster(APIView):
                                                 register=Account.objects.get(srvno='ADMIN'),
                                                 main_img=ContentFile(img_bytes, str(datetime.today())+img_name+'.jpg'))
                 ship.save()
-                print('이미지가 잘 들어갔어요!')
+                if img_len > 1:
+                    for i in range(img_len):
+                        if i == 0:
+                            continue
+                        else:
+                            img = Image.open('D:/기존 사용 DB/media/' + img_path[i])
+                            img_name = str(uuid.uuid4())
+                            buf = BytesIO()
+                            img.save(buf, 'jpeg')
+                            buf.seek(0)
+                            img_bytes = buf.read()
+                            buf.close()
+                            ship_img = WasteImage.objects.create(w_id=WasteShip.objects.get(id=ship.id),
+                                                                 img=ContentFile(img_bytes,
+                                                                                 str(datetime.today())+img_name+'.jpg'))
+                            ship_img.save()
+                            print('{0} / {1}'.format(i, img_len))
                 print('{} 선박 등록 완료'.format(ship_id))
             else:
                 ship = WasteShip.objects.create(lat=lat,
@@ -201,30 +233,10 @@ class WasteShipReigster(APIView):
         return self.success(message='success')
 
 
-class NormalImageExtraRegit(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        ship_csv = pd.read_csv('D:/기존 사용 DB/선박.csv')
-        img_csv = pd.read_csv('D:/기존 사용 DB/선박이미지.csv')
-        for ship_id in ship_csv['id']:
-            find_row = img_csv.loc[(img_csv['shipdb_id'] == int(ship_id))]  # 필터링 된 row를 이용하여 img 주소 찾기
-            img_len = len(list(find_row['ship_image']))
-
-        return self.success(message='success')
-
-
-class WasteImageExtraRegit(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        return self.success(message='success')
-
-
 class AllDelete(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        ships = NormalShip.objects.all()
+        ships = WasteShip.objects.all()
         ships.delete()
         return self.success(message='success')
