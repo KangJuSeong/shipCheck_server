@@ -149,5 +149,5 @@ DATETIME_FORMAT = 'Y-m-d H:i:s'
 
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'Accounts.Account'
-MEDIA_URL = '/img/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Ships/img')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Ships/media')
