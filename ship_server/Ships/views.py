@@ -60,18 +60,37 @@ class SearchNormalShipAPI(APIView):
 
 
 class DetailWasteShipAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
+    def get(self, request, pk=None):
+        try:
+            queryset = WasteShip.objects.get(id=pk)
+            serializer = WasteShipSerializer(queryset)
+            return self.success(data=serializer.data, message='success')
+        except ObjectDoesNotExist:
+            return self.fail(message='Not Exist')
+
+    def delete(self, request, pk=None):
+        try:
+            queryset = WasteShip.objects.get(id=pk)
+            queryset.delete()
+            return self.success(message='success')
+        except ObjectDoesNotExist:
+            return self.fail(message='Not Exist')
 
 
 class CreateWasteShipAPI(APIView):
     def post(self, request):
-        return self.success(message='success')
+        status = WasteShip.create_normal_ship(data=request.data, user=request.user)
+        if not status == 0:
+            return self.success(message='success ' + str(status))
+        else:
+            return self.fail(message='Fail Create')
 
 
 class ListWasteShipAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
+    def get(self, request):
+        queryset = WasteShip.objects.all()
+        serializer = WasteShipSerializer(queryset, many=True)
+        return self.success(data=serializer.data, message='success')
 
 
 class SearchWasteShipAPI(APIView):
@@ -79,7 +98,7 @@ class SearchWasteShipAPI(APIView):
         return self.success(message='success')
 
 
-class DetailNoramlImageAPI(APIView):
+class DetailNormalImageAPI(APIView):
     def post(self, request):
         return self.success(message='success')
 
