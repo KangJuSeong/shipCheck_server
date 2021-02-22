@@ -2,7 +2,8 @@ from utils.custom_view import APIView
 from .models import NormalShip, NormalImage, WasteShip, WasteImage
 from Accounts.models import Account
 from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
-                          WasteImageSerializer, WasteLocationSerializer,)
+                          WasteImageSerializer, WasteLocationSerializer,
+                          NormalShipUpdateSerializer, WasteShipUpdateSerializer)
 from django.core.exceptions import ObjectDoesNotExist
 import numpy as np
 from django.core.files import File
@@ -38,23 +39,41 @@ class DetailNormalShipAPI(APIView):
             return self.fail(message='Not Exist')
 
     def put(self, request, pk=None):
-        return self.success(message='success')
+        queryset = NormalShip.objects.get(id=pk)
+        serializer = NormalShipUpdateSerializer(queryset, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return self.success(message='success')
+        return self.fail(message='fail')
 
 
 class CreateNormalShipAPI(APIView):
     def post(self, request):
-        status = NormalShip.create_normal_ship(data=request.data, user=request.user)
-        if not status == 0:
-            return self.success(message='success '+str(status))
-        else:
-            return self.fail(message='Fail Create')
+        ship_id = NormalShip.create_normal_ship(data=request.data, user=request.user)
+        if len(request.data['image_data']) > 1:
+            NormalImage.create_normal_image(img_list=request.data['image_data'],
+                                            ship_id=ship_id)
+        return self.success(message='success')
 
 
 class ListNormalShipAPI(APIView):
     def get(self, request):
-        queryset = NormalShip.objects.all()
+        query_size = NormalShip.objects.count()
+        page_size = 50
+        count = int(query_size / page_size) + 1
+        page = int(request.GET.get('page'))
+        if page is 1:
+            queryset = NormalShip.objects.all()[0:page_size-1]
+        elif page is count:
+            start = page_size * (page - 1)
+            queryset = NormalShip.objects.all()[start:]
+        else:
+            start = page_size * (page - 1)
+            end = start + page_size
+            queryset = NormalShip.objects.all()[start:end]
         serializer = NormalShipSerializer(queryset, many=True)
-        return self.success(data=serializer.data, message='success')
+        result = {'count': count, "data": serializer.data}
+        return self.success(data=result, message='success')
 
 
 class SearchNormalShipAPI(APIView):
@@ -81,21 +100,42 @@ class DetailWasteShipAPI(APIView):
         except ObjectDoesNotExist:
             return self.fail(message='Not Exist')
 
+    def put(self, request, pk=None):
+        queryset = WasteShip.objects.get(id=pk)
+        serializer = WasteShipUpdateSerializer(queryset, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return self.success(message='success')
+        return self.fail(message='fail')
+
 
 class CreateWasteShipAPI(APIView):
     def post(self, request):
-        status = WasteShip.create_normal_ship(data=request.data, user=request.user)
-        if not status == 0:
-            return self.success(message='success ' + str(status))
-        else:
-            return self.fail(message='Fail Create')
+        ship_id = WasteShip.create_normal_ship(data=request.data, user=request.user)
+        if len(request.data['image_data']) > 1:
+            NormalImage.create_normal_image(img_list=request.data['image_data'],
+                                            ship_id=ship_id)
+        return self.success(message='success')
 
 
 class ListWasteShipAPI(APIView):
     def get(self, request):
-        queryset = WasteShip.objects.all()
+        query_size = WasteShip.objects.count()
+        page_size = 50
+        count = int(query_size / page_size) + 1
+        page = int(request.GET.get('page'))
+        if page is 1:
+            queryset = WasteShip.objects.all()[0:page_size - 1]
+        elif page is count:
+            start = page_size * (page - 1)
+            queryset = WasteShip.objects.all()[start:]
+        else:
+            start = page_size * (page - 1)
+            end = start + page_size
+            queryset = WasteShip.objects.all()[start:end]
         serializer = WasteShipSerializer(queryset, many=True)
-        return self.success(data=serializer.data, message='success')
+        result = {'count': count, "data": serializer.data}
+        return self.success(data=result, message='success')
 
 
 class LocationWasteShipAPI(APIView):
@@ -165,6 +205,7 @@ class NormalShipRegister(APIView):
                                                  tons=weight,
                                                  img_cnt=img_len,
                                                  register=Account.objects.get(srvno='ADMIN'),
+                                                 region='정보 없음',
                                                  main_img=ContentFile(img_bytes, str(datetime.today())+img_name+'.jpg'))
                 ship.save()
                 if img_len > 1:
@@ -191,6 +232,7 @@ class NormalShipRegister(APIView):
                                                  size=size,
                                                  tons=weight,
                                                  img_cnt=img_len,
+                                                 region='정보 없음',
                                                  register=Account.objects.get(srvno='ADMIN'))
                 ship.save()
                 print('이미지가 없어요 ㅜㅜ')
@@ -230,6 +272,7 @@ class WasteShipReigster(APIView):
                                                 info=info,
                                                 img_cnt=img_len,
                                                 register=Account.objects.get(srvno='ADMIN'),
+                                                region='정보 없음',
                                                 main_img=ContentFile(img_bytes, str(datetime.today())+img_name+'.jpg'))
                 ship.save()
                 if img_len > 1:
@@ -255,6 +298,7 @@ class WasteShipReigster(APIView):
                                                 lon=lon,
                                                 info=info,
                                                 img_cnt=img_len,
+                                                region='정보 없음',
                                                 register=Account.objects.get(srvno='ADMIN'),)
                 ship.save()
                 print('이미지가 없어요 ㅜㅜ')
