@@ -53,7 +53,7 @@ class SignUpAPI(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        if Account.objects.filter(serviceNum=request.data['serviceNum']):
+        if Account.objects.filter(srvno=request.data['srvno']):
             print('aleady exist serviceNum')
             return self.fail(message="Already exist serviceNum")
         if Account.objects.filter(device_id=request.data['device_id']):
