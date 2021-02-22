@@ -19,8 +19,6 @@ from datetime import datetime
 
 
 class DetailNormalShipAPI(APIView):
-    permission_classes = [AllowAny]
-
     def get(self, request, pk=None):
         try:
             queryset = NormalShip.objects.get(id=pk)
@@ -39,8 +37,6 @@ class DetailNormalShipAPI(APIView):
 
 
 class CreateNormalShipAPI(APIView):
-    permission_classes = [AllowAny]
-
     def post(self, request):
         status = NormalShip.create_normal_ship(data=request.data, user=request.user)
         if not status == 0:
@@ -50,8 +46,6 @@ class CreateNormalShipAPI(APIView):
 
 
 class ListNormalShipAPI(APIView):
-    permission_classes = [AllowAny]
-
     def get(self, request):
         queryset = NormalShip.objects.all()
         serializer = NormalShipSerializer(queryset, many=True)
@@ -59,8 +53,6 @@ class ListNormalShipAPI(APIView):
 
 
 class SearchNormalShipAPI(APIView):
-    permission_classes = [AllowAny]
-
     def post(self, request):
         result = NormalShip.searching_normal_ship(data=request.data)
         serializer = NormalShipSerializer(result, many=True)

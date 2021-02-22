@@ -73,7 +73,8 @@ class NormalShip(RegitInfo):
         is_ais = Q(is_ais__contains=data['is_ais'])
         is_vhf = Q(is_vhf__contains=data['is_vhf'])
         is_ff = Q(is_ff__contains=data['is_ff'])
-        result = NormalShip.objects.filter(name|port|code|tons|types|size|is_vpass|is_ais|is_vhf|is_ff)
+        result = NormalShip.objects.filter(name | port | code | tons | types
+                                           | size | is_vpass | is_ais | is_vhf | is_ff)
         return result
 
 
