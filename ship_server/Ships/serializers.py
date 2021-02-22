@@ -7,12 +7,13 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
     register = serializers.SlugRelatedField(read_only=True,
                                             many=False,
                                             slug_field='srvno')
-    normal_ship = serializers.StringRelatedField(many=True)
+    normal_imgs = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = NormalShip
         fields = ('id', 'main_img', 'name', 'port', 'code', 'tons', 'types',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
-                  'is_train', 'regit_date', 'register', 'normal_ship')
+                  'is_train', 'regit_date', 'register', 'normal_imgs')
 
 
 class NormalImageSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,10 +23,14 @@ class NormalImageSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
+    register = serializers.SlugRelatedField(read_only=True,
+                                            many=False,
+                                            slug_field='srvno')
+    waste_imgs = serializers.StringRelatedField(many=True)
     class Meta:
         model = WasteShip
         fields = ('id', 'main_img', 'info', 'types', 'lat', 'lon',
-                  'is_train', 'regit_date')
+                  'is_train', 'regit_date', 'register', 'waste_imgs')
 
 
 class WasteImageSerializer(serializers.HyperlinkedModelSerializer):
