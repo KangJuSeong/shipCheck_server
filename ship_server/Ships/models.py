@@ -18,14 +18,22 @@ class RegitInfo(models.Model):
         abstract = True
 
 
+class RegionInfo(models.Model):
+    region = models.CharField(max_length=10, null=True, blank= True)
+
+    class Meta:
+        abstract = True
+
+
 #  항구를 선택할것인가? 지역 선택? 선박 유형 선택? 등록 날짜, 등록자
-class NormalShip(RegitInfo):
+class NormalShip(RegitInfo, RegionInfo):
     name = models.CharField(max_length=10, null=True, blank=True)
     port = models.CharField(max_length=10, null=True, blank=True)
     code = models.CharField(max_length=20, null=True, blank=True)
     tons = models.CharField(max_length=10, null=True, blank=True)
     types = models.CharField(max_length=10, null=True, blank=True)
     size = models.CharField(max_length=15, null=True, blank=True)
+    region = models.CharField(max_length=10, null=True, blank=True)
     is_vpass = models.BooleanField(default=False)
     is_ais = models.BooleanField(default=False)
     is_vhf = models.BooleanField(default=False)
@@ -36,30 +44,31 @@ class NormalShip(RegitInfo):
                                  null=True,
                                  blank=True)
 
+    class Meta:
+        db_table = 'NormalShip'
+
     def __str__(self):
         return str(self.id)
     
     @staticmethod
     def create_normal_ship(data, user):
-        try:
-            ship = NormalShip.objects.create(name=data['name'],
-                                             port=data['port'],
-                                             code=data['code'],
-                                             tons=data['tons'],
-                                             types=data['types'],
-                                             size=data['size'],
-                                             is_vpass=data['is_vpass'],
-                                             is_ais=data['is_ais'],
-                                             is_vhf=data['is_vhf'],
-                                             is_ff=data['is_ff'],
-                                             register=user)
+        ship = NormalShip.objects.create(name=data['name'],
+                                         port=data['port'],
+                                         code=data['code'],
+                                         tons=data['tons'],
+                                         types=data['types'],
+                                         size=data['size'],
+                                         is_vpass=data['is_vpass'],
+                                         is_ais=data['is_ais'],
+                                         is_vhf=data['is_vhf'],
+                                         is_ff=data['is_ff'],
+                                         register=user)
+        if len(data['image_data']) > 0:
             img_name = str(uuid.uuid4())
-            image = base64.b64decode(data['image_data'])
+            image = base64.b64decode(data['image_data'][0])
             ship.main_img = ContentFile(image, str(datetime.today())+img_name+'.jpg')
-            ship.save()
-            return ship.id
-        except:
-            return 0
+        ship.save()
+        return ship.id
 
     @staticmethod
     def searching_normal_ship(data):
@@ -92,10 +101,23 @@ class NormalImage(RegitInfo):
     def __str__(self):
         return self.img.url
 
+    @staticmethod
+    def create_normal_image(img_list, ship_id):
+        del img_list[0]
+        for img in img_list:
+            img_name = str(uuid.uuid4())
+            image = base64.b64decode(img)
+            ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                                  str(datetime.today()) + img_name + '.jpg'),
+                                                  n_name=NormalShip.objects.get(id=ship_id),
+                                                  regit_date=datetime.today())
+        ship_img.save()
 
-class WasteShip(RegitInfo):
+
+class WasteShip(RegitInfo, RegionInfo):
     info = models.TextField(null=True, blank=True)
     types = models.CharField(max_length=10, null=True, blank=True)
+    region = models.CharField(max_length=10, null=True, blank=True)
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
     img_cnt = models.IntegerField(default=0)
@@ -115,7 +137,7 @@ class WasteShip(RegitInfo):
                                         lon=data['lon'],
                                         register=user)
         img_name = str(uuid.uuid4())
-        image = base64.b64decode(data['image_data'])
+        image = base64.b64decode(data['image_data'][0])
         ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
         ship.save()
         return ship.id
@@ -134,3 +156,15 @@ class WasteImage(RegitInfo):
 
     def __str__(self):
         return self.img.url
+
+    @staticmethod
+    def create_waste_image(img_list, ship_id):
+        del img_list[0]
+        for img in img_list:
+            img_name = str(uuid.uuid4())
+            image = base64.b64decode(img)
+            ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                                  str(datetime.today()) + img_name + '.jpg'),
+                                                  w_id=WasteShip.objects.get(id=ship_id),
+                                                  regit_date=datetime.today())
+        ship_img.save()
