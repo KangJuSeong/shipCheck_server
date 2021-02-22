@@ -79,7 +79,7 @@ class NormalShip(RegitInfo):
 
 
 class NormalImage(RegitInfo):
-    n_name = models.ForeignKey('NormalShip', related_name='normal_ship',
+    n_name = models.ForeignKey('NormalShip', related_name='normal_imgs',
                                on_delete=models.SET_NULL,
                                null=True,
                                blank=True)
@@ -107,14 +107,30 @@ class WasteShip(RegitInfo):
     def __str__(self):
         return str(self.id)
 
+    @staticmethod
+    def create_waste_ship(data, user):
+        ship = WasteShip.objects.create(info=data['info'],
+                                        types=data['types'],
+                                        lat=data['lat'],
+                                        lon=data['lon'],
+                                        register=user)
+        img_name = str(uuid.uuid4())
+        image = base64.b64decode(data['image_data'])
+        ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+        ship.save()
+        return ship.id
+
 
 class WasteImage(RegitInfo):
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
-    w_id = models.ForeignKey('WasteShip', related_name='waste_ship',
+    w_id = models.ForeignKey('WasteShip', related_name='waste_imgs',
                              on_delete=models.SET_NULL,
                              null=True,
                              blank=True)
     img = models.ImageField(upload_to='waste/exist/%Y/%m/%d',
                             null=True,
                             blank=True)
+
+    def __str__(self):
+        return self.img.url
