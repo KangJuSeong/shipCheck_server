@@ -1,7 +1,8 @@
 from utils.custom_view import APIView
 from .models import NormalShip, NormalImage, WasteShip, WasteImage
 from Accounts.models import Account
-from .serializers import NormalShipSerializer, NormalImageSerializer, WasteShipSerializer, WasteImageSerializer
+from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
+                          WasteImageSerializer, WasteLocationSerializer,)
 from django.core.exceptions import ObjectDoesNotExist
 import numpy as np
 from django.core.files import File
@@ -16,6 +17,7 @@ from utils.best_three import bestThree
 from rest_framework.permissions import AllowAny
 import pandas as pd
 from datetime import datetime
+import time
 
 
 class DetailNormalShipAPI(APIView):
@@ -34,6 +36,9 @@ class DetailNormalShipAPI(APIView):
             return self.success(message='success')
         except ObjectDoesNotExist:
             return self.fail(message='Not Exist')
+
+    def put(self, request, pk=None):
+        return self.success(message='success')
 
 
 class CreateNormalShipAPI(APIView):
@@ -91,6 +96,13 @@ class ListWasteShipAPI(APIView):
         queryset = WasteShip.objects.all()
         serializer = WasteShipSerializer(queryset, many=True)
         return self.success(data=serializer.data, message='success')
+
+
+class LocationWasteShipAPI(APIView):
+    def get(self, request):
+        queryset = WasteShip.objects.all()
+        location = WasteLocationSerializer(queryset, many=True)
+        return self.success(data=location.data, message='success')
 
 
 class SearchWasteShipAPI(APIView):
