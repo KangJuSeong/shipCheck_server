@@ -13,7 +13,6 @@ from io import BytesIO
 import uuid
 import io
 from utils.best_three import bestThree
-from django.db.models import Q
 from rest_framework.permissions import AllowAny
 import pandas as pd
 from datetime import datetime
@@ -43,22 +42,29 @@ class CreateNormalShipAPI(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        status = 0
-        status = NormalShip.create_normal_ship(request.data, Account.objects.get(srvno='ADMIN'))
+        status = NormalShip.create_normal_ship(data=request.data, user=request.user)
         if not status == 0:
             return self.success(message='success '+str(status))
         else:
-            return self.fail(message='Fail Create2')
+            return self.fail(message='Fail Create')
 
 
 class ListNormalShipAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        queryset = NormalShip.objects.all()
+        serializer = NormalShipSerializer(queryset, many=True)
+        return self.success(data=serializer.data, message='success')
 
 
 class SearchNormalShipAPI(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
-        return self.success(message='success')
+        result = NormalShip.searching_normal_ship(data=request.data)
+        serializer = NormalShipSerializer(result, many=True)
+        return self.success(data=serializer.data, message='success')
 
 
 class DetailWasteShipAPI(APIView):

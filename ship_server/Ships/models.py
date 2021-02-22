@@ -1,5 +1,10 @@
 from django.db import models
 from Accounts.models import Account
+import base64
+import uuid
+from django.core.files.base import ContentFile
+from datetime import datetime
+from django.db.models import Q
 
 
 class RegitInfo(models.Model):
@@ -34,22 +39,42 @@ class NormalShip(RegitInfo):
     def __str__(self):
         return str(self.id)
     
+    @staticmethod
     def create_normal_ship(data, user):
-        ship = NormalShip.objects.create(name=data['name'],
-                                         port=data['port'],
-                                         code=data['code'],
-                                         tons=data['tons'],
-                                         types=data['types'],
-                                         width=data['width'],
-                                         is_vpass=data['is_vpass'],
-                                         is_ais=data['is_ais'],
-                                         is_vhf=data['is_vhf'],
-                                         is_ff=data['is_ff'],)
-        ship.register = user
-        # image = base64.b64decode(data['image_data'])
-        # ship.main_img = ContentFile(image_data, str(ship.name)+'.jpg')
-        ship.save()
-        return ship.id
+        try:
+            ship = NormalShip.objects.create(name=data['name'],
+                                             port=data['port'],
+                                             code=data['code'],
+                                             tons=data['tons'],
+                                             types=data['types'],
+                                             size=data['size'],
+                                             is_vpass=data['is_vpass'],
+                                             is_ais=data['is_ais'],
+                                             is_vhf=data['is_vhf'],
+                                             is_ff=data['is_ff'],
+                                             register=user)
+            img_name = str(uuid.uuid4())
+            image = base64.b64decode(data['image_data'])
+            ship.main_img = ContentFile(image, str(datetime.today())+img_name+'.jpg')
+            ship.save()
+            return ship.id
+        except:
+            return 0
+
+    @staticmethod
+    def searching_normal_ship(data):
+        name = Q(name__contains=data['name'])
+        port = Q(port__contains=data['port'])
+        code = Q(code__contains=data['code'])
+        tons = Q(tons__contains=data['tons'])
+        types = Q(types__contains=data['types'])
+        size = Q(size__contains=data['size'])
+        is_vpass = Q(is_vpass__contains=data['is_vpass'])
+        is_ais = Q(is_ais__contains=data['is_ais'])
+        is_vhf = Q(is_vhf__contains=data['is_vhf'])
+        is_ff = Q(is_ff__contains=data['is_ff'])
+        result = NormalShip.objects.filter(name|port|code|tons|types|size|is_vpass|is_ais|is_vhf|is_ff)
+        return result
 
 
 class NormalImage(RegitInfo):
