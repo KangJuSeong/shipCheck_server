@@ -27,6 +27,7 @@ class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
                                             many=False,
                                             slug_field='srvno')
     waste_imgs = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = WasteShip
         fields = ('id', 'main_img', 'info', 'types', 'lat', 'lon',
@@ -37,3 +38,9 @@ class WasteImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteImage
         fields = ('id', 'img', 'regit_date', 'lat', 'lon')
+
+
+class WasteLocationSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = WasteShip
+        fields = ('id', 'lat', 'lon')
