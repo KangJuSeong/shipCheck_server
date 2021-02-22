@@ -89,6 +89,9 @@ class NormalImage(RegitInfo):
     # lat = models.FloatField(default=0)
     # lon = models.FloatField(default=0)
 
+    def __str__(self):
+        return self.img.url
+
 
 class WasteShip(RegitInfo):
     info = models.TextField(null=True, blank=True)
