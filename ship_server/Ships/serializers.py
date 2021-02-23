@@ -55,4 +55,4 @@ class WasteImageSerializer(serializers.HyperlinkedModelSerializer):
 class WasteLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteShip
-        fields = ('id', 'lat', 'lon')
+        fields = ('id', 'lat', 'lon', 'info')
