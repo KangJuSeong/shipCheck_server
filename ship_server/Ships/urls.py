@@ -1,9 +1,8 @@
 from django.conf.urls import url
 from .views import (DetailNormalShipAPI, CreateNormalShipAPI, ListNormalShipAPI, SearchNormalShipAPI,
                     DetailWasteShipAPI, CreateWasteShipAPI, ListWasteShipAPI, LocationWasteShipAPI,
-                    RemoveTrashData)
-
-                    # NormalShipRegister, AllDelete, WasteShipReigster)
+                    SearchWasteShipAPI, DetailNormalImageAPI, DetailWasteImageAPI)
+                    # NormalShipRegister, AllDelete, WasteShipReigster, RemoveTrashData,)
 
 urlpatterns = [
     url(r'^ship/normal/(?P<pk>\d+)/$', DetailNormalShipAPI.as_view()),  # 일반 선박 세부 정보
@@ -14,7 +13,10 @@ urlpatterns = [
     url(r'^ship/waste/create/', CreateWasteShipAPI.as_view()),  # 유기,폐 선박 추가
     url(r'^ship/waste/list/', ListWasteShipAPI.as_view()),  # 유기,폐 선박 목록
     url(r'^ship/waste/location/', LocationWasteShipAPI.as_view()),  # 유기,폐 선박 좌표 요청
-    url(r'^test/(?P<pk>\d+)/$', RemoveTrashData.as_view()),
+    url(r'^ship/waste/search/', SearchWasteShipAPI.as_view()),
+    url(r'^image/normal/(?P<pk>\d+)/$', DetailNormalImageAPI.as_view()),
+    url(r'^image/waste/(?P<pk>\d+)/$', DetailWasteImageAPI.as_view()),
+    # url(r'^test/(?P<pk>\d+)/$', RemoveTrashData.as_view()),
     # url(r'^regitnormal/', NormalShipRegister.as_view()),
     # url(r'^del/', AllDelete.as_view()),
     # url(r'regitwaste/', WasteShipReigster.as_view()),
