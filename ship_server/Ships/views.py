@@ -19,6 +19,8 @@ from rest_framework.permissions import AllowAny
 import pandas as pd
 from datetime import datetime
 import time
+import os
+import csv
 
 
 class DetailNormalShipAPI(APIView):
@@ -143,6 +145,34 @@ class LocationWasteShipAPI(APIView):
         queryset = WasteShip.objects.all()
         location = WasteLocationSerializer(queryset, many=True)
         return self.success(data=location.data, message='success')
+
+
+class RemoveTrashData(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk=None):
+        trash = NormalShip.objects.get(id=pk)
+        base_path = 'D:/shipCheck_server/ship_server/Ships/media/'
+        os.remove(base_path + str(trash.main_img))
+        trash.delete()
+        # queryset = NormalShip.objects.filter(img_cnt__gte=10).order_by('-img_cnt')
+        # serializer = NormalShipSerializer(queryset, many=True)
+        # f = open('D:/ai보고용/데이터현황.csv', 'w', newline='')
+        # idx = 1
+        # for data in serializer.data:
+        #     name = data['name']
+        #     img_cnt = data['img_cnt']
+        #     img_list = []
+        #     main_img_idx = data['main_img'].find('/22/')
+        #     img_list.append(data['main_img'][main_img_idx+4:])
+        #     for file in data['normal_imgs']:
+        #         main_img_idx = file.find('/22/')
+        #         img_list.append(file[main_img_idx + 4:])
+        #     wr = csv.writer(f)
+        #     wr.writerow([str(idx), name, img_cnt, img_list])
+        #     idx = idx + 1
+        # f.close()
+        return self.success(data=serializer.data, message='success')
 
 
 class SearchWasteShipAPI(APIView):
