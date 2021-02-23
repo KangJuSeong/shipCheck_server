@@ -147,6 +147,32 @@ class LocationWasteShipAPI(APIView):
         return self.success(data=location.data, message='success')
 
 
+class SearchWasteShipAPI(APIView):
+    def post(self, request):
+        result = WasteShip.searching_waste_ship(data=request.data)
+        serializer = WasteShipSerializer(result, many=True)
+        return self.success(data=serializer.data, message='success')
+
+
+class DetailNormalImageAPI(APIView):
+    def get(self, request, pk=None):
+        queryset = NormalImage.objects.get(id=pk)
+        serializer = NormalImageSerializer(queryset)
+        return self.success(data=serializer.data, message='success')
+
+
+class CreateNormalImageAPI(APIView):
+    def post(self, request):
+        return self.success(message='success')
+
+
+class DetailWasteImageAPI(APIView):
+    def get(self, request, pk=None):
+        queryset = WasteImage.objects.get(id=pk)
+        serializer = WasteImageSerializer(queryset)
+        return self.success(data=serializer.data, message='success')
+
+
 class RemoveTrashData(APIView):
     permission_classes = [AllowAny]
 
@@ -173,26 +199,6 @@ class RemoveTrashData(APIView):
         #     idx = idx + 1
         # f.close()
         return self.success(data=serializer.data, message='success')
-
-
-class SearchWasteShipAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
-
-
-class DetailNormalImageAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
-
-
-class CreateNormalImageAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
-
-
-class DetailWasteImageAPI(APIView):
-    def post(self, request):
-        return self.success(message='success')
 
 
 class NormalShipRegister(APIView):
