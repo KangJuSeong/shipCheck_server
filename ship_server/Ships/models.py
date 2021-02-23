@@ -78,11 +78,12 @@ class NormalShip(RegitInfo, RegionInfo):
         tons = Q(tons__contains=data['tons'])
         types = Q(types__contains=data['types'])
         size = Q(size__contains=data['size'])
+        region = Q(region__contains=data['region'])
         is_vpass = Q(is_vpass__contains=data['is_vpass'])
         is_ais = Q(is_ais__contains=data['is_ais'])
         is_vhf = Q(is_vhf__contains=data['is_vhf'])
         is_ff = Q(is_ff__contains=data['is_ff'])
-        result = NormalShip.objects.filter(name | port | code | tons | types
+        result = NormalShip.objects.filter(name | port | code | tons | types | region
                                            | size | is_vpass | is_ais | is_vhf | is_ff)
         return result
 
@@ -141,6 +142,14 @@ class WasteShip(RegitInfo, RegionInfo):
         ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
         ship.save()
         return ship.id
+
+    @staticmethod
+    def searching_waste_ship(data):
+        info = Q(info__contains=data['info'])
+        region = Q(region__contains=data['region'])
+        types = Q(types__contains=data['types'])
+        result = WasteShip.objects.filter(info | region | types)
+        return result
 
 
 class WasteImage(RegitInfo):
