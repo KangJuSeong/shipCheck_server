@@ -62,7 +62,7 @@ class NormalShip(RegitInfo, RegionInfo):
                                          is_ais=data['is_ais'],
                                          is_vhf=data['is_vhf'],
                                          is_ff=data['is_ff'],
-                                         img_cnt=len(data['image_data'])+1,
+                                         img_cnt=len(data['image_data']),
                                          register=user)
         if len(data['image_data']) > 0:
             img_name = str(uuid.uuid4())
@@ -137,7 +137,7 @@ class WasteShip(RegitInfo, RegionInfo):
                                         types=data['types'],
                                         lat=data['lat'],
                                         lon=data['lon'],
-                                        img_cnt=len(data['image_data'])+1,
+                                        img_cnt=len(data['image_data']),
                                         register=user)
         img_name = str(uuid.uuid4())
         image = base64.b64decode(data['image_data'][0])
