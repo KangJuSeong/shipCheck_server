@@ -63,7 +63,8 @@ class NormalShip(RegitInfo, RegionInfo):
                                          is_vhf=data['is_vhf'],
                                          is_ff=data['is_ff'],
                                          img_cnt=len(data['image_data']),
-                                         register=user)
+                                         register=user,
+                                         region=data['region'])
         if len(data['image_data']) > 0:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(data['image_data'][0])
@@ -115,7 +116,6 @@ class NormalImage(RegitInfo):
 
     @staticmethod
     def add_normal_image(img_list, ship_id):
-        del img_list[0]
         for img in img_list:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(img)
