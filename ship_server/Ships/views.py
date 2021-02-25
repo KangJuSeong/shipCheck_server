@@ -24,6 +24,8 @@ import csv
 
 
 class DetailNormalShipAPI(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request, pk=None):
         try:
             queryset = NormalShip.objects.get(id=pk)
@@ -61,7 +63,7 @@ class CreateNormalShipAPI(APIView):
 class ListNormalShipAPI(APIView):
     def get(self, request):
         query_size = NormalShip.objects.count()
-        page_size = 50
+        page_size = 10
         count = int(query_size / page_size) + 1
         page = int(request.GET.get('page'))
         if page is 1:
@@ -80,9 +82,23 @@ class ListNormalShipAPI(APIView):
 
 class SearchNormalShipAPI(APIView):
     def post(self, request):
-        result = NormalShip.searching_normal_ship(data=request.data)
-        serializer = NormalShipSerializer(result, many=True)
-        return self.success(data=serializer.data, message='success')
+        queryset = NormalShip.searching_normal_ship(data=request.data)
+        query_size = queryset.count()
+        page_size = 10
+        page = int(request.GET.get('page'))
+        count = int(query_size / page_size) + 1
+        if page is 1:
+            queryset = queryset[0:page_size-1]
+        elif page is count:
+            start = page_size * (page - 1)
+            queryset = queryset[start:]
+        else:
+            start = page_size * (page - 1)
+            end = start + page_size
+            queryset = queryset[start:end]
+        serializer = NormalShipSerializer(queryset, many=True)
+        result = {'count': count, "data": serializer.data}
+        return self.success(data=result, message='success')
 
 
 class DetailWasteShipAPI(APIView):
@@ -113,17 +129,17 @@ class DetailWasteShipAPI(APIView):
 
 class CreateWasteShipAPI(APIView):
     def post(self, request):
-        ship_id = WasteShip.create_normal_ship(data=request.data, user=request.user)
+        ship_id = WasteShip.create_waste_ship(data=request.data, user=request.user)
         if len(request.data['image_data']) > 1:
-            NormalImage.create_normal_image(img_list=request.data['image_data'],
-                                            ship_id=ship_id)
+            WasteImage.create_waste_image(img_list=request.data['image_data'],
+                                          ship_id=ship_id)
         return self.success(message='success')
 
 
 class ListWasteShipAPI(APIView):
     def get(self, request):
         query_size = WasteShip.objects.count()
-        page_size = 50
+        page_size = 10
         count = int(query_size / page_size) + 1
         page = int(request.GET.get('page'))
         if page is 1:
@@ -149,28 +165,51 @@ class LocationWasteShipAPI(APIView):
 
 class SearchWasteShipAPI(APIView):
     def post(self, request):
-        result = WasteShip.searching_waste_ship(data=request.data)
-        serializer = WasteShipSerializer(result, many=True)
-        return self.success(data=serializer.data, message='success')
+        queryset = WasteShip.searching_waste_ship(data=request.data)
+        query_size = queryset.count()
+        page_size = 10
+        page = int(request.GET.get('page'))
+        count = int(query_size / page_size) + 1
+        if page is 1:
+            queryset = queryset[0:page_size - 1]
+        elif page is count:
+            start = page_size * (page - 1)
+            queryset = queryset[start:]
+        else:
+            start = page_size * (page - 1)
+            end = start + page_size
+            queryset = queryset[start:end]
+        serializer = WasteShipSerializer(queryset, many=True)
+        result = {'count': count, "data": serializer.data}
+        return self.success(data=result, message='success')
 
 
-class DetailNormalImageAPI(APIView):
+class ListNormalImageAPI(APIView):
     def get(self, request, pk=None):
-        queryset = NormalImage.objects.get(id=pk)
-        serializer = NormalImageSerializer(queryset)
+        queryset = NormalShip.objects.get(id=pk)
+        img_queryset = NormalImage.objects.filter(n_name=queryset.id)
+        serializer = NormalImageSerializer(img_queryset, many=True)
         return self.success(data=serializer.data, message='success')
 
 
-class CreateNormalImageAPI(APIView):
+class AddNormalImageAPI(APIView):
     def post(self, request):
+        NormalImage.add_normal_image(request.data['image_data'], request.data['id'])
         return self.success(message='success')
 
 
-class DetailWasteImageAPI(APIView):
+class ListWasteImageAPI(APIView):
     def get(self, request, pk=None):
         queryset = WasteImage.objects.get(id=pk)
-        serializer = WasteImageSerializer(queryset)
+        img_queryset = WasteImage.objects.filter(w_id=queryset.id)
+        serializer = WasteImageSerializer(img_queryset, many=True)
         return self.success(data=serializer.data, message='success')
+
+
+class AddWasteImageAPI(APIView):
+    def post(self, request):
+        WasteImage.add_normal_image(request.data['image_data'], request.data['id'])
+        return self.success(message='success')
 
 
 class RemoveTrashData(APIView):

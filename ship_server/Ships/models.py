@@ -97,14 +97,24 @@ class NormalImage(RegitInfo):
     img = models.ImageField(upload_to='normal/exist/%Y/%m/%d',
                             null=True,
                             blank=True)
-    # lat = models.FloatField(default=0)
-    # lon = models.FloatField(default=0)
 
     def __str__(self):
         return self.img.url
 
     @staticmethod
     def create_normal_image(img_list, ship_id):
+        del img_list[0]
+        for img in img_list:
+            img_name = str(uuid.uuid4())
+            image = base64.b64decode(img)
+            ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                                  str(datetime.today()) + img_name + '.jpg'),
+                                                  n_name=NormalShip.objects.get(id=ship_id),
+                                                  regit_date=datetime.today())
+        ship_img.save()
+
+    @staticmethod
+    def add_normal_image(img_list, ship_id):
         del img_list[0]
         for img in img_list:
             img_name = str(uuid.uuid4())
@@ -138,6 +148,7 @@ class WasteShip(RegitInfo, RegionInfo):
                                         lat=data['lat'],
                                         lon=data['lon'],
                                         img_cnt=len(data['image_data']),
+                                        region=data['region'],
                                         register=user)
         img_name = str(uuid.uuid4())
         image = base64.b64decode(data['image_data'][0])
@@ -171,6 +182,17 @@ class WasteImage(RegitInfo):
     @staticmethod
     def create_waste_image(img_list, ship_id):
         del img_list[0]
+        for img in img_list:
+            img_name = str(uuid.uuid4())
+            image = base64.b64decode(img)
+            ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                                  str(datetime.today()) + img_name + '.jpg'),
+                                                  w_id=WasteShip.objects.get(id=ship_id),
+                                                  regit_date=datetime.today())
+        ship_img.save()
+
+    @staticmethod
+    def add_waste_image(img_list, ship_id):
         for img in img_list:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(img)

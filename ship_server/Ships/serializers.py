@@ -7,13 +7,12 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
     register = serializers.SlugRelatedField(read_only=True,
                                             many=False,
                                             slug_field='srvno')
-    normal_imgs = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = NormalShip
         fields = ('id', 'main_img', 'name', 'port', 'code', 'tons', 'types',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
-                  'is_train', 'regit_date', 'register', 'normal_imgs')
+                  'is_train', 'regit_date', 'register')
 
 
 class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,25 +22,20 @@ class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class NormalImageSerializer(serializers.HyperlinkedModelSerializer):
-    n_name = serializers.SlugRelatedField(read_only=True,
-                                          many=False,
-                                          slug_field='name')
-
     class Meta:
         model = NormalImage
-        fields = ('id', 'img', 'regit_date', 'n_name')
+        fields = ('id', 'img', 'regit_date')
 
 
 class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
     register = serializers.SlugRelatedField(read_only=True,
                                             many=False,
                                             slug_field='srvno')
-    waste_imgs = serializers.StringRelatedField(many=True)
 
     class Meta:
         model = WasteShip
         fields = ('id', 'main_img', 'info', 'types', 'lat', 'lon',
-                  'is_train', 'regit_date', 'register', 'waste_imgs')
+                  'is_train', 'regit_date', 'register')
 
 
 class WasteShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
@@ -51,13 +45,9 @@ class WasteShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class WasteImageSerializer(serializers.HyperlinkedModelSerializer):
-    w_id = serializers.SlugRelatedField(read_only=True,
-                                        many=False,
-                                        slug_field='id')
-
     class Meta:
         model = WasteImage
-        fields = ('id', 'img', 'regit_date', 'lat', 'lon', 'w_id')
+        fields = ('id', 'img', 'regit_date')
 
 
 class WasteLocationSerializer(serializers.HyperlinkedModelSerializer):
