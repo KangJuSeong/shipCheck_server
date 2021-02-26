@@ -3,7 +3,8 @@ from .models import NormalShip, NormalImage, WasteShip, WasteImage
 from Accounts.models import Account
 from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
                           WasteImageSerializer, WasteLocationSerializer,
-                          NormalShipUpdateSerializer, WasteShipUpdateSerializer)
+                          NormalShipUpdateSerializer, WasteShipUpdateSerializer,
+                          ProgramNormalShipSerializer, ProgramWasteShipSerializer,)
 from django.core.exceptions import ObjectDoesNotExist
 import numpy as np
 from django.core.files import File
@@ -24,8 +25,6 @@ import csv
 
 
 class DetailNormalShipAPI(APIView):
-    permission_classes = [AllowAny]
-
     def get(self, request, pk=None):
         try:
             queryset = NormalShip.objects.get(id=pk)
@@ -67,7 +66,7 @@ class ListNormalShipAPI(APIView):
         count = int(query_size / page_size) + 1
         page = int(request.GET.get('page'))
         if page is 1:
-            queryset = NormalShip.objects.all()[0:page_size-1]
+            queryset = NormalShip.objects.all()[0:page_size]
         elif page is count:
             start = page_size * (page - 1)
             queryset = NormalShip.objects.all()[start:]
@@ -88,7 +87,7 @@ class SearchNormalShipAPI(APIView):
         page = int(request.GET.get('page'))
         count = int(query_size / page_size) + 1
         if page is 1:
-            queryset = queryset[0:page_size-1]
+            queryset = queryset[0:page_size]
         elif page is count:
             start = page_size * (page - 1)
             queryset = queryset[start:]
@@ -143,7 +142,7 @@ class ListWasteShipAPI(APIView):
         count = int(query_size / page_size) + 1
         page = int(request.GET.get('page'))
         if page is 1:
-            queryset = WasteShip.objects.all()[0:page_size - 1]
+            queryset = WasteShip.objects.all()[0:page_size]
         elif page is count:
             start = page_size * (page - 1)
             queryset = WasteShip.objects.all()[start:]
@@ -171,7 +170,7 @@ class SearchWasteShipAPI(APIView):
         page = int(request.GET.get('page'))
         count = int(query_size / page_size) + 1
         if page is 1:
-            queryset = queryset[0:page_size - 1]
+            queryset = queryset[0:page_size]
         elif page is count:
             start = page_size * (page - 1)
             queryset = queryset[start:]
@@ -210,6 +209,30 @@ class AddWasteImageAPI(APIView):
     def post(self, request):
         WasteImage.add_normal_image(request.data['image_data'], request.data['id'])
         return self.success(message='success')
+
+
+class ProgramNormalShipAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk=None):
+        try:
+            queryset = NormalShip.objects.get(id=pk)
+            serializer = ProgramNormalShipSerializer(queryset)
+            return self.success(data=serializer.data, message='success')
+        except ObjectDoesNotExist:
+            return self.fail(message='Not Exist')
+
+
+class ProgramWasteShipAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk=None):
+        try:
+            queryset = WasteShip.objects.get(id=pk)
+            serializer = ProgramWasteShipSerializer(queryset)
+            return self.success(data=serializer.data, message='success')
+        except ObjectDoesNotExist:
+            return self.fail(message='Not Exist')
 
 
 class RemoveTrashData(APIView):
