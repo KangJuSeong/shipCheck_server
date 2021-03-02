@@ -22,6 +22,10 @@ from datetime import datetime
 import time
 import os
 import csv
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class DetailNormalShipAPI(APIView):
@@ -61,22 +65,26 @@ class CreateNormalShipAPI(APIView):
 
 class ListNormalShipAPI(APIView):
     def get(self, request):
-        query_size = NormalShip.objects.count()
-        page_size = 10
-        count = int(query_size / page_size) + 1
-        page = int(request.GET.get('page'))
-        if page is 1:
-            queryset = NormalShip.objects.all()[0:page_size]
-        elif page is count:
-            start = page_size * (page - 1)
-            queryset = NormalShip.objects.all()[start:]
-        else:
-            start = page_size * (page - 1)
-            end = start + page_size
-            queryset = NormalShip.objects.all()[start:end]
-        serializer = NormalShipSerializer(queryset, many=True)
-        result = {'count': count, "data": serializer.data}
-        return self.success(data=result, message='success')
+        try:
+            query_size = NormalShip.objects.count()
+            page_size = 10
+            count = int(query_size / page_size) + 1
+            page = int(request.GET.get('page'))
+            if page is 1:
+                queryset = NormalShip.objects.all()[0:page_size]
+            elif page is count:
+                start = page_size * (page - 1)
+                queryset = NormalShip.objects.all()[start:]
+            else:
+                start = page_size * (page - 1)
+                end = start + page_size
+                queryset = NormalShip.objects.all()[start:end]
+            serializer = NormalShipSerializer(queryset, many=True)
+            result = {'count': count, "data": serializer.data}
+            return self.success(data=result, message='success')
+        except:
+            logger.debug('log = {}'.format('error'))
+            return self.fail(message='fail')
 
 
 class SearchNormalShipAPI(APIView):
@@ -405,9 +413,11 @@ class WasteShipReigster(APIView):
 
 
 class AllDelete(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request):
-        ships = WasteShip.objects.all()
-        ships.delete()
+    def get(self, request, pk=None):
+        path = 'D:/shipCheck_server/ship_server/Ships/media/'
+        for i in delete_list:
+            ship = NormalShip.objects.get(id=i)
+            img_name = ship.main_img
+            os.remove(path + str(img_name))
+            ship.delete()
         return self.success(message='success')

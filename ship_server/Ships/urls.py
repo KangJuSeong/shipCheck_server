@@ -2,7 +2,8 @@ from django.conf.urls import url
 from .views import (DetailNormalShipAPI, CreateNormalShipAPI, ListNormalShipAPI, SearchNormalShipAPI,
                     DetailWasteShipAPI, CreateWasteShipAPI, ListWasteShipAPI, LocationWasteShipAPI,
                     SearchWasteShipAPI, ListNormalImageAPI, ListWasteImageAPI, AddWasteImageAPI,
-                    AddNormalImageAPI, ProgramNormalShipAPI, ProgramWasteShipAPI)
+                    AddNormalImageAPI, ProgramNormalShipAPI, ProgramWasteShipAPI,
+                    AllDelete)
                     # NormalShipRegister, AllDelete, WasteShipReigster, RemoveTrashData,)
 
 urlpatterns = [
@@ -23,6 +24,6 @@ urlpatterns = [
     url(r'^ship/waste/program/(?P<pk>\d+)/$', ProgramWasteShipAPI.as_view()),
     # url(r'^test/(?P<pk>\d+)/$', RemoveTrashData.as_view()),
     # url(r'^regitnormal/', NormalShipRegister.as_view()),
-    # url(r'^del/', AllDelete.as_view()),
+    url(r'^del/(?P<pk>\d+)/$', AllDelete.as_view()),
     # url(r'regitwaste/', WasteShipReigster.as_view()),
 ]
