@@ -72,13 +72,13 @@ LOGGING = {
         'file1': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'D:/shipCheck_server/ship_server/Logs/logfile',
+            'filename': 'D:/shipCheck_server/ship_server/Logs/AccountLog',
             'formatter': 'format1',
         },
         'file2': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'D:/shipCheck_server/ship_server/Logs/logfile2',
+            'filename': 'D:/shipCheck_server/ship_server/Logs/ShipLog',
             'formatter': 'format1',
         },
         # 콘솔(터미널)에 출력
