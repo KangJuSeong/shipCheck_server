@@ -23,30 +23,24 @@ class LoginAPI(APIView):
             logger.debug('Login Fail : {}'.format('가입되지 않은 유저'))
             return self.fail(message="Unauthenticated user")
         if serializer.validated_data['message'] == 'Wating':
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('승인되지 않은 유저',
-                                                               request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('승인되지 않은 유저', request.data['srvno']))
             return self.fail(message="Waiting for login approval")
         if serializer.validated_data['message'] == 'Not connected 3months':
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('3달간 미접속 유저',
-                                                               request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('3달간 미접속 유저', request.data['srvno']))
             return self.fail(message="Not connected 3months Blocked user")
         if serializer.validated_data['message'] == 'Login fail blocked':
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('계정 정지 유저',
-                                                               request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('계정 정지 유저', request.data['srvno']))
             return self.fail(message='Login fail Blocked user')
         if serializer.validated_data['message'] == "Device mismatch":
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('등록되지 않은 단말',
-                                                               request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('등록되지 않은 단말', request.data['srvno']))
             return self.fail(message="Device mismatch")
         if serializer.validated_data['message'] == 'Incorrect password':
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('비밀번호 불일치',
-                                                               request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('비밀번호 불일치', request.data['srvno']))
             return self.fail(message="Incorrect password")
         response = {
             'token': serializer.data['token'],
         }
-        logger.debug('Login Success : {0} (군번 : {1})'.format('로그인 성공',
-                                                              Account.objects.get(srvno=request.data['srvno'])))
+        logger.debug('Login Success : {0} (군번 : {1})'.format('로그인 성공', Account.objects.get(srvno=request.data['srvno'])))
         message = 'Login Success'
         return self.success(data=response, message=message)
 
@@ -54,12 +48,10 @@ class LoginAPI(APIView):
 class LogoutAPI(APIView):
     def get(self, request):
         if request.user is not None:
-            logger.debug('Logout Success : {0} (군번 : {1})'.format('로그아웃 성공',
-                                                                   request.user.srvno))
+            logger.debug('Logout Success : {0} (군번 : {1})'.format('로그아웃 성공', request.user.srvno))
             return self.success(message='Logout Success')
         else:
-            logger.debug('Logout Fail : {0} (군번 : {1})'.format('잘못된 로그아웃 요청',
-                                                                request.data['srvno']))
+            logger.debug('Logout Fail : {0} (군번 : {1})'.format('잘못된 로그아웃 요청', request.data['srvno']))
             return self.fail(message='None logged in')
 
 
@@ -68,12 +60,10 @@ class SignUpAPI(APIView):
 
     def post(self, request):
         if Account.objects.filter(srvno=request.data['srvno']):
-            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 존재하는 계정',
-                                                                request.data['srvno']))
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 존재하는 계정', request.data['srvno']))
             return self.fail(message="Already exist serviceNum")
         if Account.objects.filter(device_id=request.data['device_id']):
-            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 등록된 단말기',
-                                                                request.data['device_id']))
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 등록된 단말기', request.data['device_id']))
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
         if value['status'] == '4':
@@ -85,20 +75,16 @@ class SignUpAPI(APIView):
                                         position=request.data['position'],
                                         phone=request.data['phone'],
                                         device_id=request.data['device_id'])
-            logger.debug('Signup Success : {0} (군번 : {1})'.format('회원가입 성공',
-                                                                   request.data['srvno']))
+            logger.debug('Signup Success : {0} (군번 : {1})'.format('회원가입 성공', request.data['srvno']))
             return self.success(message=value['message'])
         elif value['status'] == '3':
-            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
-                                                                request.data['srvno']))
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족', request.data['srvno']))
             return self.fail(message=value['message'])
         elif value['status'] == '2':
-            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
-                                                                request.data['srvno']))
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족', request.data['srvno']))
             return self.fail(message=value['message'])
         else:
-            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
-                                                                request.data['srvno']))
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족', request.data['srvno']))
             return self.fail(message=value['message'])
 
 
@@ -107,8 +93,7 @@ class UserInfoAPI(APIView):
         try:
             user = Account.objects.filter(id=self.request.user.id)
             serializer = AccountSerializer(user)
-            logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기',
-                                                                      user.srvno))
+            logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기', user.srvno))
             return self.success(serializer.data, message='success')
         except:
             logger.debug('User Info Fail : {0}'.format('유저 정보 불러오기 실패'))
