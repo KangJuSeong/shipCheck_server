@@ -7,3 +7,4 @@
 [02/Mar/2021 14:25:08] DEBUG [Accounts.views:55] Logout Success : 로그아웃 성공 (군번 : ADMIN)
 [02/Mar/2021 14:27:33] DEBUG [Accounts.views:26] Login Fail : 승인되지 않은 유저 (군번 : ADMIN)
 [02/Mar/2021 14:28:34] DEBUG [Accounts.views:48] Login Success : 로그인 성공 (군번 : ADMIN)
+[02/Mar/2021 16:32:39] DEBUG [Accounts.views:43] Login Success : 로그인 성공 (군번 : ADMIN)

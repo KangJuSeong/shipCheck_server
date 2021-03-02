@@ -555,10 +555,10 @@ class WasteShipReigster(APIView):
 
 class AllDelete(APIView):
     def get(self, request, pk=None):
-        path = 'D:/shipCheck_server/ship_server/Ships/media/'
-        for i in delete_list:
-            ship = NormalShip.objects.get(id=i)
-            img_name = ship.main_img
-            os.remove(path + str(img_name))
-            ship.delete()
+        # path = 'D:/shipCheck_server/ship_server/Ships/media/'
+        # for i in delete_list:
+        #     ship = NormalShip.objects.get(id=i)
+        #     img_name = ship.main_img
+        #     os.remove(path + str(img_name))
+        #     ship.delete()
         return self.success(message='success')
