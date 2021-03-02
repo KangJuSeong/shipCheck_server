@@ -3,7 +3,6 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework_jwt.settings import api_settings
 from datetime import datetime, timezone
-# from django.conf import timezone
 
 
 User = get_user_model()
@@ -34,7 +33,6 @@ class LoginSerializer(serializers.Serializer):
             try:
                 user_sub = User.objects.get(srvno=srvno)
                 if user_sub.block_no == 2:
-                    print('Login fail blocked')
                     return {'message': 'Login fail blocked'}
                 if user_sub.fail_cnt < 3:
                     user_sub.fail_cnt = user_sub.fail_cnt + 1
@@ -43,12 +41,9 @@ class LoginSerializer(serializers.Serializer):
                         user_sub.fail_cnt = 0
                         user_sub.block_no = 2
                         user_sub.save()
-                        print('Login fail blocked')
                         return {'message': 'Login fail blocked'}
-                    print('Incorrect password')
                     return {'message': 'Incorrect password'}
             except User.DoesNotExist:
-                print("None")
                 return {'message': "None"}
         else:
             blank_day = (datetime.now() - user.last_login).days
@@ -60,16 +55,12 @@ class LoginSerializer(serializers.Serializer):
             if not (user.device_id == device_id):
                 return {'message': "Device mismatch"}
             if not user.approve:
-                print("Waiting for login approval")
                 return {'message': 'Wating'}
             if user.block_no == 1:
-                print("Not connected 3months")
                 return {'message': 'Not connected 3months'}
             if user.block_no == 2:
-                print("Login fail blocked")
                 return {'message': "Login fail blocked"}
             else:
-                print("Login Success! Hello " + user.name)
                 user.last_login = datetime.now()
                 user.fail_cnt = 0
                 user.save()

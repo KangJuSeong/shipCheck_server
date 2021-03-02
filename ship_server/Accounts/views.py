@@ -4,6 +4,11 @@ from .models import Account
 from .serializers import LoginSerializer, AccountSerializer
 from rest_framework.permissions import AllowAny
 from utils.check_pw import check_pw
+import logging
+from django.core.exceptions import ObjectDoesNotExist
+
+
+logger = logging.getLogger(__name__)
 
 
 class LoginAPI(APIView):
@@ -12,40 +17,49 @@ class LoginAPI(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
+            logger.debug('Login Fail : {0}, Body : {1}'.format('Request Body error', request.data))
             return self.fail(message="Request Body Error.")
         if serializer.validated_data['message'] == 'None':
-            print("Unauthenticated user")
+            logger.debug('Login Fail : {}'.format('가입되지 않은 유저'))
             return self.fail(message="Unauthenticated user")
         if serializer.validated_data['message'] == 'Wating':
-            print("Waiting for login approval")
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('승인되지 않은 유저',
+                                                               request.data['srvno']))
             return self.fail(message="Waiting for login approval")
         if serializer.validated_data['message'] == 'Not connected 3months':
-            print("Not connected 3months Blocked user")
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('3달간 미접속 유저',
+                                                               request.data['srvno']))
             return self.fail(message="Not connected 3months Blocked user")
         if serializer.validated_data['message'] == 'Login fail blocked':
-            print('Login fail Blocked user')
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('계정 정지 유저',
+                                                               request.data['srvno']))
             return self.fail(message='Login fail Blocked user')
         if serializer.validated_data['message'] == "Device mismatch":
-            print("Device mismatch")
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('등록되지 않은 단말',
+                                                               request.data['srvno']))
             return self.fail(message="Device mismatch")
         if serializer.validated_data['message'] == 'Incorrect password':
-            print("Incorrect password")
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('비밀번호 불일치',
+                                                               request.data['srvno']))
             return self.fail(message="Incorrect password")
         response = {
             'token': serializer.data['token'],
         }
+        logger.debug('Login Success : {0} (군번 : {1})'.format('로그인 성공',
+                                                              Account.objects.get(srvno=request.data['srvno'])))
         message = 'Login Success'
         return self.success(data=response, message=message)
 
 
 class LogoutAPI(APIView):
-    def post(self, request):
+    def get(self, request):
         if request.user is not None:
-            print('Logout Success Bye ' + request.user.name
-                  + time.strftime('\nHistroy : %Y-%m-%d %H:%M:%S (%a)',
-                                  time.localtime(time.time())))
+            logger.debug('Logout Success : {0} (군번 : {1})'.format('로그아웃 성공',
+                                                                   request.user.srvno))
             return self.success(message='Logout Success')
         else:
+            logger.debug('Logout Fail : {0} (군번 : {1})'.format('잘못된 로그아웃 요청',
+                                                                request.data['srvno']))
             return self.fail(message='None logged in')
 
 
@@ -54,10 +68,12 @@ class SignUpAPI(APIView):
 
     def post(self, request):
         if Account.objects.filter(srvno=request.data['srvno']):
-            print('aleady exist serviceNum')
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 존재하는 계정',
+                                                                request.data['srvno']))
             return self.fail(message="Already exist serviceNum")
         if Account.objects.filter(device_id=request.data['device_id']):
-            print('already regit device')
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 등록된 단말기',
+                                                                request.data['device_id']))
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
         if value['status'] == '4':
@@ -69,20 +85,34 @@ class SignUpAPI(APIView):
                                         position=request.data['position'],
                                         phone=request.data['phone'],
                                         device_id=request.data['device_id'])
+            logger.debug('Signup Success : {0} (군번 : {1})'.format('회원가입 성공',
+                                                                   request.data['srvno']))
             return self.success(message=value['message'])
         elif value['status'] == '3':
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
+                                                                request.data['srvno']))
             return self.fail(message=value['message'])
         elif value['status'] == '2':
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
+                                                                request.data['srvno']))
             return self.fail(message=value['message'])
         else:
+            logger.debug('Signup Fail : {0} (군번 : {1})'.format('비밀번호 조건 불충족',
+                                                                request.data['srvno']))
             return self.fail(message=value['message'])
 
 
 class UserInfoAPI(APIView):
     def post(self, request):
-        user = Account.objects.filter(id=self.request.user.id)
-        serializer = AccountSerializer(user)
-        return self.success(serializer.data, message='success')
+        try:
+            user = Account.objects.filter(id=self.request.user.id)
+            serializer = AccountSerializer(user)
+            logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기',
+                                                                      user.srvno))
+            return self.success(serializer.data, message='success')
+        except:
+            logger.debug('User Info Fail : {0}'.format('유저 정보 불러오기 실패'))
+            return self.fail(message='Not loading user information')
 
 
 class SearchingPwAPI(APIView):
