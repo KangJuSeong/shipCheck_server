@@ -1,0 +1,9 @@
+[02/Mar/2021 14:08:33] DEBUG [Accounts.views:17] log = error
+[02/Mar/2021 14:13:23] DEBUG [Accounts.views:22] Login Fail : 가입되지 않은 유저의 로그인 시도
+[02/Mar/2021 14:14:29] DEBUG [Accounts.views:22] Login Fail : 가입되지 않은 유저의 로그인 시도
+[02/Mar/2021 14:16:02] DEBUG [Accounts.views:25] Login Fail : 승인되지 않은 유저의 로그인 시도 (ADMIN)
+[02/Mar/2021 14:20:33] DEBUG [Accounts.views:42] Login Fail : 비밀번호 불일치 (군번 : ADMIN)
+[02/Mar/2021 14:21:27] DEBUG [Accounts.views:26] Login Fail : 승인되지 않은 유저 (군번 : ADMIN)
+[02/Mar/2021 14:25:08] DEBUG [Accounts.views:55] Logout Success : 로그아웃 성공 (군번 : ADMIN)
+[02/Mar/2021 14:27:33] DEBUG [Accounts.views:26] Login Fail : 승인되지 않은 유저 (군번 : ADMIN)
+[02/Mar/2021 14:28:34] DEBUG [Accounts.views:48] Login Success : 로그인 성공 (군번 : ADMIN)
