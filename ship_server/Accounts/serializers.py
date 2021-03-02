@@ -32,7 +32,7 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(srvno=srvno, password=password)
         if user is None:
             try:
-                user_sub = User.objects.filter(srvno=srvno)
+                user_sub = User.objects.get(srvno=srvno)
                 if user_sub.block_no == 2:
                     print('Login fail blocked')
                     return {'message': 'Login fail blocked'}
