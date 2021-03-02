@@ -2,6 +2,7 @@ import tensorflow.keras
 from PIL import Image, ImageOps
 import numpy as np
 import time
+import os
 
 
 def ai_module(img):
@@ -9,7 +10,8 @@ def ai_module(img):
     np.set_printoptions(suppress=True)
     start_time = time.time()
     # Load the model
-    model = tensorflow.keras.models.load_model('/workspace/shipCheck_server/ship_server/keras_model/keras_model.h5', compile=False)
+    model = tensorflow.keras.models.load_model(os.getcwd().replace('\\', '/') + '/keras_model/save_model/keras_model.h5'
+                                               , compile=False)
     print("모델 로딩 시간 : ", time.time() - start_time)
     # Create the array of the right shape to feed into the keras model
     # The 'length' or number of images you can put into the array is
