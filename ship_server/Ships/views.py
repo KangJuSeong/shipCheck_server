@@ -23,6 +23,10 @@ import time
 import os
 import csv
 import logging
+import requests
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.alert import Alert
 
 
 logger = logging.getLogger(__name__)
@@ -555,10 +559,21 @@ class WasteShipReigster(APIView):
 
 class AllDelete(APIView):
     def get(self, request, pk=None):
-        # path = 'D:/shipCheck_server/ship_server/Ships/media/'
-        # for i in delete_list:
-        #     ship = NormalShip.objects.get(id=i)
-        #     img_name = ship.main_img
-        #     os.remove(path + str(img_name))
-        #     ship.delete()
+        url = 'http://army.mil.kr/vfct/vfctin.do'
+        driver = webdriver.Chrome('D:/shipCheck_server/ship_server/chromedriver.exe')
+        driver.get(url)
+        find_srvno = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/input")
+        find_code = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/div/input")
+        find_srvno.send_keys('20-12146')
+        find_code.send_keys('38')
+        submit = driver.find_element_by_xpath("/html/body/form/div/div/div[2]/a[1]")
+        submit.click()
+        result = Alert(driver).text
+        if result == '인증번호 정상':
+            Alert(driver).accept()
+            print('인증 성공')
+        else:
+            Alert(driver).accept()
+            print('인증 실패')
+        driver.close()
         return self.success(message='success')
