@@ -1,1 +1,2 @@
 [02/Mar/2021 15:33:16] DEBUG [Ships.views:36] Request Detail Success : 일반 선박 정보 요청 성공 (군번 : ADMIN)
+[02/Mar/2021 16:54:28] DEBUG [Ships.views:38] Request Detail Success : 일반 선박 정보 요청 성공 (군번 : ADMIN, 데이터 : 1404)
