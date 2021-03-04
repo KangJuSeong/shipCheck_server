@@ -1,40 +1,24 @@
-def bestThree(arr):
+import os
+
+
+def best_three(arr):
     arr = arr.tolist()
     sorted_list = sorted(arr)
     first = sorted_list[-1]
     second = sorted_list[-2]
     third = sorted_list[-3]
-    first_i = arr.index(first)
-    second_i = arr.index(second)
-    third_i = arr.index(third)
-    f = open('/workspace/shipCheck_server/ship_server/keras_model/labels.txt')
-    data = {'first': [], 'second': [], 'third': []}
-    cnt = 0
-    while True:
-        if cnt == 3:
-            break
-        line = f.readline()
-        if not line:
-            break
-        index = line.find(' ')
-        title = line[index+1:]
-        number = int(line[:index])
-        if number == first_i:
-            data['first'].append(title.replace('\n', ''))
-            data['first'].append(format(first * 100, '.2f') + '%')
-            cnt = cnt + 1
-        if number == second_i:
-            data['second'].append(title.replace('\n', ''))
-            data['second'].append(format(second * 100, '.2f') + '%')
-            cnt = cnt + 1
-        if number == third_i:
-            data['third'].append(title.replace('\n', ''))
-            data['third'].append(format(third * 100, '.2f') + '%')
-            cnt = cnt + 1
-    f.close()
-    result = []
-    result.append(data['first'])
-    result.append(data['second'])
-    result.append(data['third'])
-    print(result)
+    first_index = arr.index(first)
+    second_index = arr.index(second)
+    third_index = arr.index(third)
+    f = open(os.getcwd().replace('\\', '/') + '/keras_model/label.txt')
+    label_list = []
+    for line in f.readlines():
+        label_list.append(line.replace('\n', ''))
+    result = {'first': [], 'second': [], 'third': []}
+    result['first'].append(label_list[first_index])
+    result['first'].append(str(int(round(first, 2) * 100)) + '%')
+    result['second'].append(label_list[second_index])
+    result['second'].append(str(int(round(second, 2) * 100)) + '%')
+    result['third'].append(label_list[third_index])
+    result['third'].append(str(int(round(third, 2) * 100)) + '%')
     return result
