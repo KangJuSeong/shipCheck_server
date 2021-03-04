@@ -12,7 +12,7 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
         model = NormalShip
         fields = ('id', 'main_img', 'name', 'port', 'code', 'tons', 'types',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
-                  'is_train', 'regit_date', 'register')
+                  'is_train', 'regit_date', 'register', 'region')
 
 
 class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
