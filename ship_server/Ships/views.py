@@ -10,12 +10,12 @@ import numpy as np
 from django.core.files import File
 import base64
 from django.core.files.base import ContentFile
-from keras_model import snippets
+from keras_model.prediction_ship import ai_module
 from PIL import Image
 from io import BytesIO
 import uuid
 import io
-from utils.best_three import bestThree
+from utils.best_three import best_three
 from rest_framework.permissions import AllowAny
 import pandas as pd
 from datetime import datetime
@@ -23,10 +23,7 @@ import time
 import os
 import csv
 import logging
-import requests
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.alert import Alert
+import random
 
 
 logger = logging.getLogger(__name__)
@@ -364,6 +361,30 @@ class AddWasteImageAPI(APIView):
             return self.fail(message='fail')
 
 
+class PredictShipAPI(APIView):
+    def post(self, request):
+        try:
+            image_data = base64.b64decode(request.data['image_data'])
+            img = Image.open(io.BytesIO(image_data))
+            # img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/exist/2021/02/22/2021-02-22_172809.13973015bb4b37-fc64-4ce9-ba87-37a55311541e.jpg')
+            data = ai_module(img)
+            result_set = best_three(data[0])
+            first_ship = NormalShip.objects.filter(name=result_set['first'][0])
+            second_ship = NormalShip.objects.filter(name=result_set['second'][0])
+            third_ship = NormalShip.objects.filter(name=result_set['third'][0])
+            first_serial = NormalShipSerializer(first_ship, many=True)
+            second_serial = NormalShipSerializer(second_ship, many=True)
+            third_serial = NormalShipSerializer(third_ship, many=True)
+            result_ship = [first_serial.data, second_serial.data, third_serial.data]
+            result = {'result': result_ship, 'percent': [result_set['first'][1],
+                                                         result_set['second'][1],
+                                                         result_set['third'][1]]}
+            print(result_set)
+            return self.success(data=result, message='success')
+        except:
+            return self.fail(message='fail')
+
+
 class ProgramNormalShipAPI(APIView):
     permission_classes = [AllowAny]
 
@@ -559,21 +580,4 @@ class WasteShipReigster(APIView):
 
 class AllDelete(APIView):
     def get(self, request, pk=None):
-        url = 'http://army.mil.kr/vfct/vfctin.do'
-        driver = webdriver.Chrome('D:/shipCheck_server/ship_server/chromedriver.exe')
-        driver.get(url)
-        find_srvno = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/input")
-        find_code = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/div/input")
-        find_srvno.send_keys('20-12146')
-        find_code.send_keys('38')
-        submit = driver.find_element_by_xpath("/html/body/form/div/div/div[2]/a[1]")
-        submit.click()
-        result = Alert(driver).text
-        if result == '인증번호 정상':
-            Alert(driver).accept()
-            print('인증 성공')
-        else:
-            Alert(driver).accept()
-            print('인증 실패')
-        driver.close()
         return self.success(message='success')
