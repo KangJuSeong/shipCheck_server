@@ -19,7 +19,7 @@ class RegitInfo(models.Model):
 
 
 class RegionInfo(models.Model):
-    region = models.CharField(max_length=10, null=True, blank= True)
+    region = models.CharField(max_length=10, null=True, blank=True)
 
     class Meta:
         abstract = True
