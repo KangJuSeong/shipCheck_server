@@ -14,13 +14,6 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
                   'is_train', 'regit_date', 'register', 'region')
 
-    @staticmethod
-    def change_datetime(data) -> dict:
-        date_time = data['regit_date'].replace('T', '일 ').replace('-', '년', 1).replace('-', '월') \
-            .replace(':', '시', 1).replace(':', '분')
-        data['regit_date'] = date_time[:date_time.find('분') + 1]
-        return data
-
 
 class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
