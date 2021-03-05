@@ -34,10 +34,11 @@ class DetailNormalShipAPI(APIView):
         try:
             queryset = NormalShip.objects.get(id=pk)
             serializer = NormalShipSerializer(queryset)
+            result = serializer.change_datetime(data=serializer.data)
             logger.debug('Request Detail Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 정보 요청 성공',
                                                                                      request.user.srvno,
                                                                                      pk))
-            return self.success(data=serializer.data, message='success')
+            return self.success(data=result, message='success')
         except ObjectDoesNotExist:
             logger.debug('Request Detail Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 정보 요청 실패, 존재하지 않는 선박 ',
                                                                                   request.user.srvno,
@@ -104,7 +105,10 @@ class ListNormalShipAPI(APIView):
         try:
             query_size = NormalShip.objects.count()
             page_size = 10
-            count = int(query_size / page_size) + 1
+            if query_size % page_size == 0:
+                count = int(query_size / page_size)
+            else:
+                count = int(query_size / page_size) + 1
             if page is 1:
                 queryset = NormalShip.objects.all()[0:page_size]
             elif page is count:
@@ -134,7 +138,10 @@ class SearchNormalShipAPI(APIView):
             query_size = queryset.count()
             page_size = 10
             page = int(request.GET.get('page'))
-            count = int(query_size / page_size) + 1
+            if query_size % page_size == 0:
+                count = int(query_size / page_size)
+            else:
+                count = int(query_size / page_size) + 1
             if page is 1:
                 queryset = queryset[0:page_size]
             elif page is count:
@@ -232,7 +239,10 @@ class ListWasteShipAPI(APIView):
         try:
             query_size = WasteShip.objects.count()
             page_size = 10
-            count = int(query_size / page_size) + 1
+            if query_size % page_size == 0:
+                count = int(query_size / page_size)
+            else:
+                count = int(query_size / page_size) + 1
             if page is 1:
                 queryset = WasteShip.objects.all()[0:page_size]
             elif page is count:
@@ -274,7 +284,10 @@ class SearchWasteShipAPI(APIView):
             query_size = queryset.count()
             page_size = 10
             page = int(request.GET.get('page'))
-            count = int(query_size / page_size) + 1
+            if query_size % page_size == 0:
+                count = int(query_size / page_size)
+            else:
+                count = int(query_size / page_size) + 1
             if page is 1:
                 queryset = queryset[0:page_size]
             elif page is count:
@@ -379,9 +392,14 @@ class PredictShipAPI(APIView):
             result = {'result': result_ship, 'percent': [result_set['first'][1],
                                                          result_set['second'][1],
                                                          result_set['third'][1]]}
-            print(result_set)
+            logger.debug('Request Predict Success : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 성공',
+                                                                                      request.user.srvno,
+                                                                                      request.data))
             return self.success(data=result, message='success')
         except:
+            logger.debug('Request Predict Fail : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 실패',
+                                                                                   request.user.srvno,
+                                                                                   request.data))
             return self.fail(message='fail')
 
 
