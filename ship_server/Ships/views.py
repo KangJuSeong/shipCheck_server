@@ -24,6 +24,7 @@ import os
 import csv
 import logging
 import random
+from utils.change_datetime import change_datetime
 
 
 logger = logging.getLogger(__name__)
@@ -34,7 +35,7 @@ class DetailNormalShipAPI(APIView):
         try:
             queryset = NormalShip.objects.get(id=pk)
             serializer = NormalShipSerializer(queryset)
-            result = serializer.change_datetime(data=serializer.data)
+            result = change_datetime(data=serializer.data)
             logger.debug('Request Detail Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 정보 요청 성공',
                                                                                      request.user.srvno,
                                                                                      pk))
@@ -92,10 +93,12 @@ class CreateNormalShipAPI(APIView):
                                                                                      request.user.srvno,
                                                                                      request.data))
             return self.success(message='success')
-        except:
-            logger.debug('Request Create Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 등록 요청 실패, 유효하지 않은 데이터',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
+        except Exception as e:
+            logger.debug('Request Create Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '일반 선박 등록 요청 실패, 유효하지 않은 데이터',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -119,15 +122,16 @@ class ListNormalShipAPI(APIView):
                 end = start + page_size
                 queryset = NormalShip.objects.all()[start:end]
             serializer = NormalShipSerializer(queryset, many=True)
-            result = {'count': count, "data": serializer.data}
+            data = change_datetime(serializer.data)
+            result = {"count": count, "data": data}
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 목록 요청 성공',
                                                                                    request.user.srvno,
                                                                                    page))
             return self.success(data=result, message='success')
-        except:
-            logger.debug('Request List Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 목록 요청 실패, 유효하지 않은 데이터',
-                                                                                request.user.srvno,
-                                                                                page))
+        except Exception as e:
+            logger.debug('Request List Fail : {0} (군번 : {1}, 오류내용 : {2})'.format('일반 선박 목록 요청 실패, 유효하지 않은 데이터',
+                                                                                 request.user.srvno,
+                                                                                 e))
             return self.fail(message='fail')
 
 
@@ -157,10 +161,12 @@ class SearchNormalShipAPI(APIView):
                                                                                      request.user.srvno,
                                                                                      request.data))
             return self.success(data=result, message='success')
-        except:
-            logger.debug('Request Search Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 검색 요청 실패, 유효하지 않은 데이터',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
+        except Exception as e:
+            logger.debug('Request Search Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '일반 선박 검색 요청 실패, 유효하지 않은 데이터',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -169,10 +175,11 @@ class DetailWasteShipAPI(APIView):
         try:
             queryset = WasteShip.objects.get(id=pk)
             serializer = WasteShipSerializer(queryset)
+            result = change_datetime(serializer.data)
             logger.debug('Request Detail Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 정보 요청 성공',
                                                                                      request.user.srvno,
                                                                                      request.data))
-            return self.success(data=serializer.data, message='success')
+            return self.success(data=result, message='success')
         except ObjectDoesNotExist:
             logger.debug('Request Detail Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 정보 요청 실패, 존재하지 않는 선박',
                                                                                   request.user.srvno,
@@ -226,10 +233,12 @@ class CreateWasteShipAPI(APIView):
                                                                                      request.user.srvno,
                                                                                      request.data))
             return self.success(message='success')
-        except:
-            logger.debug('Request Create Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 등록 요청 실패, 유효하지 않은 데이터',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
+        except Exception as e:
+            logger.debug('Request Create Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '유기 선박 등록 요청 실패, 유효하지 않은 데이터',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -253,15 +262,16 @@ class ListWasteShipAPI(APIView):
                 end = start + page_size
                 queryset = WasteShip.objects.all()[start:end]
             serializer = WasteShipSerializer(queryset, many=True)
-            result = {'count': count, "data": serializer.data}
+            data = change_datetime(serializer.data)
+            result = {'count': count, "data": data}
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 목록 요청 성공',
                                                                                    request.user.srvno,
                                                                                    page))
             return self.success(data=result, message='success')
-        except:
-            logger.debug('Request List Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 목록 요청 실패, 유효하지 않은 데이터',
-                                                                                request.user.srvno,
-                                                                                page))
+        except Exception as e:
+            logger.debug('Request List Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 목록 요청 실패, 유효하지 않은 데이터',
+                                                                                  request.user.srvno,
+                                                                                  e))
             return self.fail(message='fail')
 
 
@@ -272,8 +282,10 @@ class LocationWasteShipAPI(APIView):
             location = WasteLocationSerializer(queryset, many=True)
             logger.debug('Request Location Success : {0} (군번 : {1})'.format('유기 선박 위치 요청 성공', request.user.srvno))
             return self.success(data=location.data, message='success')
-        except:
-            logger.debug('Request Location Fail : {0} (군번 : {1})'.format('유기 선박 위치 요청 실패, 유효하지 않은 데이터', request.user.srvno))
+        except Exception as e:
+            logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 위치 요청 실패, 유효하지 않은 데이터',
+                                                                                      request.user.srvno,
+                                                                                      e))
             return self.fail(message='fail')
 
 
@@ -303,10 +315,12 @@ class SearchWasteShipAPI(APIView):
                                                                                      request.user.srvno,
                                                                                      request.data))
             return self.success(data=result, message='success')
-        except:
-            logger.debug('Request Search Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 검색 요청 실패, 유효하지 않은 데이터',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
+        except Exception as e:
+            logger.debug('Request Search Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '유기 선박 검색 요청 실패, 유효하지 않은 데이터',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -320,10 +334,10 @@ class ListNormalImageAPI(APIView):
                                                                                    request.user.srvno,
                                                                                    pk))
             return self.success(data=serializer.data, message='success')
-        except:
-            logger.debug('Request List Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 이미지 목록 요청 실패, 유효하지 않은 데이터',
-                                                                                request.user.srvno,
-                                                                                pk))
+        except Exception as e:
+            logger.debug('Request List Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('일반 선박 이미지 목록 요청 실패, 유효하지 않은 데이터',
+                                                                                  request.user.srvno,
+                                                                                  e))
             return self.fail(message='fail')
 
 
@@ -335,10 +349,12 @@ class AddNormalImageAPI(APIView):
                                                                                   request.user.srvno,
                                                                                   request.data))
             return self.success(message='success')
-        except:
-            logger.debug('Request Add Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 이미지 추가 요청 실패, 유효하지 않은 데이터 ',
-                                                                               request.user.srvno,
-                                                                               request.data))
+        except Exception as e:
+            logger.debug('Request Add Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '일반 선박 이미지 추가 요청 실패, 유효하지 않은 데이터 ',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -352,10 +368,10 @@ class ListWasteImageAPI(APIView):
                                                                                    request.user.srvno,
                                                                                    pk))
             return self.success(data=serializer.data, message='success')
-        except:
-            logger.debug('Request List Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 이미지 목록 요청 실패, 유효하지 않은 데이터',
-                                                                                request.user.srvno,
-                                                                                pk))
+        except Exception as e:
+            logger.debug('Request List Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 이미지 목록 요청 실패, 유효하지 않은 데이터',
+                                                                                  request.user.srvno,
+                                                                                  e))
             return self.fail(message='fail')
 
 
@@ -367,10 +383,12 @@ class AddWasteImageAPI(APIView):
                                                                                    request.user.srvno,
                                                                                    request.data))
             return self.success(message='success')
-        except:
-            logger.debug('Request List Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 이미지 추가 요청 실패, 유효하지 않은 데이터 ',
-                                                                                request.user.srvno,
-                                                                                request.data))
+        except Exception as e:
+            logger.debug('Request List Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '유기 선박 이미지 추가 요청 실패, 유효하지 않은 데이터 ',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
@@ -396,10 +414,12 @@ class PredictShipAPI(APIView):
                                                                                       request.user.srvno,
                                                                                       request.data))
             return self.success(data=result, message='success')
-        except:
-            logger.debug('Request Predict Fail : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 실패',
-                                                                                   request.user.srvno,
-                                                                                   request.data))
+        except Exception as e:
+            logger.debug('Request Predict Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
+                '선박 AI 요청 실패',
+                request.user.srvno,
+                e,
+                request.data))
             return self.fail(message='fail')
 
 
