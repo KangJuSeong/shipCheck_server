@@ -2,9 +2,7 @@ from django.conf.urls import url
 from .views import (DetailNormalShipAPI, CreateNormalShipAPI, ListNormalShipAPI, SearchNormalShipAPI,
                     DetailWasteShipAPI, CreateWasteShipAPI, ListWasteShipAPI, LocationWasteShipAPI,
                     SearchWasteShipAPI, ListNormalImageAPI, ListWasteImageAPI, AddWasteImageAPI,
-                    AddNormalImageAPI, ProgramNormalShipAPI, ProgramWasteShipAPI, PredictShipAPI,
-                    AllDelete)
-                    # NormalShipRegister, AllDelete, WasteShipReigster, RemoveTrashData,)
+                    AddNormalImageAPI, ProgramNormalShipAPI, ProgramWasteShipAPI, PredictShipAPI,)
 
 urlpatterns = [
     url(r'^ship/normal/(?P<pk>\d+)/$', DetailNormalShipAPI.as_view()),  # 일반 선박 세부 정보
@@ -23,8 +21,4 @@ urlpatterns = [
     url(r'^ship/normal/program/(?P<pk>\d+)/$', ProgramNormalShipAPI.as_view()),
     url(r'^ship/waste/program/(?P<pk>\d+)/$', ProgramWasteShipAPI.as_view()),
     url(r'^ship/predict/', PredictShipAPI.as_view()),
-    # url(r'^test/(?P<pk>\d+)/$', RemoveTrashData.as_view()),
-    # url(r'^regitnormal/', NormalShipRegister.as_view()),
-    url(r'^del/(?P<pk>\d+)/$', AllDelete.as_view()),
-    # url(r'regitwaste/', WasteShipReigster.as_view()),
 ]
