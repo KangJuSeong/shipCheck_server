@@ -395,17 +395,17 @@ class AddWasteImageAPI(APIView):
 class PredictShipAPI(APIView):
     def post(self, request):
         try:
-            image_data = base64.b64decode(request.data['image_data'])
-            img = Image.open(io.BytesIO(image_data))
-            # img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/exist/2021/02/22/2021-02-22_172809.13973015bb4b37-fc64-4ce9-ba87-37a55311541e.jpg')
+            # image_data = base64.b64decode(request.data['image_data'])
+            # img = Image.open(io.BytesIO(image_data))
+            img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/new/2021/02/22/2021-02-22_172648.337648c8b88685-3ee9-4fe0-abeb-e693306e382f.jpg')
             data = ai_module(img)
             result_set = best_three(data[0])
             first_ship = NormalShip.objects.filter(name=result_set['first'][0])
             second_ship = NormalShip.objects.filter(name=result_set['second'][0])
             third_ship = NormalShip.objects.filter(name=result_set['third'][0])
-            first_serial = NormalShipSerializer(first_ship, many=True)
-            second_serial = NormalShipSerializer(second_ship, many=True)
-            third_serial = NormalShipSerializer(third_ship, many=True)
+            first_serial = NormalShipSerializer(first_ship[0])
+            second_serial = NormalShipSerializer(second_ship[0])
+            third_serial = NormalShipSerializer(third_ship[0])
             result_ship = [first_serial.data, second_serial.data, third_serial.data]
             result = {'result': result_ship, 'percent': [result_set['first'][1],
                                                          result_set['second'][1],
