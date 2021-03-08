@@ -378,7 +378,7 @@ class ListWasteImageAPI(APIView):
 class AddWasteImageAPI(APIView):
     def post(self, request):
         try:
-            WasteImage.add_normal_image(request.data['image_data'], request.data['id'])
+            WasteImage.add_waste_image(request.data['image_data'], request.data['id'])
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 이미지 추가 요청 성공',
                                                                                    request.user.srvno,
                                                                                    request.data))
