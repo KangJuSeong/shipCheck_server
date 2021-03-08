@@ -395,9 +395,12 @@ class AddWasteImageAPI(APIView):
 class PredictShipAPI(APIView):
     def post(self, request):
         try:
-            # image_data = base64.b64decode(request.data['image_data'])
-            # img = Image.open(io.BytesIO(image_data))
-            img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/new/2021/02/22/2021-02-22_172648.337648c8b88685-3ee9-4fe0-abeb-e693306e382f.jpg')
+            # img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/new/2021/02/22/2021-02-22_172648.337648c8b88685-3ee9-4fe0-abeb-e693306e382f.jpg')
+            # with open('C:/Users/User/Downloads/ship_image_2.png', "rb") as image_file:
+            #     encoded_string = base64.b64encode(image_file.read())
+            #     print(encoded_string)
+            image_data = base64.b64decode(request.data['image_data'])
+            img = Image.open(io.BytesIO(image_data))
             data = ai_module(img)
             result_set = best_three(data[0])
             first_ship = NormalShip.objects.filter(name=result_set['first'][0])
@@ -413,7 +416,7 @@ class PredictShipAPI(APIView):
             logger.debug('Request Predict Success : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 성공',
                                                                                       request.user.srvno,
                                                                                       request.data))
-            return self.success(data=result, message='success')
+            return self.success(message='success')
         except Exception as e:
             logger.debug('Request Predict Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
                 '선박 AI 요청 실패',

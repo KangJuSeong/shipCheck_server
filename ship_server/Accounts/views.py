@@ -93,14 +93,14 @@ class SignUpAPI(APIView):
 
 
 class UserInfoAPI(APIView):
-    def post(self, request):
+    def get(self, request):
         try:
-            user = Account.objects.filter(id=self.request.user.id)
+            user = Account.objects.get(id=self.request.user.id)
             serializer = AccountSerializer(user)
             logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기', user.srvno))
             return self.success(serializer.data, message='success')
-        except:
-            logger.debug('User Info Fail : {0}'.format('유저 정보 불러오기 실패'))
+        except Exception as e:
+            logger.debug('User Info Fail : {0}(에러 내용: {1})'.format('유저 정보 불러오기 실패', e))
             return self.fail(message='Not loading user information')
 
 
