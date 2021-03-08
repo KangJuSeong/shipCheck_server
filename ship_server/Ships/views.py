@@ -395,10 +395,6 @@ class AddWasteImageAPI(APIView):
 class PredictShipAPI(APIView):
     def post(self, request):
         try:
-            # img = Image.open('D:/shipCheck_server/ship_server/Ships/media/normal/new/2021/02/22/2021-02-22_172648.337648c8b88685-3ee9-4fe0-abeb-e693306e382f.jpg')
-            # with open('C:/Users/User/Downloads/ship_image_2.png', "rb") as image_file:
-            #     encoded_string = base64.b64encode(image_file.read())
-            #     print(encoded_string)
             image_data = base64.b64decode(request.data['image_data'])
             img = Image.open(io.BytesIO(image_data))
             data = ai_module(img)
