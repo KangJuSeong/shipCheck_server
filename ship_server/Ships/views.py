@@ -412,7 +412,7 @@ class PredictShipAPI(APIView):
             logger.debug('Request Predict Success : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 성공',
                                                                                       request.user.srvno,
                                                                                       request.data))
-            return self.success(message='success')
+            return self.success(data=result, message='success')
         except Exception as e:
             logger.debug('Request Predict Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
                 '선박 AI 요청 실패',
