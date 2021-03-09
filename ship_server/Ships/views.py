@@ -211,12 +211,12 @@ class DetailWasteShipAPI(APIView):
                                                                                          request.data))
                 return self.success(message='success')
             else:
-                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 실패, 유효하지 않은 데이터',
+                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 유효하지 않은 데이터',
                                                                                       request.user.srvno,
                                                                                       request.data))
                 return self.fail(message='fail')
         except ObjectDoesNotExist:
-            logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 실패, 존재하지 않는 선박',
+            logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 존재하지 않는 선박',
                                                                                   request.user.srvno,
                                                                                   request.data))
             return self.fail(message='fail')
