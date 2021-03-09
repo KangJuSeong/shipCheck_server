@@ -26,7 +26,7 @@ class RegionInfo(models.Model):
 
 
 #  항구를 선택할것인가? 지역 선택? 선박 유형 선택? 등록 날짜, 등록자
-class NormalShip(RegitInfo, RegionInfo):
+class NormalShip(RegitInfo):
     name = models.CharField(max_length=10, null=True, blank=True)
     port = models.CharField(max_length=10, null=True, blank=True)
     code = models.CharField(max_length=20, null=True, blank=True)
@@ -126,7 +126,7 @@ class NormalImage(RegitInfo):
         ship_img.save()
 
 
-class WasteShip(RegitInfo, RegionInfo):
+class WasteShip(RegitInfo):
     info = models.TextField(null=True, blank=True)
     types = models.CharField(max_length=10, null=True, blank=True)
     region = models.CharField(max_length=10, null=True, blank=True)
