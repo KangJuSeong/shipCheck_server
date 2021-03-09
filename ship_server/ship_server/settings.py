@@ -21,7 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'w$sd)_&da=!kq!w-tbv%3w2m@ih)b689jdosq@atd4i#gi2$ei'
+with open(os.getcwd() + '/server_secret_key.txt') as f:
+    secret_key = str(f.readline())
+SECRET_KEY = secret_key
+
+with open(os.getcwd() + '/jwt_secret_key.txt') as f:
+    jwt_key = str(f.readline())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -177,7 +182,7 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_SECRET_KEY': 'afjeiaosdfjEFidffuhesdjvIDfemsdicDjsdeifejs',
+    'JWT_SECRET_KEY': jwt_key,
     'JWT_ALGORITHM': 'HS256',
     'JWT_ALLOW_REFRESH': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
