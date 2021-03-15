@@ -47,39 +47,45 @@ class DetailNormalShipAPI(APIView):
             return self.fail(message='Not Exist')
 
     def delete(self, request, pk=None):
-        try:
-            queryset = NormalShip.objects.get(id=pk)
-            queryset.delete()
-            logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 제거 요청 성공',
-                                                                                     request.user.srvno,
-                                                                                     pk))
-            return self.success(message='success')
-        except ObjectDoesNotExist:
-            logger.debug('Request Delete Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 제거 요청 실패, 존재하지 않는 선박',
-                                                                                  request.user.srvno,
-                                                                                  pk))
-            return self.fail(message='Not Exist')
+        if request.user.user_level >= 2:
+            try:
+                queryset = NormalShip.objects.get(id=pk)
+                logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 제거 요청 성공',
+                                                                                         request.user.srvno,
+                                                                                         queryset))
+                queryset.delete()
+                return self.success(message='success')
+            except ObjectDoesNotExist:
+                logger.debug('Request Delete Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 제거 요청 실패, 존재하지 않는 선박',
+                                                                                      request.user.srvno,
+                                                                                      pk))
+                return self.fail(message='Not Exist')
+        else:
+            return self.fail(message='No permission')
 
     def put(self, request, pk=None):
-        try:
-            queryset = NormalShip.objects.get(id=pk)
-            serializer = NormalShipUpdateSerializer(queryset, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                logger.debug('Request Update Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 성공',
-                                                                                         request.user.srvno,
-                                                                                         request.data))
-                return self.success(message='success')
-            else:
-                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 실패, 유효하지 않은 데이터',
+        if request.user.user_level >= 2:
+            try:
+                queryset = NormalShip.objects.get(id=pk)
+                serializer = NormalShipUpdateSerializer(queryset, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    logger.debug('Request Update Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 성공',
+                                                                                             request.user.srvno,
+                                                                                             request.data))
+                    return self.success(message='success')
+                else:
+                    logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 실패, 유효하지 않은 데이터',
+                                                                                          request.user.srvno,
+                                                                                          request.data))
+                    return self.fail(message='fail')
+            except ObjectDoesNotExist:
+                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 실패, 존재하지 않는 선박',
                                                                                       request.user.srvno,
                                                                                       request.data))
                 return self.fail(message='fail')
-        except ObjectDoesNotExist:
-            logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 수정 요청 실패, 존재하지 않는 선박',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
-            return self.fail(message='fail')
+        else:
+            return self.fail(message='No Permission')
 
 
 class CreateNormalShipAPI(APIView):
@@ -187,39 +193,45 @@ class DetailWasteShipAPI(APIView):
             return self.fail(message='Not Exist')
 
     def delete(self, request, pk=None):
-        try:
-            queryset = WasteShip.objects.get(id=pk)
-            queryset.delete()
-            logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 성공',
-                                                                                     request.user.srvno,
-                                                                                     request.data))
-            return self.success(message='success')
-        except ObjectDoesNotExist:
-            logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 실패, 존재하지 않는 선박',
-                                                                                     request.user.srvno,
-                                                                                     request.data))
-            return self.fail(message='Not Exist')
-
-    def put(self, request, pk=None):
-        try:
-            queryset = WasteShip.objects.get(id=pk)
-            serializer = WasteShipUpdateSerializer(queryset, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                logger.debug('Request Update Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 성공',
+        if request.user.user_level >= 2:
+            try:
+                queryset = WasteShip.objects.get(id=pk)
+                logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 성공',
+                                                                                         request.user.srvno,
+                                                                                         queryset))
+                queryset.delete()
+                return self.success(message='success')
+            except ObjectDoesNotExist:
+                logger.debug('Request Delete Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 제거 요청 실패, 존재하지 않는 선박',
                                                                                          request.user.srvno,
                                                                                          request.data))
-                return self.success(message='success')
-            else:
-                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 유효하지 않은 데이터',
+                return self.fail(message='Not Exist')
+        else:
+            return self.fail(message='No permission')
+
+    def put(self, request, pk=None):
+        if request.user.user_level >= 2:
+            try:
+                queryset = WasteShip.objects.get(id=pk)
+                serializer = WasteShipUpdateSerializer(queryset, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    logger.debug('Request Update Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 성공',
+                                                                                             request.user.srvno,
+                                                                                             request.data))
+                    return self.success(message='success')
+                else:
+                    logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 유효하지 않은 데이터',
+                                                                                          request.user.srvno,
+                                                                                          request.data))
+                    return self.fail(message='fail')
+            except ObjectDoesNotExist:
+                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 존재하지 않는 선박',
                                                                                       request.user.srvno,
                                                                                       request.data))
                 return self.fail(message='fail')
-        except ObjectDoesNotExist:
-            logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 수정 요청 실패, 존재하지 않는 선박',
-                                                                                  request.user.srvno,
-                                                                                  request.data))
-            return self.fail(message='fail')
+        else:
+            return self.fail(message='No permission')
 
 
 class CreateWasteShipAPI(APIView):
