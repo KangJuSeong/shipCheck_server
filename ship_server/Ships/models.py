@@ -186,13 +186,12 @@ class WasteImage(RegitInfo):
     @staticmethod
     def create_waste_image(img_list, ship_id):
         del img_list[0]
-        waste_ship = WasteShip.objects.get(id=ship_id)
         for img in img_list:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(img)
             ship_img = WasteImage.objects.create(img=ContentFile(image,
                                                  str(datetime.today()) + img_name + '.jpg'),
-                                                 w_id=waste_ship,
+                                                 w_id=WasteShip.objects.get(id=ship_id),
                                                  regit_date=datetime.today())
         ship_img.save()
 
@@ -205,7 +204,7 @@ class WasteImage(RegitInfo):
             image = base64.b64decode(img)
             ship_img = WasteImage.objects.create(img=ContentFile(image,
                                                  str(datetime.today()) + img_name + '.jpg'),
-                                                 w_id=waste_ship,
+                                                 w_id=ship,
                                                  regit_date=datetime.today())
         ship_img.save()
         ship.save()
