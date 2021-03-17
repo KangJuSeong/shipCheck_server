@@ -64,6 +64,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=11, null=True, blank=True)
     regit_date = models.DateField(null=True, blank=True)
     device_id = models.CharField(max_length=255, null=True, blank=True)
+    user_level = models.IntegerField(default=1)  # 1: ai 검색 및 선박 조회 및 선박 추가 가능, 2: 데이터 삭제 및 수정 가능, 3: 서비스 전체 관리(admin)
     fail_cnt = models.IntegerField(default=0)
     block_no = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
