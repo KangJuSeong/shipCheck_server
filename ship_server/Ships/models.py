@@ -118,11 +118,11 @@ class NormalImage(RegitInfo):
     def add_normal_image(img_list, ship_id):
         ship = NormalShip.objects.get(id=ship_id)
         ship.img_cnt = ship.img_cnt + len(img_list)
-        if ship.main_img is None:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(img_list[0])
-            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
-        del img_list[0]
+        # if ship.main_img is None:
+        #     img_name = str(uuid.uuid4())
+        #     image = base64.b64decode(img_list[0])
+        #     ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+        # del img_list[0]
         for img in img_list:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(img)
