@@ -35,7 +35,7 @@ class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteShip
         fields = ('id', 'main_img', 'info', 'types', 'lat', 'lon',
-                  'is_train', 'regit_date', 'register', 'region')
+                  'is_train', 'regit_date', 'register', 'region', 'img_cnt')
 
 
 class WasteShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
