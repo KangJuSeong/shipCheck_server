@@ -22,8 +22,8 @@ class NormalShipAdmin(admin.ModelAdmin):
 
 class WastedShipAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'image_tag', 'info', 'types', 'lat', 'lon', 'is_train',
-        'regit_date', 'register', 'img_cnt'
+        'id', 'image_tag', 'img_cnt', 'info', 'types', 'lat', 'lon', 'is_train',
+        'regit_date', 'register'
     )
     search_fields = ['info', 'id']
 
