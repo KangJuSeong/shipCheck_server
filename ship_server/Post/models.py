@@ -23,5 +23,5 @@ class Answer(models.Model):
 class Notice(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    types = models.CharField(max_length=50)
+    types = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
