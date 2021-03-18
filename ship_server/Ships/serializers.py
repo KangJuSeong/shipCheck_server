@@ -61,7 +61,7 @@ class ProgramNormalShipSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = NormalShip
-        fields = ('name', 'img_cnt', 'normal_imgs', 'main_img')
+        fields = ('name', 'img_cnt', 'normal_imgs', 'main_img', 'id')
 
 
 class ProgramWasteShipSerializer(serializers.HyperlinkedModelSerializer):
@@ -69,4 +69,4 @@ class ProgramWasteShipSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = WasteShip
-        fields = ('id', 'img_cnt', 'waste_imgs', 'main_img')
+        fields = ('id', 'img_cnt', 'waste_imgs', 'main_img', 'id')
