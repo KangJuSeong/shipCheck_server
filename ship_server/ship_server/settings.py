@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'Accounts',
     'rest_framework',
     'Ships',
+    'Post',
 ]
 
 LOGGING = {
@@ -86,6 +87,12 @@ LOGGING = {
             'filename': os.getcwd().replace('\\', '/') + '/Logs/ShipLog',
             'formatter': 'format1',
         },
+        'file3': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.getcwd().replace('\\', '/') + '/Logs/PostLog',
+            'formatter': 'format1',
+        },
         # 콘솔(터미널)에 출력
         'console': {
             'level': 'DEBUG',
@@ -104,6 +111,10 @@ LOGGING = {
         },
         'Ships': {
             'handlers': ['file2'],
+            'level': 'DEBUG',
+        },
+        'Post': {
+            'handlers': ['file3'],
             'level': 'DEBUG',
         }
     },
