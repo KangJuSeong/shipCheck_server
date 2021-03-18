@@ -94,7 +94,8 @@ class CreateNormalShipAPI(APIView):
             ship_id = NormalShip.create_normal_ship(data=request.data, user=request.user)
             if len(request.data['image_data']) > 1:
                 NormalImage.create_normal_image(img_list=request.data['image_data'],
-                                                ship_id=ship_id)
+                                                ship_id=ship_id,
+                                                user=request.user)
             logger.debug('Request Create Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 등록 요청 성공',
                                                                                      request.user.srvno,
                                                                                      request.data))
@@ -356,7 +357,7 @@ class ListNormalImageAPI(APIView):
 class AddNormalImageAPI(APIView):
     def post(self, request):
         try:
-            NormalImage.add_normal_image(request.data['image_data'], request.data['id'])
+            NormalImage.add_normal_image(request.data['image_data'], request.data['id'], request.user)
             logger.debug('Request Add Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 이미지 추가 요청 성공',
                                                                                   request.user.srvno,
                                                                                   request.data))
@@ -390,7 +391,7 @@ class ListWasteImageAPI(APIView):
 class AddWasteImageAPI(APIView):
     def post(self, request):
         try:
-            WasteImage.add_waste_image(request.data['image_data'], request.data['id'])
+            WasteImage.add_waste_image(request.data['image_data'], request.data['id'], request.user)
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 이미지 추가 요청 성공',
                                                                                    request.user.srvno,
                                                                                    request.data))
@@ -628,5 +629,10 @@ class WasteShipReigster(APIView):
 
 
 class AllDelete(APIView):
-    def get(self, request, pk=None):
+    def get(self, request):
+        # img_name = str(uuid.uuid4())
+        # image = base64.b64decode(request.data['image_data'][0])
+        # image = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+        # ship.main_img = image
+        # ship.save()
         return self.success(message='success')
