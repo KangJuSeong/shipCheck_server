@@ -103,34 +103,38 @@ class NormalImage(RegitInfo):
         return self.img.url
 
     @staticmethod
-    def create_normal_image(img_list, ship_id):
+    def create_normal_image(img_list, ship_id, user):
         del img_list[0]
-        for img in img_list:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(img)
-            ship_img = NormalImage.objects.create(img=ContentFile(image,
-                                                                  str(datetime.today()) + img_name + '.jpg'),
-                                                  n_name=NormalShip.objects.get(id=ship_id),
-                                                  regit_date=datetime.today())
-        ship_img.save()
+        if img_list > 0:
+            for img in img_list:
+                img_name = str(uuid.uuid4())
+                image = base64.b64decode(img)
+                ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                      str(datetime.today()) + img_name + '.jpg'),
+                                                      n_name=NormalShip.objects.get(id=ship_id),
+                                                      regit_date=datetime.today(),
+                                                      register=user)
+                ship_img.save()
 
     @staticmethod
-    def add_normal_image(img_list, ship_id):
+    def add_normal_image(img_list, ship_id, user):
         ship = NormalShip.objects.get(id=ship_id)
         ship.img_cnt = ship.img_cnt + len(img_list)
-        # if ship.main_img is None:
-        #     img_name = str(uuid.uuid4())
-        #     image = base64.b64decode(img_list[0])
-        #     ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
-        # del img_list[0]
-        for img in img_list:
+        if not ship.main_img:
             img_name = str(uuid.uuid4())
-            image = base64.b64decode(img)
-            ship_img = NormalImage.objects.create(img=ContentFile(image,
-                                                                  str(datetime.today()) + img_name + '.jpg'),
-                                                  n_name=ship,
-                                                  regit_date=datetime.today())
-        ship_img.save()
+            image = base64.b64decode(img_list[0])
+            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+            del img_list[0]
+        if len(img_list) > 0:
+            for img in img_list:
+                img_name = str(uuid.uuid4())
+                image = base64.b64decode(img)
+                ship_img = NormalImage.objects.create(img=ContentFile(image,
+                                                      str(datetime.today()) + img_name + '.jpg'),
+                                                      n_name=ship,
+                                                      regit_date=datetime.today(),
+                                                      register=user)
+                ship_img.save()
         ship.save()
 
 
@@ -189,27 +193,36 @@ class WasteImage(RegitInfo):
         return self.img.url
 
     @staticmethod
-    def create_waste_image(img_list, ship_id):
+    def create_waste_image(img_list, ship_id, user):
         del img_list[0]
-        for img in img_list:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(img)
-            ship_img = WasteImage.objects.create(img=ContentFile(image,
-                                                 str(datetime.today()) + img_name + '.jpg'),
-                                                 w_id=WasteShip.objects.get(id=ship_id),
-                                                 regit_date=datetime.today())
-        ship_img.save()
+        if img_len > 0:
+            for img in img_list:
+                img_name = str(uuid.uuid4())
+                image = base64.b64decode(img)
+                ship_img = WasteImage.objects.create(img=ContentFile(image,
+                                                     str(datetime.today()) + img_name + '.jpg'),
+                                                     w_id=WasteShip.objects.get(id=ship_id),
+                                                     regit_date=datetime.today(),
+                                                     register=user)
+                ship_img.save()
 
     @staticmethod
-    def add_waste_image(img_list, ship_id):
+    def add_waste_image(img_list, ship_id, user):
         ship = WasteShip.objects.get(id=ship_id)
         ship.img_cnt = ship.img_cnt + len(img_list)
-        for img in img_list:
+        if not ship.main_img:
             img_name = str(uuid.uuid4())
-            image = base64.b64decode(img)
-            ship_img = WasteImage.objects.create(img=ContentFile(image,
-                                                 str(datetime.today()) + img_name + '.jpg'),
-                                                 w_id=ship,
-                                                 regit_date=datetime.today())
-        ship_img.save()
+            image = base64.b64decode(img_list[0])
+            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+            del img_list[0]
+        if len(img_list) > 0:
+            for img in img_list:
+                img_name = str(uuid.uuid4())
+                image = base64.b64decode(img)
+                ship_img = WasteImage.objects.create(img=ContentFile(image,
+                                                     str(datetime.today()) + img_name + '.jpg'),
+                                                     w_id=ship,
+                                                     regit_date=datetime.today(),
+                                                     register=user)
+                ship_img.save()
         ship.save()
