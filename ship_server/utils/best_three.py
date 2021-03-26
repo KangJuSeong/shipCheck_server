@@ -10,7 +10,9 @@ def best_three(arr):
     first_index = arr.index(first)
     second_index = arr.index(second)
     third_index = arr.index(third)
-    f = open(os.getcwd().replace('\\', '/') + '/keras_model/label.txt')
+    label_path = os.listdir(os.getcwd().replace('\\', '/') + '/keras_model/class_history')
+    label_name = os.getcwd().replace('\\', '/') + '/keras_model/class_history/' + label_path[0]
+    f = open(label_name)
     label_list = []
     for line in f.readlines():
         label_list.append(line.replace('\n', ''))
