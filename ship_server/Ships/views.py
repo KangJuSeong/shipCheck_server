@@ -412,16 +412,35 @@ class PredictShipAPI(APIView):
             img = Image.open(io.BytesIO(image_data))
             data = ai_module(img)
             result_set = best_three(data[0])
-            first_ship = NormalShip.objects.filter(name=result_set['first'][0])
-            second_ship = NormalShip.objects.filter(name=result_set['second'][0])
-            third_ship = NormalShip.objects.filter(name=result_set['third'][0])
-            first_serial = NormalShipSerializer(first_ship[0])
-            second_serial = NormalShipSerializer(second_ship[0])
-            third_serial = NormalShipSerializer(third_ship[0])
+            kinds = list()
+            if result_set['first'][0][0] is 'n':
+                first_ship = NormalShip.objects.get(id=int(result_set['first'][0][2:]))
+                first_serial = NormalShipSerializer(first_ship)
+                kinds.append(1)
+            else:
+                first_ship = WasteShip.objects.get(id=int(result_set['first'][0][2:]))
+                first_serial = WasteShipSerializer(first_ship)
+                kinds.append(0)
+            if result_set['second'][0][0] is 'n':
+                second_ship = NormalShip.objects.get(id=int(result_set['second'][0][2:]))
+                second_serial = NormalShipSerializer(second_ship)
+                kinds.append(1)
+            else:
+                second_ship = WasteShip.objects.get(id=int(result_set['second'][0][2:]))
+                second_serial = WasteShipSerializer(second_ship)
+                kinds.append(0)
+            if result_set['third'][0][0] is 'n':
+                third_ship = NormalShip.objects.get(id=int(result_set['third'][0][2:]))
+                third_serial = NormalShipSerializer(third_ship)
+                kinds.append(1)
+            else:
+                third_ship = WasteShip.objects.get(id=int(result_set['third'][0][2:]))
+                third_serial = WasteShipSerializer(third_ship)
+                kinds.append(0)
             result_ship = [first_serial.data, second_serial.data, third_serial.data]
-            result = {'result': result_ship, 'percent': [result_set['first'][1],
-                                                         result_set['second'][1],
-                                                         result_set['third'][1]]}
+            result = {'result': result_ship, 'kinds': kinds, 'percent': [result_set['first'][1],
+                                                                         result_set['second'][1],
+                                                                         result_set['third'][1]]}
             logger.debug('Request Predict Success : {0} (군번 : {1}, 데이터 : {2})'.format('선박 AI 요청 성공',
                                                                                       request.user.srvno,
                                                                                       request.data))
@@ -493,7 +512,7 @@ class NormalShipRegister(APIView):
     def get(self, request):
         ship_csv = pd.read_csv('D:/기존 사용 DB/선박.csv')
         img_csv = pd.read_csv('D:/기존 사용 DB/선박이미지.csv')
-        black = [15]
+        black = []
         for ship_id in ship_csv['id']:
             if ship_id in black:
                 continue

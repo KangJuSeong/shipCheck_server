@@ -10,3 +10,43 @@
 [02/Mar/2021 16:32:39] DEBUG [Accounts.views:43] Login Success : 로그인 성공 (군번 : ADMIN)
 [03/Mar/2021 14:30:20] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
 [03/Mar/2021 14:30:48] DEBUG [Accounts.views:55] Logout Success : 로그아웃 성공 (군번 : ADMIN)
+[05/Mar/2021 09:58:33] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[08/Mar/2021 11:29:50] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[08/Mar/2021 13:35:26] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:38:48] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[08/Mar/2021 13:39:01] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[08/Mar/2021 13:39:04] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:39:21] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:39:22] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:43:36] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:43:37] DEBUG [Accounts.views:103] User Info Fail : 유저 정보 불러오기 실패
+[08/Mar/2021 13:45:10] DEBUG [Accounts.views:106] User Info Fail : 유저 정보 불러오기 실패(에러 내용: 'QuerySet' object has no attribute 'srvno'
+[08/Mar/2021 13:46:05] DEBUG [Accounts.views:103] User Info Success : 유저 정보 불러오기 (군번 : ADMIN)
+[08/Mar/2021 13:46:05] DEBUG [Accounts.views:106] User Info Fail : 유저 정보 불러오기 실패(에러 내용: 'Account' object is not iterable
+[08/Mar/2021 13:46:47] DEBUG [Accounts.views:103] User Info Success : 유저 정보 불러오기 (군번 : ADMIN)
+[08/Mar/2021 13:46:47] DEBUG [Accounts.views:106] User Info Fail : 유저 정보 불러오기 실패(에러 내용: 'Account' object is not iterable)
+[08/Mar/2021 13:47:16] DEBUG [Accounts.views:103] User Info Success : 유저 정보 불러오기 (군번 : ADMIN)
+[09/Mar/2021 09:09:23] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:11:21] DEBUG [Accounts.views:100] User Info Success : 유저 정보 불러오기 (군번 : ADMIN)
+[09/Mar/2021 09:11:47] DEBUG [Accounts.views:100] User Info Success : 유저 정보 불러오기 (군번 : ADMIN)
+[09/Mar/2021 09:14:18] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:20] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:21] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:21] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:22] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:23] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:24] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:25] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:25] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:26] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:26] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:27] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:28] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 09:14:28] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[09/Mar/2021 10:52:15] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[17/Mar/2021 15:54:01] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[18/Mar/2021 16:01:48] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[22/Mar/2021 09:04:47] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[26/Mar/2021 13:51:54] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[26/Mar/2021 13:53:12] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)
+[26/Mar/2021 15:32:00] DEBUG [Accounts.views:47] Login Success : 로그인 성공 (군번 : ADMIN)

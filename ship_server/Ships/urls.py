@@ -20,5 +20,5 @@ urlpatterns = [
     url(r'^image/waste/add/', AddWasteImageAPI.as_view()),  # 유기,폐 선박 이미지 추가 등록
     url(r'^ship/normal/program/(?P<pk>\d+)/$', ProgramNormalShipAPI.as_view()),
     url(r'^ship/waste/program/(?P<pk>\d+)/$', ProgramWasteShipAPI.as_view()),
-    url(r'^ship/predict/', PredictShipAPI.as_view()),
+    url(r'^predict/', PredictShipAPI.as_view()),
 ]
