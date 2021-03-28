@@ -512,7 +512,7 @@ class NormalShipRegister(APIView):
     def get(self, request):
         ship_csv = pd.read_csv('D:/기존 사용 DB/선박.csv')
         img_csv = pd.read_csv('D:/기존 사용 DB/선박이미지.csv')
-        black = [15]
+        black = []
         for ship_id in ship_csv['id']:
             if ship_id in black:
                 continue
