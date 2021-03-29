@@ -4,7 +4,7 @@ from .models import Question, Answer, Notice
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'types', 'writer', 'title', 'content', 'date', 'status'
+        'id', 'writer', 'title', 'content', 'date', 'status'
     )
 
 
