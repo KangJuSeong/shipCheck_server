@@ -1,5 +1,6 @@
 import time
 from utils.custom_view import APIView
+from utils.change_format import change_unit
 from .models import Account
 from .serializers import LoginSerializer, AccountSerializer
 from rest_framework.permissions import AllowAny
@@ -97,8 +98,9 @@ class UserInfoAPI(APIView):
         try:
             user = Account.objects.get(id=self.request.user.id)
             serializer = AccountSerializer(user)
+            result = change_unit(serializer.data)
             logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기', user.srvno))
-            return self.success(serializer.data, message='success')
+            return self.success(result, message='success')
         except Exception as e:
             logger.debug('User Info Fail : {0}(에러 내용: {1})'.format('유저 정보 불러오기 실패', e))
             return self.fail(message='Not loading user information')

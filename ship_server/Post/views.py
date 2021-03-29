@@ -1,5 +1,5 @@
 from utils.custom_view import APIView
-from utils.change_datetime import change_datetime_notice
+from utils.change_format import change_datetime_notice
 from .models import Notice, Question, Answer
 from .serializers import NoticeSerializer, QuestionSerializer, AnswerSerializer
 from django.core.exceptions import ObjectDoesNotExist
