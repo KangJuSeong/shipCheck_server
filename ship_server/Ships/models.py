@@ -19,21 +19,20 @@ class RegitInfo(models.Model):
 
 
 class RegionInfo(models.Model):
-    region = models.CharField(max_length=10, null=True, blank=True)
+    region = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         abstract = True
 
 
 #  항구를 선택할것인가? 지역 선택? 선박 유형 선택? 등록 날짜, 등록자
-class NormalShip(RegitInfo):
-    name = models.CharField(max_length=10, null=True, blank=True)
-    port = models.CharField(max_length=10, null=True, blank=True)
-    code = models.CharField(max_length=20, null=True, blank=True)
-    tons = models.CharField(max_length=10, null=True, blank=True)
-    types = models.CharField(max_length=10, null=True, blank=True)
-    size = models.CharField(max_length=15, null=True, blank=True)
-    region = models.CharField(max_length=10, null=True, blank=True)
+class NormalShip(RegitInfo, RegionInfo):
+    name = models.CharField(max_length=255, null=True, blank=True)
+    port = models.CharField(max_length=255, null=True, blank=True)
+    code = models.CharField(max_length=255, null=True, blank=True)
+    tons = models.CharField(max_length=255, null=True, blank=True)
+    types = models.CharField(max_length=255, null=True, blank=True)
+    size = models.CharField(max_length=255, null=True, blank=True)
     is_vpass = models.BooleanField(default=False)
     is_ais = models.BooleanField(default=False)
     is_vhf = models.BooleanField(default=False)
@@ -90,7 +89,7 @@ class NormalShip(RegitInfo):
         return result
 
 
-class NormalImage(RegitInfo):
+class NormalImage(RegitInfo, RegionInfo):
     n_name = models.ForeignKey('NormalShip', related_name='normal_imgs',
                                on_delete=models.SET_NULL,
                                null=True,
@@ -98,6 +97,9 @@ class NormalImage(RegitInfo):
     img = models.ImageField(upload_to='normal/exist/%Y/%m/%d',
                             null=True,
                             blank=True)
+
+    class Meta:
+        db_table = 'NormalImage'
 
     def __str__(self):
         return self.img.url
@@ -138,10 +140,9 @@ class NormalImage(RegitInfo):
         ship.save()
 
 
-class WasteShip(RegitInfo):
+class WasteShip(RegitInfo, RegionInfo):
     info = models.TextField(null=True, blank=True)
-    types = models.CharField(max_length=10, null=True, blank=True)
-    region = models.CharField(max_length=10, null=True, blank=True)
+    types = models.CharField(max_length=255, null=True, blank=True)
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
     img_cnt = models.IntegerField(default=0)
@@ -149,6 +150,9 @@ class WasteShip(RegitInfo):
     main_img = models.ImageField(upload_to='waste/new/%Y/%m/%d',
                                  null=True,
                                  blank=True)
+
+    class Meta:
+        db_table = 'WasteShip'
 
     def __str__(self):
         return str(self.id)
@@ -178,7 +182,7 @@ class WasteShip(RegitInfo):
         return result
 
 
-class WasteImage(RegitInfo):
+class WasteImage(RegitInfo, RegionInfo):
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
     w_id = models.ForeignKey('WasteShip', related_name='waste_imgs',
@@ -188,6 +192,9 @@ class WasteImage(RegitInfo):
     img = models.ImageField(upload_to='waste/exist/%Y/%m/%d',
                             null=True,
                             blank=True)
+
+    class Meta:
+        db_table = 'WasteImage'
 
     def __str__(self):
         return self.img.url

@@ -3,9 +3,8 @@ from Accounts.models import Account
 
 
 class Question(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
     content = models.TextField()
-    types = models.CharField(max_length=50)
     date = models.DateTimeField(auto_now_add=True)
     status = models.BooleanField(default=False)
     writer = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -21,7 +20,7 @@ class Answer(models.Model):
 
 
 class Notice(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255)
     content = models.TextField()
     types = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
