@@ -8,7 +8,7 @@ class NormalShipAdmin(admin.ModelAdmin):
         'id', 'image_tag', 'name',
         # 'port', 'tons', 'types', 'code',
         # 'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'is_train',
-        'img_cnt', 'register', 'regit_date',
+        'img_cnt', 'register', 'regit_date', 'is_train',
     )
     search_fields = ['id', 'name']
 
