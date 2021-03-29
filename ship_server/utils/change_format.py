@@ -24,3 +24,9 @@ def change_datetime_notice(data):
                 .replace(':', '시', 1).replace(':', '분')
             i['date'] = date_time[:date_time.find('분') + 1]
         return data
+
+
+def change_unit(data):
+    data['unit'] = data['unit'][:2] + '여단 ' + data['unit'][3] + '대대'
+    return data
+
