@@ -27,6 +27,8 @@ def change_datetime_notice(data):
 
 
 def change_unit(data):
+    if data['unit'] is '사령부' or data['unit'] is '직할대':
+        return data
     data['unit'] = data['unit'][:2] + '여단 ' + data['unit'][3] + '대대'
     return data
 
