@@ -2,7 +2,7 @@ from utils.custom_view import APIView
 from .models import NormalShip, NormalImage, WasteShip, WasteImage
 from Accounts.models import Account
 from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
-                          WasteImageSerializer, WasteLocationSerializer,
+                          WasteImageSerializer, WasteLocationSerializer, NormalLocationSerializer,
                           NormalShipUpdateSerializer, WasteShipUpdateSerializer,
                           ProgramNormalShipSerializer, ProgramWasteShipSerializer,)
 from django.core.exceptions import ObjectDoesNotExist
@@ -289,13 +289,16 @@ class ListWasteShipAPI(APIView):
             return self.fail(message='fail')
 
 
-class LocationWasteShipAPI(APIView):
+class LocationShipAPI(APIView):
     def get(self, request):
         try:
-            queryset = WasteShip.objects.all()
-            location = WasteLocationSerializer(queryset, many=True)
+            w_queryset = WasteShip.objects.all()
+            n_queryset = NormalShip.objects.all()
+            w_location = WasteLocationSerializer(w_queryset, many=True)
+            n_location = NormalLocationSerializer(n_queryset, many=True)
+            result = {"normal": n_location.data, "waste": w_location.data}
             logger.debug('Request Location Success : {0} (군번 : {1})'.format('유기 선박 위치 요청 성공', request.user.srvno))
-            return self.success(data=location.data, message='success')
+            return self.success(data=result, message='success')
         except Exception as e:
             logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 위치 요청 실패, 유효하지 않은 데이터',
                                                                                       request.user.srvno,
@@ -532,6 +535,8 @@ class NormalShipRegister(APIView):
             code = list(search_row['registerd_ship_num'])[0]
             size = list(search_row['width_length'])[0]
             weight = list(search_row['weight'])[0]
+            lat = list(search_row['lat'])[0]
+            lon = list(search_row['long'])[0]
             find_row = img_csv.loc[(img_csv['shipdb_id'] == ship_id)]  # 필터링 된 row를 이용하여 img 주소 찾기
             img_len = len(list(find_row['ship_image']))
             if name == 'none' or name == '.' or name == '미상' or name == '':
@@ -558,6 +563,8 @@ class NormalShipRegister(APIView):
                                                  img_cnt=img_len,
                                                  register=Account.objects.get(srvno='ADMIN'),
                                                  region='정보 없음',
+                                                 lat=lat,
+                                                 lon=lon,
                                                  main_img=ContentFile(img_bytes, str(datetime.today())+img_name+'.jpg'))
                 if img_len > 1:
                     for i in range(img_len):
