@@ -106,6 +106,18 @@ class UserInfoAPI(APIView):
             return self.fail(message='Not loading user information')
 
 
+class UserPermissionAPI(APIView):
+    def get(self, request):
+        try:
+            user = Account.objects.get(id=self.request.user.id)
+            level = user.user_level
+            logger.debug('User Permission Success : {0} (군번 : {1})'.format('유저 권한 불러오기', user.srvno))
+            return self.success(data={"user_level": level}, message='success')
+        except Exception as e:
+            logger.debug('User Permission Fail : {0}(에러 내용: {1})'.format('유저 권한 불러오기 실패', e))
+            return self.fail(message='fail')
+
+
 class AuthenticationSignup(APIView):
     permission_classes = [AllowAny]
 
