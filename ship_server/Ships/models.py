@@ -184,6 +184,9 @@ class WasteShip(RegitInfo, RegionInfo):
     @staticmethod
     def searching_waste_ship(data):
         ships = WasteShip.objects.all()
+        if not data['id'] is '':
+            ships = ships.filter(id=data['id'])
+            return ships
         if not data['info'] is '':
             ships = ships.filter(info__contains=data['info'])
         if not data['region'] is '':
