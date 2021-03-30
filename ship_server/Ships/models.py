@@ -73,20 +73,28 @@ class NormalShip(RegitInfo, RegionInfo):
 
     @staticmethod
     def searching_normal_ship(data):
-        name = Q(name__contains=data['name'])
-        port = Q(port__contains=data['port'])
-        code = Q(code__contains=data['code'])
-        tons = Q(tons__contains=data['tons'])
-        types = Q(types__contains=data['types'])
-        size = Q(size__contains=data['size'])
-        region = Q(region__contains=data['region'])
-        is_vpass = Q(is_vpass__contains=data['is_vpass'])
-        is_ais = Q(is_ais__contains=data['is_ais'])
-        is_vhf = Q(is_vhf__contains=data['is_vhf'])
-        is_ff = Q(is_ff__contains=data['is_ff'])
-        result = NormalShip.objects.filter(name | port | code | tons | types | region
-                                           | size | is_vpass | is_ais | is_vhf | is_ff)
-        return result
+        ships = NormalShip.objects.all()
+        if not data['name'] == '':
+            ships = ships.filter(name__contains=data['name'])
+        if not data['port'] == '':
+            ships = ships.filter(port__contains=data['port'])
+        if not data['tons'] == '':
+            ships = ships.filter(tons__contains=data['tons'])
+        if not data['types'] == '':
+            ships = ships.filter(types__contains=data['types'])
+        if not data['size'] == '':
+            ships = ships.filter(size__contains=data['size'])
+        if not data['region'] == '':
+            ships = ships.filter(region__contains=data['region'])
+        if data['is_vpass']:
+            ships = ships.filter(is_vpass=True)
+        if data['is_ais']:
+            ships = ships.filter(is_ais=True)
+        if data['is_vhf']:
+            ships = ships.filter(is_vhf=True)
+        if data['is_ff']:
+            ships = ships.filter(is_ff=True)
+        return ships
 
 
 class NormalImage(RegitInfo, RegionInfo):
@@ -175,11 +183,14 @@ class WasteShip(RegitInfo, RegionInfo):
 
     @staticmethod
     def searching_waste_ship(data):
-        info = Q(info__contains=data['info'])
-        region = Q(region__contains=data['region'])
-        types = Q(types__contains=data['types'])
-        result = WasteShip.objects.filter(info | region | types)
-        return result
+        ships = WasteShip.objects.all()
+        if not data['info'] is '':
+            ships = ships.filter(info__contains=data['info'])
+        if not data['region'] is '':
+            ships = ships.filter(region__contains=data['region'])
+        if not data['types'] is '':
+            ships = ships.filter(types__contains=data['types'])
+        return ships
 
 
 class WasteImage(RegitInfo, RegionInfo):
