@@ -438,7 +438,10 @@ class PredictShipAPI(APIView):
                 third_ship = WasteShip.objects.get(id=int(result_set['third'][0][2:]))
                 third_serial = WasteShipSerializer(third_ship)
                 kinds.append(0)
-            result_ship = [first_serial.data, second_serial.data, third_serial.data]
+            first_serial = change_datetime(first_serial.data)
+            second_serial = change_datetime(second_serial.data)
+            third_serial = change_datetime(third_serial.data)
+            result_ship = [first_serial, second_serial, third_serial]
             result = {'result': result_ship, 'kinds': kinds, 'percent': [result_set['first'][1],
                                                                          result_set['second'][1],
                                                                          result_set['third'][1]]}
