@@ -12,7 +12,7 @@ class NoticeSerializer(serializers.HyperlinkedModelSerializer):
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Question
-        fields = ('id', 'title', 'content', 'types', 'date', 'status')
+        fields = ('id', 'title', 'content', 'date', 'status')
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
