@@ -64,7 +64,7 @@ class DetailNormalShipAPI(APIView):
         else:
             return self.fail(message='No permission')
 
-    def put(self, request, pk=None):
+    def post(self, request, pk=None):
         if request.user.user_level >= 2:
             try:
                 queryset = NormalShip.objects.get(id=pk)
@@ -211,7 +211,7 @@ class DetailWasteShipAPI(APIView):
         else:
             return self.fail(message='No permission')
 
-    def put(self, request, pk=None):
+    def post(self, request, pk=None):
         if request.user.user_level >= 2:
             try:
                 queryset = WasteShip.objects.get(id=pk)

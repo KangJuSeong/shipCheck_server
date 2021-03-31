@@ -118,6 +118,15 @@ class UserPermissionAPI(APIView):
             return self.fail(message='fail')
 
 
+class VersionCheckAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        now_version = "v1.0.0"
+        server_status = ["running", "checking"]
+        return self.success(data={"version": now_version, "server_status": server_status[0]}, message='success')
+
+
 class AuthenticationSignup(APIView):
     permission_classes = [AllowAny]
 
