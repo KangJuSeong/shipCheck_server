@@ -92,7 +92,6 @@ class QuestionCreateAPI(APIView):
         try:
             obj = Question.objects.create(title=request.data['title'],
                                           content=request.data['content'],
-                                          types=request.data['types'],
                                           writer=request.user)
             obj.save()
             logger.debug('Request Create Success : {0} (군번 : {1})'.format('질문 작성 성공',
