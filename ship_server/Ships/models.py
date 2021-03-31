@@ -33,6 +33,8 @@ class NormalShip(RegitInfo, RegionInfo):
     tons = models.CharField(max_length=255, null=True, blank=True)
     types = models.CharField(max_length=255, null=True, blank=True)
     size = models.CharField(max_length=255, null=True, blank=True)
+    lat = models.FloatField(default=0)
+    lon = models.FloatField(default=0)
     is_vpass = models.BooleanField(default=False)
     is_ais = models.BooleanField(default=False)
     is_vhf = models.BooleanField(default=False)
@@ -63,7 +65,9 @@ class NormalShip(RegitInfo, RegionInfo):
                                          is_ff=data['is_ff'],
                                          img_cnt=len(data['image_data']),
                                          register=user,
-                                         region=data['region'])
+                                         region=data['region'],
+                                         lat=data['lat'],
+                                         lon=data['lon'])
         if len(data['image_data']) > 0:
             img_name = str(uuid.uuid4())
             image = base64.b64decode(data['image_data'][0])
