@@ -242,7 +242,8 @@ class CreateWasteShipAPI(APIView):
             ship_id = WasteShip.create_waste_ship(data=request.data, user=request.user)
             if len(request.data['image_data']) > 1:
                 WasteImage.create_waste_image(img_list=request.data['image_data'],
-                                              ship_id=ship_id)
+                                              ship_id=ship_id,
+                                              user=request.user)
             logger.debug('Request Create Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 등록 요청 성공',
                                                                                      request.user.srvno,
                                                                                      request.data))
