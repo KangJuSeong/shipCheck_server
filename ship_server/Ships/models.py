@@ -119,7 +119,7 @@ class NormalImage(RegitInfo, RegionInfo):
     @staticmethod
     def create_normal_image(img_list, ship_id, user):
         del img_list[0]
-        if img_list > 0:
+        if len(img_list) > 0:
             for img in img_list:
                 img_name = str(uuid.uuid4())
                 image = base64.b64decode(img)
@@ -220,7 +220,7 @@ class WasteImage(RegitInfo, RegionInfo):
     @staticmethod
     def create_waste_image(img_list, ship_id, user):
         del img_list[0]
-        if img_len > 0:
+        if len(img_list) > 0:
             for img in img_list:
                 img_name = str(uuid.uuid4())
                 image = base64.b64decode(img)
