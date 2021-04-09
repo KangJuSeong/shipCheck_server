@@ -41,16 +41,15 @@ class NormalShip(RegitInfo, RegionInfo):
     is_ff = models.BooleanField(default=False)
     img_cnt = models.IntegerField(default=0)
     is_train = models.BooleanField(default=False)
-    main_img = models.ImageField(upload_to='normal/new/%Y/%m/%d',
-                                 null=True,
-                                 blank=True)
+    register_unit = models.CharField(max_length=255, null=True, blank=True)
+    main_img = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         db_table = 'NormalShip'
 
     def __str__(self):
         return str(self.id)
-    
+
     @staticmethod
     def create_normal_ship(data, user):
         ship = NormalShip.objects.create(name=data['name'],
@@ -63,15 +62,11 @@ class NormalShip(RegitInfo, RegionInfo):
                                          is_ais=data['is_ais'],
                                          is_vhf=data['is_vhf'],
                                          is_ff=data['is_ff'],
-                                         img_cnt=len(data['image_data']),
                                          register=user,
                                          region=data['region'],
                                          lat=data['lat'],
                                          lon=data['lon'])
-        if len(data['image_data']) > 0:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(data['image_data'][0])
-            ship.main_img = ContentFile(image, str(datetime.today())+img_name+'.jpg')
+        ship.main_img = '/media/NoImage.jpg'
         ship.save()
         return ship.id
 
@@ -90,20 +85,22 @@ class NormalShip(RegitInfo, RegionInfo):
             ships = ships.filter(size__contains=data['size'])
         if not data['region'] == '':
             ships = ships.filter(region__contains=data['region'])
-        if data['is_vpass']:
+        if not data['code'] == '':
+            ships = ships.filter(code__contains=data['code'])
+        if data['is_vpass'] is True:
             ships = ships.filter(is_vpass=True)
-        if data['is_ais']:
+        if data['is_ais'] is True:
             ships = ships.filter(is_ais=True)
-        if data['is_vhf']:
+        if data['is_vhf'] is True:
             ships = ships.filter(is_vhf=True)
-        if data['is_ff']:
+        if data['is_ff'] is True:
             ships = ships.filter(is_ff=True)
         return ships
 
 
 class NormalImage(RegitInfo, RegionInfo):
     n_name = models.ForeignKey('NormalShip', related_name='normal_imgs',
-                               on_delete=models.SET_NULL,
+                               on_delete=models.CASCADE,
                                null=True,
                                blank=True)
     img = models.ImageField(upload_to='normal/exist/%Y/%m/%d',
@@ -117,39 +114,18 @@ class NormalImage(RegitInfo, RegionInfo):
         return self.img.url
 
     @staticmethod
-    def create_normal_image(img_list, ship_id, user):
-        del img_list[0]
-        if len(img_list) > 0:
-            for img in img_list:
-                img_name = str(uuid.uuid4())
-                image = base64.b64decode(img)
-                ship_img = NormalImage.objects.create(img=ContentFile(image,
-                                                      str(datetime.today()) + img_name + '.jpg'),
-                                                      n_name=NormalShip.objects.get(id=ship_id),
-                                                      regit_date=datetime.today(),
-                                                      register=user)
-                ship_img.save()
-
-    @staticmethod
-    def add_normal_image(img_list, ship_id, user):
+    def create_normal_image(image, ship_id, user):
         ship = NormalShip.objects.get(id=ship_id)
-        ship.img_cnt = ship.img_cnt + len(img_list)
-        if not ship.main_img:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(img_list[0])
-            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
-            del img_list[0]
-        if len(img_list) > 0:
-            for img in img_list:
-                img_name = str(uuid.uuid4())
-                image = base64.b64decode(img)
-                ship_img = NormalImage.objects.create(img=ContentFile(image,
-                                                      str(datetime.today()) + img_name + '.jpg'),
-                                                      n_name=ship,
-                                                      regit_date=datetime.today(),
-                                                      register=user)
-                ship_img.save()
+        image.name = str(datetime.today()) + str(uuid.uuid4()) + '.jpg'
+        ship_img = NormalImage.objects.create(img=image,
+                                              n_name=ship,
+                                              regit_date=datetime.today(),
+                                              register=user)
+        ship.img_cnt = ship.img_cnt + 1
+        if ship.img_cnt == 1:
+            ship.main_img = str(ship_img.img)
         ship.save()
+        ship_img.save()
 
 
 class WasteShip(RegitInfo, RegionInfo):
@@ -159,9 +135,8 @@ class WasteShip(RegitInfo, RegionInfo):
     lon = models.FloatField(default=0)
     img_cnt = models.IntegerField(default=0)
     is_train = models.BooleanField(default=False)
-    main_img = models.ImageField(upload_to='waste/new/%Y/%m/%d',
-                                 null=True,
-                                 blank=True)
+    register_unit = models.CharField(max_length=255, null=True, blank=True)
+    main_img = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         db_table = 'WasteShip'
@@ -175,13 +150,9 @@ class WasteShip(RegitInfo, RegionInfo):
                                         types=data['types'],
                                         lat=data['lat'],
                                         lon=data['lon'],
-                                        img_cnt=len(data['image_data']),
                                         region=data['region'],
                                         register=user)
-        if len(data['image_data']) > 0:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(data['image_data'][0])
-            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
+        ship.main_img = '/media/NoImage.jpg'
         ship.save()
         return ship.id
 
@@ -204,7 +175,7 @@ class WasteImage(RegitInfo, RegionInfo):
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
     w_id = models.ForeignKey('WasteShip', related_name='waste_imgs',
-                             on_delete=models.SET_NULL,
+                             on_delete=models.CASCADE,
                              null=True,
                              blank=True)
     img = models.ImageField(upload_to='waste/exist/%Y/%m/%d',
@@ -218,36 +189,15 @@ class WasteImage(RegitInfo, RegionInfo):
         return self.img.url
 
     @staticmethod
-    def create_waste_image(img_list, ship_id, user):
-        del img_list[0]
-        if len(img_list) > 0:
-            for img in img_list:
-                img_name = str(uuid.uuid4())
-                image = base64.b64decode(img)
-                ship_img = WasteImage.objects.create(img=ContentFile(image,
-                                                     str(datetime.today()) + img_name + '.jpg'),
-                                                     w_id=WasteShip.objects.get(id=ship_id),
-                                                     regit_date=datetime.today(),
-                                                     register=user)
-                ship_img.save()
-
-    @staticmethod
-    def add_waste_image(img_list, ship_id, user):
+    def create_waste_image(image, ship_id, user):
         ship = WasteShip.objects.get(id=ship_id)
-        ship.img_cnt = ship.img_cnt + len(img_list)
-        if not ship.main_img:
-            img_name = str(uuid.uuid4())
-            image = base64.b64decode(img_list[0])
-            ship.main_img = ContentFile(image, str(datetime.today()) + img_name + '.jpg')
-            del img_list[0]
-        if len(img_list) > 0:
-            for img in img_list:
-                img_name = str(uuid.uuid4())
-                image = base64.b64decode(img)
-                ship_img = WasteImage.objects.create(img=ContentFile(image,
-                                                     str(datetime.today()) + img_name + '.jpg'),
-                                                     w_id=ship,
-                                                     regit_date=datetime.today(),
-                                                     register=user)
-                ship_img.save()
+        image.name = str(datetime.today()) + str(uuid.uuid4()) + '.jpg'
+        ship_img = WasteImage.objects.create(img=image,
+                                             w_id=ship,
+                                             regit_date=datetime.today(),
+                                             register=user)
+        ship.img_cnt = ship.img_cnt + 1
+        if ship.img_cnt == 1:
+            ship.main_img = str(ship_img.img)
         ship.save()
+        ship_img.save()

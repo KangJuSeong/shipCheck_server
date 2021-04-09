@@ -28,7 +28,7 @@ class NoticeAPI(APIView):
 class NoticeListAPI(APIView):
     def get(self, request):
         try:
-            queryset = Notice.objects.all()
+            queryset = Notice.objects.all().order_by('-date')
             serializer = NoticeSerializer(queryset, many=True)
             result = change_datetime_notice(data=serializer.data)
             logger.debug('Request List Success : {0} (군번 : {1})'.format('공지사항 목록 요청 성공',
@@ -107,11 +107,12 @@ class QuestionCreateAPI(APIView):
 class QuestionListAPI(APIView):
     def get(self, request):
         try:
-            queryset = Question.objects.filter(writer=request.user)
+            queryset = Question.objects.all().oredr_by('-date')
             serializer = QuestionSerializer(queryset, many=True)
+            result = change_datetime_notice(data=serializer.data)
             logger.debug('Request List Success : {0} (군번 : {1})'.format('질문 목록 요청 성공',
                                                                         request.user.srvno))
-            return self.success(data=serializer.data, message='success')
+            return self.success(data=result, message='success')
 
         except Exception as e:
             logger.debug('Request List Fail : {0} (군번 : {1}, 오류 내용 : {2}'.format('질문 목록 요청 실패',

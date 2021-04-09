@@ -2,10 +2,15 @@ from django.contrib import admin
 from .models import Question, Answer, Notice
 
 
+class AnswerInline(admin.TabularInline):
+    model = Answer
+
+
 class QuestionAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'writer', 'title', 'content', 'date', 'status'
     )
+    inlines = [AnswerInline, ]
 
 
 class AnswerAdmin(admin.ModelAdmin):
@@ -23,4 +28,3 @@ class NoticeAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Notice, NoticeAdmin)
-# Register your models here.

@@ -47,13 +47,12 @@ class LoginSerializer(serializers.Serializer):
                 return {'message': "None"}
         else:
             blank_day = (datetime.now() - user.last_login).days
-            # blank_day = (timezone.now() - user.last_login).days
             if blank_day >= 90:
                 user.block_no = 1
                 user.last_login = timezone.now()
                 user.save()
-            if not (user.device_id == device_id):
-                return {'message': "Device mismatch"}
+            #if not (user.device_id == device_id):
+                #return {'message': "Device mismatch"}
             if not user.approve:
                 return {'message': 'Wating'}
             if user.block_no == 1:

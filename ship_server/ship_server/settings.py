@@ -31,8 +31,7 @@ with open(os.getcwd() + '/jwt_secret_key.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',
-                 '10.0.2.2']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -53,57 +52,55 @@ INSTALLED_APPS = [
 
 LOGGING = {
     'version': 1,
-    # 기존의 로깅 설정을 비활성화 할 것인가?
     'disable_existing_loggers': False,
-
-    # 포맷터
-    # 로그 레코드는 최종적으로 텍스트로 표현됨
-    # 이 텍스트의 포맷 형식 정의
-    # 여러 포맷 정의 가능
     'formatters': {
         'format1': {
             'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt': '%d/%b/%Y %H:%M:%S'
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
         'format2': {
             'format': '%(levelname)s %(message)s'
         },
     },
 
-    # 핸들러
-    # 로그 레코드로 무슨 작업을 할 것인지 정의
-    # 여러 핸들러 정의 가능
     'handlers': {
-        # 로그 파일을 만들어 텍스트로 로그레코드 저장
         'file1': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.getcwd().replace('\\', '/') + '/Logs/AccountLog',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.getcwd().replace('\\', '/') + '/Logs/accounts_logs/accounts_{0}_{1}_{2}.log'.format(
+                str(datetime.datetime.today().year),
+                str(datetime.datetime.today().month),
+                str(datetime.datetime.today().day)),
             'formatter': 'format1',
+            'encoding': 'utf-8',
         },
         'file2': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.getcwd().replace('\\', '/') + '/Logs/ShipLog',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.getcwd().replace('\\', '/') + '/Logs/ships_logs/ships_{0}_{1}_{2}.log'.format(
+                str(datetime.datetime.today().year),
+                str(datetime.datetime.today().month),
+                str(datetime.datetime.today().day)),
             'formatter': 'format1',
+            'encoding': 'utf-8',
         },
         'file3': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.getcwd().replace('\\', '/') + '/Logs/PostLog',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.getcwd().replace('\\', '/') + '/Logs/posts_logs/posts_{0}-{1}-{2}.log'.format(
+                str(datetime.datetime.today().year),
+                str(datetime.datetime.today().month),
+                str(datetime.datetime.today().day)),
             'formatter': 'format1',
+            'encoding': 'utf-8',
         },
-        # 콘솔(터미널)에 출력
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'format2',
-        }
+        # 'console': {
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'formatter': 'format2',
+        # }
     },
 
-    # 로거
-    # 로그 레코드 저장소
-    # 로거를 이름별로 정의
     'loggers': {
         'Accounts': {
             'handlers': ['file1'],
@@ -222,6 +219,7 @@ DATETIME_FORMAT = 'Y-m-d H:i:s'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, '.static')
 STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'Accounts.Account'
 MEDIA_URL = '/media/'
