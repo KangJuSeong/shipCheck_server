@@ -22,7 +22,7 @@ class LoginAPI(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if not serializer.is_valid(raise_exception=True):
-            logger.debug('Login Fail : {0}, Body : {1}'.format('Request Body error', request.data))
+            logger.debug('Login Fail : {0}, Body : {1}'.format('데이터 오류', request.data))
             return self.fail(message="Request Body Error.")
         if serializer.validated_data['message'] == 'None':
             logger.debug('Login Fail : {}'.format('가입되지 않은 유저'))
@@ -37,26 +37,23 @@ class LoginAPI(APIView):
             logger.debug('Login Fail : {0} (군번 : {1})'.format('계정 정지 유저', request.data['srvno']))
             return self.fail(message='Login fail Blocked user')
         if serializer.validated_data['message'] == "Device mismatch":
-            logger.debug('Login Fail : {0} (군번 : {1})'.format('등록되지 않은 단말', request.data['srvno']))
+            logger.debug('Login Fail : {0} (군번 : {1})'.format('등록되지 않은 디바이스', request.data['srvno']))
             return self.fail(message="Device mismatch")
         if serializer.validated_data['message'] == 'Incorrect password':
             logger.debug('Login Fail : {0} (군번 : {1})'.format('비밀번호 불일치', request.data['srvno']))
             return self.fail(message="Incorrect password")
-        response = {
-            'token': serializer.data['token'],
-        }
-        logger.debug('Login Success : {0} (군번 : {1})'.format('로그인 성공', Account.objects.get(srvno=request.data['srvno'])))
-        message = 'Login Success'
-        return self.success(data=response, message=message)
+        user = Account.objects.get(srvno=request.data['srvno'])
+        logger.debug('Login Success : {0} ({1})'.format(user.srvno, user.name))
+        return self.success(data={'token': serializer.data['token']}, message='Login Success')
 
 
 class LogoutAPI(APIView):
     def get(self, request):
         if request.user is not None:
-            logger.debug('Logout Success : {0} (군번 : {1})'.format('로그아웃 성공', request.user.srvno))
+            logger.debug('Logout Success : {0} ({1})'.format(request.user.srvno, request.user.name))
             return self.success(message='Logout Success')
         else:
-            logger.debug('Logout Fail : {0} (군번 : {1})'.format('잘못된 로그아웃 요청', request.data['srvno']))
+            logger.debug('Logout Fail : {0} (군번 : {1})'.format('None token', request.data['srvno']))
             return self.fail(message='None logged in')
 
 
@@ -122,40 +119,6 @@ class VersionCheckAPI(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        now_version = "v1.0.0"
+        now_version = "v1.0.1"
         server_status = ["running", "checking"]
         return self.success(data={"version": now_version, "server_status": server_status[0]}, message='success')
-
-
-class AuthenticationSignup(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        url = 'http://army.mil.kr/vfct/vfctin.do'
-        driver = webdriver.Chrome(os.getcwd().replace('\\', '/') + '/chromedriver.exe')
-        driver.get(url)
-        find_srvno = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/input")
-        find_code = driver.find_element_by_xpath("/html/body/form/div/div/div[1]/div/input")
-        find_srvno.send_keys('20-12146')
-        find_code.send_keys('38')
-        submit = driver.find_element_by_xpath("/html/body/form/div/div/div[2]/a[1]")
-        submit.click()
-        result = Alert(driver).text
-        if result == '인증번호 정상':
-            Alert(driver).accept()
-            print('인증 성공')
-        else:
-            Alert(driver).accept()
-            print('인증 실패')
-        driver.close()
-        return self.success(message='success')
-
-
-class SearchingPwAPI(APIView):
-    def post(self, request):
-        return self.success()
-
-
-class DeleteUserAPI(APIView):
-    def post(self, request):
-        return self.success()
