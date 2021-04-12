@@ -12,7 +12,8 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
         model = NormalShip
         fields = ('id', 'name', 'port', 'code', 'tons', 'types', 'main_img',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
-                  'is_train', 'regit_date', 'register', 'region', 'lat', 'lon')
+                  'is_train', 'regit_date', 'region', 'lat', 'lon', 'register',
+                  'main_img_id',)
 
 
 class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,7 +42,8 @@ class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteShip
         fields = ('id', 'info', 'types', 'lat', 'lon', 'main_img',
-                  'is_train', 'regit_date', 'register', 'region', 'img_cnt')
+                  'is_train', 'regit_date', 'register', 'region', 'img_cnt',
+                  'main_img_id')
 
 
 class WasteShipUpdateSerializer(serializers.HyperlinkedModelSerializer):

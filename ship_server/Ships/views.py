@@ -23,6 +23,7 @@ import csv
 import logging
 import random
 from utils.change_format import change_datetime
+from django.db.models import Q
 
 
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ logger = logging.getLogger(__name__)
 class DetailNormalShipAPI(APIView):
     def get(self, request, pk=None):
         try:
-            queryset = NormalShip.objects.get(id=pk)
+            queryset = NormalShip.objects.filter(id=pk).select_related('register')[0]
             serializer = NormalShipSerializer(queryset)
             result = change_datetime(data=serializer.data)
             logger.debug('Request Detail Success : {0} (군번 : {1}, 일반 선박 ID : {2})'.format('일반 선박 정보 요청 성공',
@@ -75,7 +76,7 @@ class DetailNormalShipAPI(APIView):
                                                                                                             request.user.srvno,
                                                                                                             request.data,
                                                                                                             pk))
-                    return self.success(message='success')
+                return self.success(message='success')
             except Exception as e:
                 logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2} 일반 선박 ID : {3} 오류 내용 : {4})'.format('일반 선박 수정 요청 실패',
                                                                                                                  request.user.srvno,
@@ -109,24 +110,25 @@ class ListNormalShipAPI(APIView):
         page = int(request.GET.get('page'))
         try:
             query_size = NormalShip.objects.count()
+            queryset = NormalShip.objects.all().select_related('register')
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
             else:
                 count = int(query_size / page_size) + 1
             if page is 1:
-                queryset = NormalShip.objects.all()[0:page_size]
+                queryset = queryset[0:page_size]
             elif page is count:
                 start = page_size * (page - 1)
-                queryset = NormalShip.objects.all()[start:]
+                queryset = queryset[start:]
             else:
                 start = page_size * (page - 1)
                 end = start + page_size
-                queryset = NormalShip.objects.all()[start:end]
+                queryset = queryset[start:end]
             serializer = NormalShipSerializer(queryset, many=True)
             data = change_datetime(serializer.data)
             result = {"count": count, "data": data}
-            logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 목록 요청 성공',
+            logger.debug('Request List Success : {0} (군번 : {1}, 페이지 : {2})'.format('일반 선박 목록 요청 성공',
                                                                                    request.user.srvno,
                                                                                    page))
             return self.success(data=result, message='success')
@@ -187,11 +189,30 @@ class LocationNormalShipAPI(APIView):
                                                                                       e))
             return self.fail(message='fail')
 
+    def post(self, request):
+        try:
+            x, y = float(request.data['lat']), float(request.data['lon'])
+            scope = 0.03
+            q = Q()
+            q.add(Q(lat__lt=x+scope), q.AND)
+            q.add(Q(lat__gt=x-scope), q.AND)
+            q.add(Q(lon__lt=y+scope), q.AND)
+            q.add(Q(lon__gt=y-scope), q.AND)
+            queryset = NormalShip.objects.filter(q)
+            serializer = NormalLocationSerializer(queryset, many=True)
+            logger.debug('Request Location Success : {0} (군번 : {1})'.format('일반 선박 주변 위치 요청 성공', request.user.srvno))
+            return self.success(data=serializer.data, message='success')
+        except Exception as e:
+            logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('일반 선박 주변 위치 요청 실패',
+                                                                                      request.user.srvno,
+                                                                                      e))
+            return self.fail(message='fail')
+
 
 class DetailWasteShipAPI(APIView):
     def get(self, request, pk=None):
         try:
-            queryset = WasteShip.objects.get(id=pk)
+            queryset = WasteShip.objects.filter(id=pk).select_related('register')[0]
             serializer = WasteShipSerializer(queryset)
             result = change_datetime(serializer.data)
             logger.debug('Request Detail Success : {0} (군번 : {1}, 유기 선박 ID : {2})'.format('유기 선박 정보 요청 성공',
@@ -269,20 +290,21 @@ class ListWasteShipAPI(APIView):
         page = int(request.GET.get('page'))
         try:
             query_size = WasteShip.objects.count()
+            queryset = WasteShip.objects.all().select_related('register')
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
             else:
                 count = int(query_size / page_size) + 1
             if page is 1:
-                queryset = WasteShip.objects.all()[0:page_size]
+                queryset = queryset[0:page_size]
             elif page is count:
                 start = page_size * (page - 1)
-                queryset = WasteShip.objects.all()[start:]
+                queryset = queryset[start:]
             else:
                 start = page_size * (page - 1)
                 end = start + page_size
-                queryset = WasteShip.objects.all()[start:end]
+                queryset = queryset[start:end]
             serializer = WasteShipSerializer(queryset, many=True)
             data = change_datetime(serializer.data)
             result = {'count': count, "data": data}
@@ -342,7 +364,26 @@ class LocationWasteShipAPI(APIView):
             logger.debug('Request Location Success : {0} (군번 : {1})'.format('유기 선박 위치 요청 성공', request.user.srvno))
             return self.success(data=result, message='success')
         except Exception as e:
-            logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 위치 요청 실패, 유효하지 않은 데이터',
+            logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 위치 요청 실패',
+                                                                                      request.user.srvno,
+                                                                                      e))
+            return self.fail(message='fail')
+
+    def post(self, request):
+        try:
+            x, y = float(request.data['lat']), float(request.data['lon'])
+            q = Q()
+            scope = 0.03
+            q.add(Q(lat__lt=x+scope), q.AND)
+            q.add(Q(lat__gt=x-scope), q.AND)
+            q.add(Q(lon__lt=y+scope), q.AND)
+            q.add(Q(lon__gt=y-scope), q.AND)
+            queryset = WasteShip.objects.filter(q)
+            serializer = WasteLocationSerializer(queryset, many=True)
+            logger.debug('Request Location Success : {0} (군번 : {1})'.format('유기 선박 주변 위치 요청 성공', request.user.srvno))
+            return self.success(data=serializer.data, message='success')
+        except Exception as e:
+            logger.debug('Request Location Fail : {0} (군번 : {1}, 오류 내용 : {2})'.format('유기 선박 주변 위치 요청 실패',
                                                                                       request.user.srvno,
                                                                                       e))
             return self.fail(message='fail')
@@ -351,9 +392,8 @@ class LocationWasteShipAPI(APIView):
 class ListNormalImageAPI(APIView):
     def get(self, request, pk=None):
         try:
-            queryset = NormalShip.objects.get(id=pk)
-            img_queryset = NormalImage.objects.filter(n_name=queryset.id)
-            serializer = NormalImageSerializer(img_queryset, many=True)
+            queryset = NormalImage.objects.filter(n_name=pk)
+            serializer = NormalImageSerializer(queryset, many=True)
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('일반 선박 이미지 목록 요청 성공',
                                                                                    request.user.srvno,
                                                                                    pk))
@@ -383,33 +423,52 @@ class NormalImageAPI(APIView):
 
     def delete(self, request):
         try:
-            image = NormalImage.objects.get(id=request.data['id'])
-            logger.debug('Request Delete Success : {0} (군번 : {1}, 삭제 이미지 : {2})'.format('일반 선박 이미지 삭제 요청 성공',
-                                                                                        request.user.srvno,
-                                                                                        image))
+            image = NormalImage.objects.get(id=request.GET.get('id'))
             image.n_name.img_cnt = image.n_name.img_cnt - 1
             if image.n_name.img_cnt == 0:
                 image.n_name.main_img = '/media/NoImage.jpg'
-            if image.n_name.main_img == str(image.img):
-                image.n_name.main_img = str(NormalImage.objects.filter(n_name=image.n_name)[0])
+                image.n_name.main_img_id = -1
+            if image.n_name.main_img_id == image.id:
+                main = NormalImage.objects.filter(n_name=image.n_name).exclude(id=image.id)[0]
+                image.n_name.main_img = str(main)
+                image.n_name.main_img_id = main.id
             image.n_name.save()
             image.delete()
+            logger.debug('Request Delete Success : {0} (군번 : {1}, 삭제 이미지 : {2})'.format('일반 선박 이미지 삭제 요청 성공',
+                                                                                        request.user.srvno,
+                                                                                        image))
             return self.success(message='success')
         except Exception as e:
             logger.debug('Request Delete Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
                 '일반 선박 이미지 삭제 요청 실패',
                 request.user.srvno,
                 e,
-                request.data))
+                request.GET.get('id')))
+            return self.fail(message='fail')
+
+
+class ChangeNormalMainImage(APIView):
+    def post(self, request):
+        try:
+            image = NormalImage.objects.filter(id=request.data['id'])[0]
+            NormalShip.objects.filter(id=image.n_name_id).update(main_img=str(image), main_img_id=image.id)
+            logger.debug('Request Update Success : {0} (군번 : {1}, 대표 수정 이미지 : {2})'.format('일반 선박 대표 이지미 수정 요청 성공',
+                                                                                           request.user.srvno,
+                                                                                           image))
+            return self.success(message='success')
+        except Exception as e:
+            logger.debug('Request Update Fail : {0} (군번 : {1}, 대표 수정 이미지 : {2} 오류 내용 : {3})'.format('일반 선박 대표 이지미 수정 요청 실패',
+                                                                                                    request.user.srvno,
+                                                                                                    request.data,
+                                                                                                    e))
             return self.fail(message='fail')
 
 
 class ListWasteImageAPI(APIView):
     def get(self, request, pk=None):
         try:
-            queryset = WasteImage.objects.get(id=pk)
-            img_queryset = WasteImage.objects.filter(w_id=queryset.id)
-            serializer = WasteImageSerializer(img_queryset, many=True)
+            queryset = WasteImage.objects.filter(w_id=pk)
+            serializer = WasteImageSerializer(queryset, many=True)
             logger.debug('Request List Success : {0} (군번 : {1}, 데이터 : {2})'.format('유기 선박 이미지 목록 요청 성공',
                                                                                    request.user.srvno,
                                                                                    pk))
@@ -431,7 +490,7 @@ class WasteImageAPI(APIView):
             return self.success(message='success')
         except Exception as e:
             logger.debug('Request Create Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
-                '유기 선박 이미지 추가 요청 실패, 유효하지 않은 데이터 ',
+                '유기 선박 이미지 추가 요청 실패',
                 request.user.srvno,
                 e,
                 request.data))
@@ -439,24 +498,45 @@ class WasteImageAPI(APIView):
 
     def delete(self, request):
         try:
-            image = WasteImage.objects.get(id=request.data['id'])
-            logger.debug('Request Delete Success : {0} (군번 : {1}, 삭제 이미지 : {2})'.format('유기 선박 이미지 삭제 요청 성공',
-                                                                                        request.user.srvno,
-                                                                                        image))
+            image = WasteImage.objects.get(id=request.GET.get('id'))
             image.w_id.img_cnt = image.w_id.img_cnt - 1
             if image.w_id.img_cnt == 0:
                 image.w_id.main_img = '/media/NoImage.jpg'
-            if image.w_id.main_img == str(image):
-                image.w_id.main_img = str(WasteImage.objects.filter(w_id=image.w_id)[0])
+                image.w_id.main_img_id = -1
+            if image.w_id.main_img_id == image.id:
+                main = WasteImage.objects.filter(w_id=image.w_id).exclude(id=image.id)[0]
+                image.w_id.main_img = str(main)
+                image.w_id.main_img_id = main.id
             image.w_id.save()
             image.delete()
+            logger.debug('Request Delete Success : {0} (군번 : {1}, 삭제 이미지 : {2})'.format('유기 선박 이미지 삭제 요청 성공',
+                                                                                        request.user.srvno,
+                                                                                        image))
             return self.success(message='success')
         except Exception as e:
             logger.debug('Request Delete Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3})'.format(
                 '유기 선박 이미지 삭제 요청 실패',
                 request.user.srvno,
                 e,
-                request.data))
+                request.GET.get('id')))
+            return self.fail(message='fail')
+
+
+class ChangeWasteMainImage(APIView):
+    def post(self, request):
+        try:
+            image = WasteImage.objects.filter(id=request.data['id'])[0]
+            WasteShip.objects.filter(id=image.w_id_id).update(main_img=str(image), main_img_id=image.id)
+            logger.debug('Request Update Success : {0} (군번 : {1}, 대표 수정 이미지 : {2})'.format('유기 선박 대표 이지미 수정 요청 성공',
+                                                                                           request.user.srvno,
+                                                                                           image))
+            return self.success(message='success')
+        except Exception as e:
+            logger.debug(
+                'Request Update Fail : {0} (군번 : {1}, 대표 수정 이미지 : {2} 오류 내용 : {2})'.format('유기 선박 대표 이지미 수정 요청 실패',
+                                                                                           request.user.srvno,
+                                                                                           request.data,
+                                                                                           e))
             return self.fail(message='fail')
 
 
@@ -474,34 +554,31 @@ class PredictShipAPI(APIView):
             data = ai_module(img)
             result_set = best_three(data[0])
             kinds = list()
-            if result_set['first'][0][0] is 'n':
-                first_ship = NormalShip.objects.get(id=int(result_set['first'][0][2:]))
-                first_serial = NormalShipSerializer(first_ship)
-                kinds.append(1)
-            else:
-                first_ship = WasteShip.objects.get(id=int(result_set['first'][0][2:]))
-                first_serial = WasteShipSerializer(first_ship)
-                kinds.append(0)
-            if result_set['second'][0][0] is 'n':
-                second_ship = NormalShip.objects.get(id=int(result_set['second'][0][2:]))
-                second_serial = NormalShipSerializer(second_ship)
-                kinds.append(1)
-            else:
-                second_ship = WasteShip.objects.get(id=int(result_set['second'][0][2:]))
-                second_serial = WasteShipSerializer(second_ship)
-                kinds.append(0)
-            if result_set['third'][0][0] is 'n':
-                third_ship = NormalShip.objects.get(id=int(result_set['third'][0][2:]))
-                third_serial = NormalShipSerializer(third_ship)
-                kinds.append(1)
-            else:
-                third_ship = WasteShip.objects.get(id=int(result_set['third'][0][2:]))
-                third_serial = WasteShipSerializer(third_ship)
-                kinds.append(0)
-            first_serial = change_datetime(first_serial.data)
-            second_serial = change_datetime(second_serial.data)
-            third_serial = change_datetime(third_serial.data)
-            result_ship = [first_serial, second_serial, third_serial]
+            result_ship = list()
+            seq_list = ['first', 'second', 'third']
+            q = Q()
+            _q = Q()
+            for i in seq_list:
+                if result_set[i][0][0] is 'n':
+                    q.add(Q(id=int(result_set[i][0][2:])), q.OR)
+                    kinds.append(1)
+                else:
+                    _q.add(Q(id=int(result_set[i][0][2:])), _q.OR)
+                    kinds.append(0)
+            n_ship = NormalShip.objects.filter(q).select_related('register')
+            w_ship = WasteShip.objects.filter(_q).select_related('register')
+            n_idx = 0
+            w_idx = 0
+            for i in kinds:
+                if i == 1:
+                    serializer = change_datetime(NormalShipSerializer(n_ship[n_idx]).data)
+                    result_ship.append(serializer)
+                    n_idx += 1
+                else:
+                    serializer = change_datetime(WasteShipSerializer(w_ship[w_idx]).data)
+                    serializer['name'] = serializer['info']
+                    result_ship.append(serializer)
+                    w_idx += 1
             result = {'result': result_ship, 'kinds': kinds, 'percent': [result_set['first'][1],
                                                                          result_set['second'][1],
                                                                          result_set['third'][1]]}
@@ -519,3 +596,16 @@ class PredictShipAPI(APIView):
                 e,
                 request.data))
             return self.fail(message='fail')
+
+
+class Test(APIView):
+    def post(self, request):
+        x, y = request.data['lat'], request.data['lon']
+        q = Q()
+        q.add(Q(lat__lt=x+0.03), q.AND)
+        q.add(Q(lat__gt=x-0.03), q.AND)
+        q.add(Q(lon__lt=y+0.03), q.AND)
+        q.add(Q(lon__gt=y-0.03), q.AND)
+        queryset = NormalShip.objects.filter(q)
+        serializer = NormalLocationSerializer(queryset, many=True)
+        return self.success(data=serializer.data, message='success')

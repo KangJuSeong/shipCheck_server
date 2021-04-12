@@ -56,22 +56,6 @@ class QuestionAPI(APIView):
                                                                                    e))
             return self.fail(message='fail')
 
-    def put(self, request, pk=None):
-        try:
-            queryset = Question.objects.get(id=pk)
-            serializer = QuestionSerializer(queryset, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-            logger.debug('Request Update Success : {0} (군번 : {1})'.format('질문 수정 성공',
-                                                                          request.user.srvno))
-            return self.success(message='success')
-
-        except Exception as e:
-            logger.debug('Request Update Fail : {0} (군번 : {1}, 오류 내용 : {2}'.format('질문 수정 실패',
-                                                                                   request.user.srvno,
-                                                                                   e))
-            return self.fail(message='fail')
-
     def delete(self, request, pk=None):
         try:
             queryset = Question.objects.get(id=pk)
@@ -93,7 +77,6 @@ class QuestionCreateAPI(APIView):
             obj = Question.objects.create(title=request.data['title'],
                                           content=request.data['content'],
                                           writer=request.user)
-            obj.save()
             logger.debug('Request Create Success : {0} (군번 : {1})'.format('질문 작성 성공',
                                                                           request.user.srvno))
             return self.success(message='success')
@@ -107,7 +90,7 @@ class QuestionCreateAPI(APIView):
 class QuestionListAPI(APIView):
     def get(self, request):
         try:
-            queryset = Question.objects.all().oredr_by('-date')
+            queryset = Question.objects.all().order_by('-date')
             serializer = QuestionSerializer(queryset, many=True)
             result = change_datetime_notice(data=serializer.data)
             logger.debug('Request List Success : {0} (군번 : {1})'.format('질문 목록 요청 성공',

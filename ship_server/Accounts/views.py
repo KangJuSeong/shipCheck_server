@@ -42,8 +42,8 @@ class LoginAPI(APIView):
         if serializer.validated_data['message'] == 'Incorrect password':
             logger.debug('Login Fail : {0} (군번 : {1})'.format('비밀번호 불일치', request.data['srvno']))
             return self.fail(message="Incorrect password")
-        user = Account.objects.get(srvno=request.data['srvno'])
-        logger.debug('Login Success : {0} ({1})'.format(user.srvno, user.name))
+        logger.debug('Login Success : {0} ({1})'.format(serializer.validated_data['srvno'],
+                                                        serializer.validated_data['name']))
         return self.success(data={'token': serializer.data['token']}, message='Login Success')
 
 
@@ -61,10 +61,10 @@ class SignUpAPI(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        if Account.objects.filter(srvno=request.data['srvno']):
+        if not Account.objects.get(srvno=request.data['srvno']) is None:
             logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 존재하는 계정', request.data['srvno']))
             return self.fail(message="Already exist serviceNum")
-        if Account.objects.filter(device_id=request.data['device_id']):
+        if not Account.objects.get(srvno=request.data['srvno']) is None:
             logger.debug('Signup Fail : {0} (군번 : {1})'.format('이미 등록된 단말기', request.data['device_id']))
             return self.fail(message="Already regist device")
         value = check_pw(request.data['password'])
@@ -93,11 +93,10 @@ class SignUpAPI(APIView):
 class UserInfoAPI(APIView):
     def get(self, request):
         try:
-            user = Account.objects.get(id=self.request.user.id)
-            serializer = AccountSerializer(user)
+            serializer = AccountSerializer(request.user)
             result = change_unit(serializer.data)
-            logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기', user.srvno))
-            return self.success(result, message='success')
+            logger.debug('User Info Success : {0} (군번 : {1})'.format('유저 정보 불러오기', request.user.srvno))
+            return self.success(data=result, message='success')
         except Exception as e:
             logger.debug('User Info Fail : {0}(에러 내용: {1})'.format('유저 정보 불러오기 실패', e))
             return self.fail(message='Not loading user information')
@@ -106,9 +105,8 @@ class UserInfoAPI(APIView):
 class UserPermissionAPI(APIView):
     def get(self, request):
         try:
-            user = Account.objects.get(id=self.request.user.id)
-            level = user.user_level
-            logger.debug('User Permission Success : {0} (군번 : {1})'.format('유저 권한 불러오기', user.srvno))
+            level = request.user.user_level
+            logger.debug('User Permission Success : {0} (군번 : {1})'.format('유저 권한 불러오기', request.user.srvno))
             return self.success(data={"user_level": level}, message='success')
         except Exception as e:
             logger.debug('User Permission Fail : {0}(에러 내용: {1})'.format('유저 권한 불러오기 실패', e))
@@ -119,6 +117,6 @@ class VersionCheckAPI(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        now_version = "v1.0.1"
+        now_version = "v1.0.2"
         server_status = ["running", "checking"]
         return self.success(data={"version": now_version, "server_status": server_status[0]}, message='success')

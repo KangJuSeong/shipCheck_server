@@ -12,6 +12,8 @@ class AccountAdmin(admin.ModelAdmin):
         'phone',
         'device_id',
         'regit_date',
+        'approve',
+        'user_level',
     )
     search_fields = ['srvno', 'name', 'phone']
 
