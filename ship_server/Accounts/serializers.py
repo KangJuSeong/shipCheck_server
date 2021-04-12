@@ -50,7 +50,6 @@ class LoginSerializer(serializers.Serializer):
             if blank_day >= 90:
                 user.block_no = 1
                 user.last_login = timezone.now()
-                user.save()
             #if not (user.device_id == device_id):
                 #return {'message': "Device mismatch"}
             if not user.approve:
@@ -69,5 +68,6 @@ class LoginSerializer(serializers.Serializer):
                     'message': 'Success Login',
                     'srvno': user.srvno,
                     'token': jwt_token,
-                    'device_id': user.device_id
+                    'device_id': user.device_id,
+                    'name': user.name,
                 }
