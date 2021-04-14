@@ -7,20 +7,49 @@ from datetime import datetime
 from django.db.models import Q
 
 
-# class OwnerInfo(models.Model):
-#     privacy_agree = models.BooleanField(default=False)
-#     name = models.CharField(max_length=255, null=True, blank=True)
-#     phone = models.CharField(max_length=255, null=True, blank=True)
-#     address = models.CharField(max_length=255, null=True, blank=True)
-#     agreement_paper = models.ImageField(upload_to='agreement_paper/%Y/%m/%d',
-#                                         null=True,
-#                                         blank=True)
+class OwnerInfo(models.Model):
+    privacy_agree = models.BooleanField(default=False)
+    own_name = models.CharField(max_length=255, null=True, blank=True)
+    phone = models.CharField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
+    agreement_paper = models.ImageField(upload_to='owner/agreement_paper/%Y/%m/%d',
+                                        null=True,
+                                        blank=True)
+    registry_date = models.DateField(default=datetime.today())
+    own_img = models.ImageField(upload_to='owner/img/%Y/%m/%d',
+                                null=True,
+                                blank=True)
+    ship = models.OneToOneField('NormalShip', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_owner(data, img):
+        owner = OwnerInfo(privacy_agree=data['privacy_agree'],
+                          own_name=data['own_name'],
+                          phone=data['phone'],
+                          address=data['address'],
+                          ship_id=data['ship_id'],
+                          registry_date=datetime.today())
+        if len(img) > 0:
+            if not data['agreement_paper'] == '':
+                img['agreement_paper'].name = str(datetime.today()) + str(uuid.uuid4()) + '.jpg'
+                owner.agreement_paper = img['agreement_paper']
+            if not data['own_img'] == '':
+                img['own_img'].name = str(datetime.today()) + str(uuid.uuid4()) + '.jpg'
+                owner.own_img = img['own_img']
+        owner.save()
+        return owner.id
 
 
-# class TrackingCoordinate(models.Model):
-#     lat = models.FloatField(default=0)
-#     lon = models.FloatField(default=0)
-#     ship = models.ForeignKey('NormalShip', on_delete=models.CASCADE)
+class NormalTrackingCoordinate(models.Model):
+    lat = models.FloatField(default=0)
+    lon = models.FloatField(default=0)
+    ship = models.ForeignKey('NormalShip', on_delete=models.CASCADE)
+
+
+class WasteTrackingCoordinate(models.Model):
+    lat = models.FloatField(default=0)
+    lon = models.FloatField(default=0)
+    ship = models.ForeignKey('WasteShip', on_delete=models.CASCADE)
 
 
 class RegitInfo(models.Model):
@@ -60,7 +89,6 @@ class NormalShip(RegitInfo, RegionInfo):
     register_unit = models.CharField(max_length=255, null=True, blank=True)
     main_img = models.CharField(max_length=255, null=True, blank=True)
     main_img_id = models.IntegerField(default=-1)
-    # owner = models.OneToOneField('OwnerInfo', on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'NormalShip'
@@ -84,12 +112,15 @@ class NormalShip(RegitInfo, RegionInfo):
                                          region=data['region'],
                                          lat=data['lat'],
                                          lon=data['lon'],
-                                         main_img='/media/NoImage.jpg')
+                                         main_img='/media/NoImage.jpg',
+                                         register_unit=user.unit)
         return ship.id
 
     @staticmethod
     def searching_normal_ship(data):
-        ships = NormalShip.objects.all().select_related('register')
+        if data['tag'] == '':
+            data['tag'] = 'name'
+        ships = NormalShip.objects.all().select_related('register').order_by(data['tag'])
         if not data['name'] == '':
             ships = ships.filter(name__contains=data['name'])
         if not data['port'] == '':
@@ -166,12 +197,15 @@ class WasteShip(RegitInfo, RegionInfo):
                                         lon=data['lon'],
                                         region=data['region'],
                                         register=user,
-                                        main_img='/media/NoImage.jpg')
+                                        main_img='/media/NoImage.jpg',
+                                        register_unit=user.unit)
         return ship.id
 
     @staticmethod
     def searching_waste_ship(data):
-        ships = WasteShip.objects.all().select_related('register')
+        if data['tag'] == '':
+            data['tag'] = 'id'
+        ships = WasteShip.objects.all().select_related('register').order_by(data['tag'])
         if not data['id'] is '':
             ships = ships.filter(id=data['id'])
             return ships

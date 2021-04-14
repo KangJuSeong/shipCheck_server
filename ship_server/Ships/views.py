@@ -1,14 +1,12 @@
 from utils.custom_view import APIView
-from .models import NormalShip, NormalImage, WasteShip, WasteImage
+from .models import (NormalShip, NormalImage, WasteShip, WasteImage, OwnerInfo, NormalTrackingCoordinate,
+                     WasteTrackingCoordinate)
 from Accounts.models import Account
 from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
                           WasteImageSerializer, WasteLocationSerializer, NormalLocationSerializer,
-                          NormalShipUpdateSerializer, WasteShipUpdateSerializer,)
+                          NormalShipUpdateSerializer, WasteShipUpdateSerializer, OwnerInfoSerializer)
 from django.core.exceptions import ObjectDoesNotExist
 import numpy as np
-from django.core.files import File
-import base64
-from django.core.files.base import ContentFile
 from keras_model.prediction_ship import ai_module
 from PIL import Image
 from io import BytesIO
@@ -24,7 +22,6 @@ import logging
 import random
 from utils.change_format import change_datetime
 from django.db.models import Q
-
 
 logger = logging.getLogger(__name__)
 
@@ -51,9 +48,9 @@ class DetailNormalShipAPI(APIView):
             try:
                 queryset = NormalShip.objects.get(id=pk)
                 logger.debug('Request Delete Success : {0} (군번 : {1}, 일반 선박 데이터 : {2} 선박 이미지 : {3})'.format('일반 선박 제거 요청 성공',
-                                                                                                                request.user.srvno,
-                                                                                                                queryset,
-                                                                                                                NormalImage.objects.filter(n_name=queryset)))
+                                                                                                            request.user.srvno,
+                                                                                                            queryset,
+                                                                                                            NormalImage.objects.filter(n_name=queryset)))
                 queryset.delete()
                 return self.success(message='success')
             except Exception as e:
@@ -108,9 +105,12 @@ class CreateNormalShipAPI(APIView):
 class ListNormalShipAPI(APIView):
     def get(self, request):
         page = int(request.GET.get('page'))
+        tag = request.GET.get('tag')
+        if tag == '':
+            tag = 'name'
         try:
             query_size = NormalShip.objects.count()
-            queryset = NormalShip.objects.all().select_related('register')
+            queryset = NormalShip.objects.all().select_related('register').order_by(tag)
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
@@ -288,9 +288,12 @@ class CreateWasteShipAPI(APIView):
 class ListWasteShipAPI(APIView):
     def get(self, request):
         page = int(request.GET.get('page'))
+        tag = request.GET.get('tag')
+        if tag == '':
+            tag = 'id'
         try:
             query_size = WasteShip.objects.count()
-            queryset = WasteShip.objects.all().select_related('register')
+            queryset = WasteShip.objects.all().select_related('register').order_by(tag)
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
@@ -598,14 +601,57 @@ class PredictShipAPI(APIView):
             return self.fail(message='fail')
 
 
-class Test(APIView):
+class OwnerInfoAPI(APIView):
+    def get(self, request, pk=None):
+        try:
+            owner = OwnerInfo.objects.get(id=pk)
+            serializer = OwnerInfoSerializer(owner)
+            logger.debug('Request Detail Success : {0} (군번 : {1})'.format('선주 정보 요청 성공', request.user.srvno))
+            return self.success(data=serializer.data, message='success')
+        except Exception as e:
+            logger.debug('Request Detail Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터: {3})'.format(
+                '선주 정보 요청 실패',
+                request.user.srvno,
+                e,
+                request.data))
+            return self.fail(message='fail')
+
+    def post(self, request, pk=None):
+        if request.user.user_level >= 2:
+            try:
+                queryset = OwnerInfo.objects.get(id=pk)
+                serializer = OwnerInfoSerializer(queryset, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    logger.debug('Request Update Success : {0} (군번 : {1}, 데이터 : {2} 선주 ID : {3})'.format('선주 정보 수정 요청 성공',
+                                                                                                         request.user.srvno,
+                                                                                                         request.data,
+                                                                                                         pk))
+                return self.success(message='success')
+            except Exception as e:
+                logger.debug('Request Update Fail : {0} (군번 : {1}, 데이터 : {2} 선주 ID : {3} 오류 내용 : {4})'.format('선주 정보 수정 요청 실패',
+                                                                                                              request.user.srvno,
+                                                                                                              request.data,
+                                                                                                              pk,
+                                                                                                              e))
+                return self.fail(message='fail')
+        else:
+            return self.fail(message='No Permission')
+
+
+class CreateOwnerAPI(APIView):
     def post(self, request):
-        x, y = request.data['lat'], request.data['lon']
-        q = Q()
-        q.add(Q(lat__lt=x+0.03), q.AND)
-        q.add(Q(lat__gt=x-0.03), q.AND)
-        q.add(Q(lon__lt=y+0.03), q.AND)
-        q.add(Q(lon__gt=y-0.03), q.AND)
-        queryset = NormalShip.objects.filter(q)
-        serializer = NormalLocationSerializer(queryset, many=True)
-        return self.success(data=serializer.data, message='success')
+        try:
+            owner = OwnerInfo.create_owner(data=request.data, img=request.FILES)
+            logger.debug('Request Create Success : {0} (군번 : {1}, 데이터 : {2})'.format('선주 생성 요청 실패',
+                                                                                     request.user.srvno,
+                                                                                     request.data))
+            return self.success(message='success')
+        except Exception as e:
+            logger.debug('Request Create Fail : {0} (군번 : {1}, 오류 내용 : {2}, 데이터 : {3} / {4})'.format(
+                '선주 생성 요청 실패',
+                request.user.srvno,
+                e,
+                request.data,
+                request.FILES))
+            return self.fail(message='fail')
