@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NormalShip, WasteShip, NormalImage, WasteImage
+from .models import NormalShip, WasteShip, NormalImage, WasteImage, OwnerInfo
 from Accounts.models import Account
 
 
@@ -62,3 +62,10 @@ class WasteLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = WasteShip
         fields = ('id', 'lat', 'lon', 'info', 'regit_date')
+
+
+class OwnerInfoSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = OwnerInfo
+        fields = ('id', 'own_name', 'phone', 'address', 'registry_date',
+                  'agreement_paper', 'own_img', 'privacy_agree',)

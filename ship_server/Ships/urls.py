@@ -2,7 +2,8 @@ from django.conf.urls import url
 from .views import (DetailNormalShipAPI, CreateNormalShipAPI, ListNormalShipAPI, SearchNormalShipAPI,
                     DetailWasteShipAPI, CreateWasteShipAPI, ListWasteShipAPI, LocationNormalShipAPI,
                     SearchWasteShipAPI, ListNormalImageAPI, ListWasteImageAPI, WasteImageAPI,
-                    NormalImageAPI, PredictShipAPI, LocationWasteShipAPI, ChangeNormalMainImage, ChangeWasteMainImage, Test)
+                    NormalImageAPI, PredictShipAPI, LocationWasteShipAPI, ChangeNormalMainImage, ChangeWasteMainImage,
+                    OwnerInfoAPI, CreateOwnerAPI)
 
 urlpatterns = [
     url(r'^ship/normal/(?P<pk>\d+)/$', DetailNormalShipAPI.as_view()),  # 일반 선박 세부 정보
@@ -22,5 +23,6 @@ urlpatterns = [
     url(r'^predict/', PredictShipAPI.as_view()),
     url(r'^image/change/normal/', ChangeNormalMainImage.as_view()),
     url(r'^image/change/waste/', ChangeWasteMainImage.as_view()),
-    url(r'^test/', Test.as_view()),
+    url(r'^owner/create/', CreateOwnerAPI.as_view()),
+    url(r'^owner/(?P<pk>\d+)/$', OwnerInfoAPI.as_view()),
 ]
