@@ -43,13 +43,29 @@ class OwnerInfo(models.Model):
 class NormalTrackingCoordinate(models.Model):
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
+    check_date = models.DateTimeField(auto_now_add=True)
     ship = models.ForeignKey('NormalShip', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_coordinate(data):
+        coordinate = NormalTrackingCoordinate.objects.create(lat=data['lat'],
+                                                             lon=data['lon'],
+                                                             ship=data['ship_id'])
+        return coordinate.id
 
 
 class WasteTrackingCoordinate(models.Model):
     lat = models.FloatField(default=0)
     lon = models.FloatField(default=0)
+    check_date = models.DateTimeField(auto_now_add=True)
     ship = models.ForeignKey('WasteShip', on_delete=models.CASCADE)
+
+    @staticmethod
+    def create_coordinate(data):
+        coordinate = NormalTrackingCoordinate.objects.create(lat=data['lat'],
+                                                             lon=data['lon'],
+                                                             ship=data['ship_id'])
+        return coordinate.id
 
 
 class RegitInfo(models.Model):
@@ -120,7 +136,10 @@ class NormalShip(RegitInfo, RegionInfo):
     def searching_normal_ship(data):
         if data['tag'] == '':
             data['tag'] = 'name'
-        ships = NormalShip.objects.all().select_related('register').order_by(data['tag'])
+        if data['unit'] == 'all':
+            ships = NormalShip.objects.all().select_related('register').order_by(data['tag'])
+        else:
+            ships = NormalShip.objects.filter(register_unit=data['unit']).select_related('register').order_by(data['tag'])
         if not data['name'] == '':
             ships = ships.filter(name__contains=data['name'])
         if not data['port'] == '':
@@ -204,8 +223,11 @@ class WasteShip(RegitInfo, RegionInfo):
     @staticmethod
     def searching_waste_ship(data):
         if data['tag'] == '':
-            data['tag'] = 'id'
-        ships = WasteShip.objects.all().select_related('register').order_by(data['tag'])
+            data['tag'] = 'name'
+        if data['unit'] == 'all':
+            ships = WasteShip.objects.all().select_related('register').order_by(data['tag'])
+        else:
+            ships = WasteShip.objects.filter(register_unit=data['unit']).select_related('register').order_by(data['tag'])
         if not data['id'] is '':
             ships = ships.filter(id=data['id'])
             return ships

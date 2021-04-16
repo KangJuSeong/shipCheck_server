@@ -4,7 +4,8 @@ from .models import (NormalShip, NormalImage, WasteShip, WasteImage, OwnerInfo, 
 from Accounts.models import Account
 from .serializers import (NormalShipSerializer, NormalImageSerializer, WasteShipSerializer,
                           WasteImageSerializer, WasteLocationSerializer, NormalLocationSerializer,
-                          NormalShipUpdateSerializer, WasteShipUpdateSerializer, OwnerInfoSerializer)
+                          NormalShipUpdateSerializer, WasteShipUpdateSerializer, OwnerInfoSerializer,
+                          NormalTrackingSerializer, WasteTrackingSerializer,)
 from django.core.exceptions import ObjectDoesNotExist
 import numpy as np
 from keras_model.prediction_ship import ai_module
@@ -106,11 +107,15 @@ class ListNormalShipAPI(APIView):
     def get(self, request):
         page = int(request.GET.get('page'))
         tag = request.GET.get('tag')
+        unit = request.GET.get('unit')
         if tag == '':
             tag = 'name'
         try:
-            query_size = NormalShip.objects.count()
-            queryset = NormalShip.objects.all().select_related('register').order_by(tag)
+            if unit == 'all':
+                queryset = NormalShip.objects.all().select_related('register').order_by(tag)
+            else:
+                queryset = NormalShip.objects.filter(register_unit=unit).select_related('register').order_by(tag)
+            query_size = queryset.count()
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
@@ -289,11 +294,15 @@ class ListWasteShipAPI(APIView):
     def get(self, request):
         page = int(request.GET.get('page'))
         tag = request.GET.get('tag')
+        unit = request.GET.get('unit')
         if tag == '':
             tag = 'id'
         try:
-            query_size = WasteShip.objects.count()
-            queryset = WasteShip.objects.all().select_related('register').order_by(tag)
+            if unit == 'all':
+                queryset = WasteShip.objects.all().select_related('register').order_by(tag)
+            else:
+                queryset = WasteShip.objects.filter(register_unit=unit).select_related('register').order_by(tag)
+            query_size = queryset.count()
             page_size = 10
             if query_size % page_size == 0:
                 count = int(query_size / page_size)
@@ -604,7 +613,7 @@ class PredictShipAPI(APIView):
 class OwnerInfoAPI(APIView):
     def get(self, request, pk=None):
         try:
-            owner = OwnerInfo.objects.get(id=pk)
+            owner = OwnerInfo.objects.get(ship_id=pk)
             serializer = OwnerInfoSerializer(owner)
             logger.debug('Request Detail Success : {0} (군번 : {1})'.format('선주 정보 요청 성공', request.user.srvno))
             return self.success(data=serializer.data, message='success')
@@ -655,3 +664,47 @@ class CreateOwnerAPI(APIView):
                 request.data,
                 request.FILES))
             return self.fail(message='fail')
+
+
+class NormalCoordinateAPI(APIView):
+    def get(self, request):
+        try:
+            count = NormalCoordinateAPI.objects.count()
+            if count < 5:
+                queryset = NormalTrackingCoordinate.objects.filter(ship_id=request.GET.get('id'))
+            else:
+                queryset = NormalTrackingCoordinate.objects.filter(ship_id=request.GET.get('id')).order_by(
+                    '-check_date')[:5]
+            serializer = NormalTrackingSerializer(queryset, many=True)
+            return self.success(data=serializer.data, message='success')
+        except Exception as e:
+            return self.fail(message='fail')
+
+    def post(self, request):
+        try:
+            NormalTrackingCoordinate.create_coordinate(request.data)
+            return self.success(message='success')
+        except Exception as e:
+            return self.fail(message='fail')
+
+
+class WasteCoordinateAPI(APIView):
+    def get(self, request):
+        try:
+            count = WasteCoordinateAPI.objects.count()
+            if count < 5:
+                queryset = WasteTrackingCoordinate.objects.filter(ship_id=request.GET.get('id'))
+            else:
+                queryset = WasteTrackingCoordinate.objects.filter(ship_id=request.GET.get('id')).order_by(
+                    '-check_date')[:5]
+            serializer = WasteTrackingSerializer(queryset, many=True)
+            return self.success(data=serializer.data, message='success')
+        except Exception as e:
+            return self.fail()
+
+    def post(self, request):
+        try:
+            WasteTrackingCoordinate.create_coordinate(request.data)
+            return self.success()
+        except Exception as e:
+            return self.fail()
