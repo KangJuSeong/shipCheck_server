@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import NormalShip, WasteShip, NormalImage, WasteImage, OwnerInfo
+from .models import NormalShip, WasteShip, NormalImage, WasteImage, OwnerInfo, NormalTrackingCoordinate, WasteTrackingCoordinate
 from Accounts.models import Account
 
 
@@ -13,7 +13,7 @@ class NormalShipSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'port', 'code', 'tons', 'types', 'main_img',
                   'is_vpass', 'is_ais', 'is_vhf', 'is_ff', 'img_cnt', 'size',
                   'is_train', 'regit_date', 'region', 'lat', 'lon', 'register',
-                  'main_img_id',)
+                  'main_img_id', 'register_unit',)
 
 
 class NormalShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
@@ -43,7 +43,7 @@ class WasteShipSerializer(serializers.HyperlinkedModelSerializer):
         model = WasteShip
         fields = ('id', 'info', 'types', 'lat', 'lon', 'main_img',
                   'is_train', 'regit_date', 'register', 'region', 'img_cnt',
-                  'main_img_id')
+                  'main_img_id', 'register_unit',)
 
 
 class WasteShipUpdateSerializer(serializers.HyperlinkedModelSerializer):
@@ -69,3 +69,15 @@ class OwnerInfoSerializer(serializers.HyperlinkedModelSerializer):
         model = OwnerInfo
         fields = ('id', 'own_name', 'phone', 'address', 'registry_date',
                   'agreement_paper', 'own_img', 'privacy_agree',)
+
+
+class NormalTrackingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = NormalTrackingCoordinate
+        fields = ('lat', 'lon', 'check_date',)
+
+
+class WasteTrackingSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = WasteTrackingCoordinate
+        fields = ('lat', 'lon', 'check_date',)
