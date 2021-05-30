@@ -72,10 +72,35 @@
 ## 6. API 작성
 
 ### 1. Accounts
+`LoginAPI`
+
+`LogoutAPI`
+
+`SignUpAPI`
+
+`UserInfoAPI`
+
+`UserPermissionAPI`
+
+`VersionCheckAPI`
 
 ### 2. Post
+`NoticeAPI`
+
+`NoticeListAPI`
+
+`QuestionAPI`
+
+`QuestionAPI`
+
+`QuestionListAPI`
+
+`AnswerAPI`
 
 ### 3. Ships
+`DetailNormalShipAPI, DetailWasteShipAPI`
+
+`CreateNormalShipAPI, CreateWasteShipAPI`
 
 ## 7. 배포
 * 클라우드 서버에 Django 프로젝트 업로드.

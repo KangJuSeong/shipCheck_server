@@ -70,8 +70,6 @@ class QuestionAPI(APIView):
                                                                                    e))
             return self.fail(message='fail')
 
-
-class QuestionCreateAPI(APIView):
     def post(self, request):
         try:
             obj = Question.objects.create(title=request.data['title'],
