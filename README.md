@@ -59,37 +59,62 @@
 >   * own_img 필드는 선주 이미지를 저장
 
 ## 5. 필요한 모듈 개발
-`best_three.py` [Code]()
+`best_three.py` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/utils/best_three.py#L1-L26)
+* 매개변수로 받은 배열에서 값이 제일 높은 인덱스를 통해 라벨에서 값이 가져오고 해당 값의 포맷팅 변경하여 제일 높은 순서 3개를 리턴.
 
-`change_format.py` [Code]()
+`change_format.py` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/utils/change_format.py#L1-L33)
+* 매개변수로 받은 serializer 딕셔너리 데이터에서 date 키값의 value 값의 날짜 포맷팅을 변경해준 후 딕셔너리 리턴.
+* `change_unit` 함수는 입력 받은 부대의 포맷팅 수정하여 딕셔너리 리턴.
 
-`check_pw.py` [Code]()
+`check_pw.py` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/utils/check_pw.py#L1-L36)
+* 비밀번호 조건의 충족하는지 검사하는 함수 작성.
+* 반복된 값이 있는지 여부와 오름차순 또는 내림차순이 있는지 확인.
+* 조건이 충족되지 않는다면 어떤 조건이 충족되지 않는지 메시지와 상태 코드 리턴.
 
-`custom_view.py` [Code]()
+`custom_view.py` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/utils/custom_view.py#L1-L25)
+* django 에서 제공해주는 django-restframework 에서 APIView 를 불러와서 상속하여 APIView 를 작성.
+* `success`, `fail` 함수를 통해 200, 400 을 리턴해주고 데이터와 메시지를 넣을 수 있도록 작성.
 
-`prediction_ship.py` [Code]()
+`prediction_ship.py` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/keras_model/prediction_ship.py#L1-L19)
+* h5 모델 파일을 로드한 후 입력 받은 이미지를 전처리하여 데이터 입력 후 결과 값을 리턴.
 
 ## 6. API 작성
 
 ### 1. Accounts
-`LoginAPI`
+`LoginAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L19-L47)
+* 클라이언트로부터 받은 srvno, password 를 이용하여 DB에 등록된 유저인지 확인 후 유효한 데이터라면 토큰 값을 respnse에 담아서 리턴.
+* 유효한지 체크할 때는 serializers 에서 validate 를 통해 유효성 검사 로직 작성. [LoginSerializer.validate](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/serializers.py#L20-L73)
+* 유효한 유저 정보라도 로그인 실패 조건(3달간 미접속, 비밀번호 3회 이상 불일치, 계정 정지)이 충족되면 로그인이 될 수 없음.
 
-`LogoutAPI`
+`LogoutAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L50-L57)
+* 요청이 왔을 때 헤더에 담긴 토큰 값이 유효하다면 로그아웃 성공을 응답으로 보내주고 유효하지 않다면 실패 메시지를 리턴.
 
-`SignUpAPI`
+`SignUpAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L60-L90)
+* `permission_classes = [AllowAny]` 구문을 작성하여 회원가입을 할 때는 토큰값이 필요 없으므로 모든 클라이언트가 접근 가능하도록 함.
+* Body 로 받은 값을 이용하여 유저를 생성해주고 만약 조건이 충족되지 않는다면 실패 메시지를 응답으로 보내줌.
 
-`UserInfoAPI`
+`UserInfoAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L93-L102)
+* 헤더에 담긴 토큰값을 통해 유저의 정보를 응답으로 보내줌.
 
-`UserPermissionAPI`
+`UserPermissionAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L105-L113)
+* 유저의 권한을 요청하는 API 로 유저 권한 값을 응답으로 보내줌.
+* 유저의 권한이 특정 값 이상일 때만 요청할 수 있는 API 가 있기 때문에 필요.
 
-`VersionCheckAPI`
+`VersionCheckAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Accounts/views.py#L116-L122)
+* 현재 클라이언트에서 사용중인 버전을 요청으로 보내면 현재 서버 버전과 일치하는지 확인하는 API.
+* 추가로 응답을 보낼 때 현재 서버가 운영중인지 점검중인지에 대한 데이터를 보내줌.
 
 ### 2. Post
-`NoticeAPI`
+`NoticeAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Post/views.py#L12-L25)
+* id 값을 통해 클라이언트에서 선택한 공지사항에 대한 데이터를 DB 에서 가져와서 리턴.
 
-`NoticeListAPI`
+`NoticeListAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Post/views.py#L28-L41)
+* 클라이언트에 DB 에 등록되어 있는 모든 공지사항을 목록으로 보여주기 위해 모든 공지사항을 불러와서 리턴.
+* 공지사항 목록이 클라이언트에 보여질 때 최근 날짜가 맨 위로 보여야되기 때문에 쿼리를 날릴 때 `order_by('-date')`를 추가하여 날려줌.
 
-`QuestionAPI`
+`QuestionAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Post/views.py#L44-L85)
+* `get` 메서드로 요청이 들어오면 id 값을 가진 질문에 대한 데이터를 응답해줌.
+* 'post' 메서드로 요청이 들어오면 
 
 `QuestionAPI`
 
