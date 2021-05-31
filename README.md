@@ -112,15 +112,19 @@
 * 클라이언트에 DB 에 등록되어 있는 모든 공지사항을 목록으로 보여주기 위해 모든 공지사항을 불러와서 리턴.
 * 공지사항 목록이 클라이언트에 보여질 때 최근 날짜가 맨 위로 보여야되기 때문에 쿼리를 날릴 때 `order_by('-date')`를 추가하여 날려줌.
 
-`QuestionAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/3baf99bbd30ce9402d126a04d690d7b5773c6b4c/ship_server/Post/views.py#L44-L85)
+`QuestionAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/ca0cb7169f162e8c3496d8f556bf5fbb36e8d961/ship_server/Post/views.py#L44-L71)
 * `get` 메서드로 요청이 들어오면 id 값을 가진 질문에 대한 데이터를 응답해줌.
-* 'post' 메서드로 요청이 들어오면 
+* `delete` 메서드로 요청이 들어오면 id 값을 가진 데이터를 DB 에서 제거.
 
-`QuestionAPI`
+`QuestionCreateAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/0bc923fedf59c94c7b82bf423dd0a9e5d9055e0c/ship_server/Post/views.py#L74-L87)
+* Body 를 통해 받은 값을 이용하여 Question 데이터를 생성.
 
-`QuestionListAPI`
+`QuestionListAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/0bc923fedf59c94c7b82bf423dd0a9e5d9055e0c/ship_server/Post/views.py#L90-L104)
+* 모든 질문 데이터를 DB 에서 가져와 응답으로 보내줌.
+* `order_by('-date')` 를 쿼리에 추가하여 날리므로 최근 등록된 질문 부터 순서대로 정렬되어 클라이언트에서 볼 수 있음.
 
-`AnswerAPI`
+`AnswerAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/0bc923fedf59c94c7b82bf423dd0a9e5d9055e0c/ship_server/Post/views.py#L107-L120)
+* 클라이언트에서 질문에 대한 답변을 요청하면 해당 질문의 id 값을 통해 DB 에서 질문의 답변을 가져와서 응답.
 
 ### 3. Ships
 `DetailNormalShipAPI, DetailWasteShipAPI`
