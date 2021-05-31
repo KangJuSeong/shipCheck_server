@@ -127,10 +127,67 @@
 * 클라이언트에서 질문에 대한 답변을 요청하면 해당 질문의 id 값을 통해 DB 에서 질문의 답변을 가져와서 응답.
 
 ### 3. Ships
-`DetailNormalShipAPI, DetailWasteShipAPI`
+`DetailShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L30-L86)
+* `get` 메서드로 요청이 들어오면 id 값을 통해 해당 선박의 정보를 응답으로 보내줌.
+* id 값을 이용하여 쿼리를 날리면 해당 데이터를 불러올 때 register 필드가 외래키이므로 쿼리가 두개가 날아가는 현상을 발견.
+* 위 현상을 해결하기 위해 `select_related('register')` 를 이용하여 한개의 쿼리로 가져올수 있음.
+* 만약 100개의 선박 데이터 요청이 들어오면 선박 쿼리 100개와 register 필드에 대한 쿼리 100개가 발생하는 문제가 있으므로 `select_related`를 사용하는것이 맞다고 판단.
+* `delete` 메서드로 요청이 들어오면 해당 id 값의 데이터를 제거.
+* `post` 메서드로 요청이 들어오면 해당 id 값의 데이터를 Body 를 통해 받은 값으로 수정.
+* `put` 메서드가 실제 서버 운용시에 요청이 들어오지 않아 사용할 수 없는 문제가 생겨 선박 데이터 생성 API 를 따로 작성.
 
-`CreateNormalShipAPI, CreateWasteShipAPI`
+`CreateShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L89-L103)
+* Body 를 통해 데이터가 들어오면 DB 에 선박 데이터 추가.
+* 추가적으로 선박 등록이 완료 되면 해당 선박 id 값을 응답에 담아서 보내주고 클라이언트에서는 해당 선박의 이미지 등록 API 요청시 요청 Body 에 선박 id 값을 담아서 요청 함. 
+
+`ListShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L106-L144)
+* 파라미터로 page(페이지 번호), tag(정렬 기준), unit(등록 부대) 를 받고 해당 값을 이용하여 선박 데이터들을 정렬하여 응답으로 보내줌.
+* register 는 왜래키 이므로 `selected_relate`구문을 이용하고 정렬 시에는 `order_by`구문을 통해 쿼리를 날릴 때 조건을 추가하여 작성함.
+* 가져온 데이터들으 개수를 확인하고 한 페이지에 보여줄 데이터의 개수를 정한 다음 해당 데이터들을 인덱싱하여 요청된 페이지에 맞춰 데이터를 보내줌.
+* 응답에 현재 정렬 방식을 통해 계산된 총 페이지의 개수를 보내줌.
+
+`SearchShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L147-L180)
+* Body 로 받은 데이터를 이용하여 선박 데이터를 필터링 하고 나온 데이터들을 한 페이지 당 보내줄 데이터의 개수에 따라 인덱싱 후 응답으로 보내줌.
+* `searching_normal_ship` 함수를 작성하여 매개변수로 받은 데이터를 이용하여 필터링 하여 나온 데이터를 리턴.
+
+`LocationShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L183-L214)
+* `get` 메서드로 요청이 들어오면 DB에 등록된 모든 선박의 좌표 값을 응답으로 보내줌.
+* `post` 메서드로 요청이 들어오면 Body 를 통해 받은 클라이언트의 현재 위치 좌표를 기준으로 정해진 scope 범위 안에 있는 선박 데이터들을 필터링 하여 응답으로 보내줌.
+
+`ListImageAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L404-L417)
+* id 값을 이용하여 해당 선박의 모든 이미지들을 가져와서 응답으로 보내줌.
+
+`ImageAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L420-L459)
+* `post` 메서드로 요청이 들어오면 Body 에 담긴 id 값을 이용하여 해당 선박에 multipart 로 받은 이미지 데이터를 추가해줌.
+* 이미지를 한장 씩 받아서 추가하면 클라이언트에서는 여러장을 요청했을 때 등록이 완료된 이미지의 개수를 알 수 있으므로 등록 상태를 체크할 수 있음.
+* `delete` 메서드로 요청이 들어오면 해당 id 값을 가진 이미지 데이터를 DB 에서 제거.
+* 추가적으로 선박별로 소유중인 이미지 개수가 있으므로 이미지 개수를 줄이는 작업이 필요.
+* 메인 이미지가 제거되었을 때 자동으로 다음 이미지가 메인 이미지가 되야 하는 로직 추가.
+
+`ChangeMainImageAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L462-L476)
+* 선박의 대표 이미지를 클라이언트에서 선택한 이미지로 변경해주는 API.
+
+`PredictShipAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L555-L610)
+* multipart 로 이미지로 받고 해당 이미지를 서버 로컬 저장소에 저장하며 저장하는 이유는 추후에 해당 사진들을 통해 모델을 테스트할 때 유용할 수 있따고 판단.
+* `ai_module`을 이용하여 해당 이미지의 확률 값이 담긴 리스트를 리턴받고 `best_three` 를 통해 확률이 제일 높은 3가지 id 값을 가져옴.
+* 리턴 받은 id 값들을 이용하여 DB 에서 필터링 후 해당 선박에 대한 데이터 가져오기.
+* 결과로 나온 선박들이 일반 선박이거나 유기 선박일 수 있으므로 해당 문제를 인지하고 로직을 작성.
+
+`OwnerInfoAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L613-L648)
+* `get` 메서드로 요청이 들어오면 선박 id 값을 통해 해당 선박의 Owner 정보를 가져와서 응답으로 보내줌.
+* `post` 메서드로 요청이 들어오면 선박 id 값을 통해 해당 선박의 Owner 정보를 Body 로 받은 데이터로 수정해줌.
+
+`CreateOwnerAPI` [Code](https://github.com/KangJuSeong/shipCheck_server/blob/d9de7fb485c0efd5c6b1b93dcd6e9ab9b4fcd584/ship_server/Ships/views.py#L651-L666)
+* Body 를 통해 받은 데이터와 multipart 로 받은 이미지를 이용하여 해당 선박의 선주 정보를 생성.
 
 ## 7. 배포
 * 클라우드 서버에 Django 프로젝트 업로드.
-* `NginX` 와 `Gunicorn`을 이용하여 서버 배포
+* `NginX` 와 `Gunicorn`을 이용하여 서버 개방.
+* 약 250명의 유저 사용.
+
+## 8. 해결해야할 문제점
+- 선박 학습에 대한 유지보수
+    1. 선박은 하루에 10척 이상씩 꾸준히 등록되고 있음.
+    2. 그에 따른 선박 학습의 자동화가 필요.
+    3. 현재는 관리자가 주 단위로 선박 등록 현황을 파악하고 일정 데이터 수집이 완료된 선박을 추려서 학습을 진행. [선박 학습 프로그램](https://github.com/KangJuSeong/Ship_Classification_Program)
+    
