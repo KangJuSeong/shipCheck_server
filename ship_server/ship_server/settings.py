@@ -94,11 +94,10 @@ LOGGING = {
             'formatter': 'format1',
             'encoding': 'utf-8',
         },
-        # 'console': {
-        #     'level': 'DEBUG',
-        #     'class': 'logging.FileHandler',
-        #     'formatter': 'format2',
-        # }
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
     },
 
     'loggers': {
@@ -113,7 +112,11 @@ LOGGING = {
         'Post': {
             'handlers': ['file3'],
             'level': 'DEBUG',
-        }
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
     },
 
 }
